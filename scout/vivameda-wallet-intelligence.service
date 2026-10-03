@@ -1,0 +1,25 @@
+[Unit]
+Description=Vivameda wallet intelligence bounded shadow pass
+After=network-online.target vivameda-wallet-candidates.service
+Wants=network-online.target
+[Service]
+Type=oneshot
+User=vivameda-wallet
+Group=vivameda-wallet
+UMask=0027
+WorkingDirectory=/var/lib/vivameda-wallet-intelligence/data
+ExecStart=/usr/bin/python3 /opt/vivameda-wallet-intelligence/wallet_worker.py --inbox /var/lib/vivameda-wallet-intelligence/inbox/candidates.json --output /var/lib/vivameda-wallet-intelligence/data
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+InaccessiblePaths=/opt/vivameda-crypto-early-scout
+ReadWritePaths=/var/lib/vivameda-wallet-intelligence/data
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+RestrictSUIDSGID=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+TimeoutStartSec=180
+MemoryMax=512M
+CPUQuota=50%

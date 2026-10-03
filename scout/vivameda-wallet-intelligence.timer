@@ -1,0 +1,9 @@
+[Unit]
+Description=Run Vivameda wallet intelligence every two minutes
+[Timer]
+OnBootSec=60
+OnUnitInactiveSec=120
+AccuracySec=10
+Unit=vivameda-wallet-intelligence.service
+[Install]
+WantedBy=timers.target

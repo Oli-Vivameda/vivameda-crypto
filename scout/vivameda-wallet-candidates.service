@@ -1,0 +1,17 @@
+[Unit]
+Description=Vivameda read-only wallet candidate export
+After=vivameda-early-scout.service
+[Service]
+Type=oneshot
+User=vivameda-scout
+Group=vivameda-wallet
+UMask=0027
+ExecStart=/usr/bin/python3 /opt/vivameda-wallet-intelligence/wallet_candidates.py --db /opt/vivameda-crypto-early-scout/data/early_scout.sqlite --output /var/lib/vivameda-wallet-intelligence/inbox/candidates.json
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateNetwork=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/vivameda-wallet-intelligence/inbox
+TimeoutStartSec=20
+MemoryMax=128M
