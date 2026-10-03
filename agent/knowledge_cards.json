@@ -1,0 +1,79 @@
+{
+  "schema": "vivameda-crypto-knowledge-v1",
+  "audit_date": "2026-10-03",
+  "scope": "All 136 V2 ALERT records returned across all five supported regimes; 120 unique mints. Earlier alerts absent from V2, other bots and complete Telegram history not verified.",
+  "evidence_limitations": [
+    "Sequential live queries are not an atomic database snapshot.",
+    "Market-cap multiples are sampled observations, not execution returns.",
+    "Unequal observation windows; ACTIVE cases are unfinished.",
+    "Legacy peak labels are diagnostic only; no fixed-horizon win rate inferred.",
+    "Full timed-outcome rows and entry features unavailable through current read tools; direct DB access denied.",
+    "Policy changed on 2026-10-03; pooled historical records do not validate current admission policy."
+  ],
+  "summary": {
+    "events": 136,
+    "tokens": 120,
+    "events_peak_ge_2": 46,
+    "events_peak_ge_5": 18,
+    "events_peak_ge_10": 7,
+    "events_last_below_half": 102,
+    "events_peak_ge_2_then_last_below_half": 22,
+    "first_alert_tokens_peak_ge_2": 35,
+    "first_alert_tokens_peak_ge_5": 15,
+    "first_alert_tokens_peak_ge_10": 6,
+    "first_alert_tokens_last_below_half": 93
+  },
+  "rules": [
+    {
+      "id": "identity",
+      "status": "evidence_handling",
+      "instruction": "Key tokens by chain and mint, never symbol. Multiple UDR and POOPYBOT identities exist."
+    },
+    {
+      "id": "repeat_alerts",
+      "status": "evidence_handling",
+      "instruction": "Report event-level and first-alert-per-mint outcomes separately; never treat escalation alerts as independent token successes."
+    },
+    {
+      "id": "peak_not_profit",
+      "status": "evidence_handling",
+      "instruction": "Always pair sampled peak with last observation and adverse excursion. Never call a peak multiple a realized return or profitable trade."
+    },
+    {
+      "id": "label_precedence",
+      "status": "known_reporting_limitation",
+      "instruction": "Existing label() chooses peak categories before failure. A 2X/5X label can coexist with a near-total subsequent collapse. Do not use label as a binary success target."
+    },
+    {
+      "id": "timing",
+      "status": "evidence_handling",
+      "instruction": "Use fixed horizons and timestamp-valid outcomes (lateness 0..180 seconds). Require complete within-horizon coverage for peak rates. Missing outcomes remain missing; do not backfill using global ATH."
+    },
+    {
+      "id": "policy",
+      "status": "current_approved_policy",
+      "instruction": "Keep token controls, liquidity controls and verified sell receipts mandatory. Explicit REJECT in any check blocks. Background UNKNOWN may pass admission but must remain visible."
+    },
+    {
+      "id": "kin_case",
+      "status": "observed_case",
+      "instruction": "KIN triggered at score 8 with pc5 -14.8% and band 124%; logs show ~0.7755x at 1m, ~0.6269x at 5m, ~0.8345x at 15m. Do not describe as clean compression or generalize causality from one case."
+    },
+    {
+      "id": "compression_gate",
+      "status": "shadow_hypothesis_only",
+      "instruction": "Evaluate existing band<=25% and pc5>=-5% as mandatory quality gates in shadow. Compare missed winners and adverse outcomes at identical horizons on mint-separated later data. Do not promote from this audit."
+    },
+    {
+      "id": "exit_paths",
+      "status": "shadow_hypothesis_only",
+      "instruction": "Evaluate predefined partial-profit and downside scenarios only with ordered price observations, liquidity, fees and slippage. Never infer target-before-stop ordering from max/min alone."
+    },
+    {
+      "id": "promotion",
+      "status": "research_rule",
+      "instruction": "Freeze candidate rules before later forward evaluation, stratify by policy era, separate ALERT/SHADOW, preserve baseline. No production rule changes or model-weight training are implied by this knowledge file."
+    }
+  ]
+}
+
