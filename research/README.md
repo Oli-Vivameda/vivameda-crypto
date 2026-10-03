@@ -1,0 +1,15 @@
+# Research and model record
+
+The production scanner is a deterministic score, not a calibrated probability model. The seven-feature L2 logistic regression is experimental and has no production call site.
+
+`published_baseline/` contains the fitted coefficients, standardization values, frozen configuration and aggregate evaluation from 2026-10-03. Training used 42 tokens; test used 18 later tokens. Brier score 0.1104709613 versus baseline 0.1003401361; log loss 0.4430391655 versus 0.3591023452. Lower is better on both: the model underperformed. The outcomes were previously inspected, so this is exploratory evaluation, not a sealed forward test. Qwen weights were unchanged.
+
+To rerun on your own data, place `fixed_horizon_training_export.json` beside `train_numerical_v1.py`, install research/requirements.txt and execute the script. It creates a new `numerical_training_v1` directory and refuses to overwrite it. The published result is kept separately. Live rows, token-specific prediction exports and split membership are not public, so the original fit is not independently reproducible from this repository alone.
+
+Input JSON has a `rows` list. Each row needs `id`, `mint`, integer `decision_ts`, `horizon` (60), integer `observed_ts`, `lateness` (0–180), `coverage_ok` (1), positive finite `multiple`, and `features` as a JSON-encoded string containing finite numbers for band, pc5, pc1, buy_ratio, vol_mc, liq_change and vol_accel. Timestamp identity must be exact: observed_ts = decision_ts + 3600 + lateness. A missing label is excluded, never reconstructed from global ATH. Minimum accepted sample is 20 train / 10 test with both training classes. Token identities are disjoint, chronological splitting is 70%, and training outcome times precede the first test decision.
+
+The target is a sampled market-cap multiple >=2 at the one-hour endpoint. It is not executable profit. Features use fractions for band/buy_ratio/vol_mc/liq_change, percentage points for pc5/pc1, and a ratio for vol_accel. Standardization uses training-only mean and standard deviation. The first coefficient is the intercept.
+
+`audit_calls.py` and its tests preserve emitted-call identities, distinguish peaks from subsequent failures, and reject invalid checkpoint timing. Its original diagnostic runner expects a private `capture_20261002.json`; that capture is deliberately absent. The unit tests use synthetic cases and can run without it.
+
+No fitting, successful test, model file or historical winner permits automatic promotion. Keep hypotheses in shadow and evaluate a frozen candidate against its baseline on later eligible observations.
