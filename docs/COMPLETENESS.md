@@ -9,7 +9,7 @@ This repository publishes the accessible crypto implementation. It is not yet th
 | Creator fee-sharing reconciliation | Included, with regression tests |
 | Wallet index, queue, age/cluster evidence and capacity diagnostics | Included; completeness of real evidence not guaranteed |
 | Forward learning V2 | Included |
-| Numerical training code | Included; fitted coefficients and evaluation artifacts withheld pending specific public-release approval |
+| Numerical training and fitted experimental coefficients | Included with explicit owner publication approval; not promoted |
 | Crypto-only agent context and dated knowledge | Included as standalone extraction; full private agent excluded |
 | Historical call audit and safeguards | Included; private captures excluded |
 | Browser evidence worker | Included; optional installation not freshly verified |
