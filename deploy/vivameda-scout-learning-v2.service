@@ -1,0 +1,19 @@
+[Unit]
+Description=Vivameda crypto forward outcome learning V2
+After=network-online.target vivameda-early-scout.service
+Wants=network-online.target
+[Service]
+User=vivameda-scout
+Group=vivameda-scout
+WorkingDirectory=/opt/vivameda-crypto-early-scout
+ExecStart=/usr/bin/python3 /opt/vivameda-crypto-early-scout/scout_learning_v2.py
+Restart=on-failure
+RestartSec=10
+UMask=0027
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/vivameda-crypto-early-scout/data /opt/vivameda-crypto-early-scout/logs
+[Install]
+WantedBy=multi-user.target

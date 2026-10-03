@@ -1,0 +1,19 @@
+[Unit]
+Description=Vivameda crypto early scanner and screened Telegram alerts
+After=network-online.target
+Wants=network-online.target
+[Service]
+User=vivameda-scout
+Group=vivameda-scout
+WorkingDirectory=/opt/vivameda-crypto-early-scout
+ExecStart=/usr/bin/python3 /opt/vivameda-crypto-early-scout/early_scout.py
+Restart=on-failure
+RestartSec=10
+UMask=0027
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/vivameda-crypto-early-scout/data /opt/vivameda-crypto-early-scout/logs
+[Install]
+WantedBy=multi-user.target
