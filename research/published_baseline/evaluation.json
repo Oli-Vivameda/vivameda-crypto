@@ -1,0 +1,32 @@
+{
+  "trained": true,
+  "model_type": "L2 logistic regression",
+  "language_model_finetuned": false,
+  "eligible_unique_tokens": 60,
+  "train_n": 42,
+  "test_n": 18,
+  "embargo_excluded": 0,
+  "train_positive": 3,
+  "test_positive": 2,
+  "excluded": {
+    "coverage": 6,
+    "repeat_mint": 17
+  },
+  "model_metrics": {
+    "brier": 0.11047096132679542,
+    "log_loss": 0.4430391655149819
+  },
+  "base_rate_metrics": {
+    "brier": 0.10034013605442177,
+    "log_loss": 0.3591023452050037
+  },
+  "production_promoted": false,
+  "knowledge_source": "knowledge_cards.json",
+  "limitations": [
+    "Small selected ALERT sample",
+    "Same short market period",
+    "Exploratory evaluation; prior outcomes inspected",
+    "Market-cap endpoint is not executable return",
+    "No calibration or profitability claim"
+  ]
+}

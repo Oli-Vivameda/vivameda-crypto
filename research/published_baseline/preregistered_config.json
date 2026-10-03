@@ -1,0 +1,18 @@
+{
+  "target": "observed market-cap multiple >=2 at 60 minutes, endpoint lateness <=180 seconds",
+  "features": [
+    "band",
+    "pc5",
+    "pc1",
+    "buy_ratio",
+    "vol_mc",
+    "liq_change",
+    "vol_accel"
+  ],
+  "split": "70% chronological unique eligible mints; train labels must precede first test decision",
+  "regularization": 1.0,
+  "steps": 2000,
+  "learning_rate": 0.05,
+  "evaluation": "exploratory, previously inspected audit; not sealed or independent forward validation",
+  "production": false
+}
