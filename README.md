@@ -9,7 +9,7 @@ Solana early-breakout scanning, wallet screening, Telegram alerts, forward outco
 - Seven screening checks: three mandatory PASS checks; every explicit REJECT blocks; background UNKNOWN disclosed.
 - Creator reconciliation, ownership census, durable wallet history indexing, clusters, activity-age bounds, maps and capacity diagnostics.
 - ALERT/SHADOW forward learning, crypto-only agent context and research rules.
-- Numerical training, experimental fitted coefficients, tests, configuration example and systemd units.
+- Numerical training code, tests, configuration example and systemd units. Fitted artifacts await specific publication approval.
 
 ## Documentation
 | Guide | Contents |

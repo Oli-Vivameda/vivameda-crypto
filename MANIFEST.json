@@ -10,7 +10,7 @@
     "SECURITY.md": "fe6ff00dd33525fee4c4fdeff8eea567ee5801705fcad953880bf9f1d58a7a8c",
     "SIGNALS.md": "f87443ad7a7850df341f1bbd3732adb65ae292a29e2c3e993f1e52298c4b315f",
     ".gitignore": "be399efba81fec45218410e877c3d3935a920538dd15e3ea558a8d5a2bdf68ec",
-    "README.md": "06c026145642079c6b23932fc767ced621d699eadd84702ac54c9b54b80db89d",
+    "README.md": "2f6239b91ca56a993672f52343975050ee24fde4e4559b079931037595b5203e",
     "requirements.txt": "0d0d2938e5443f318fc97363f42cffe3309df1b718cc2bf713263a68cb7bbee5",
     "credentials.example.json": "c58950f6be306e8860e318b8d3bfdadd2c8f4142c92149a83ac52530be0f0ab5",
     "agent/test_context.py": "e8621cb8e443af51a40c37da4f556a4a7849995c1d0bbae9377e05b799181f99",
@@ -18,7 +18,7 @@
     "agent/AGENT_LEARNING_RULES.md": "c0fbf6e287419c7ee0340ba8e032a2825af7d734e139c5a25aa271ae6bd9dc43",
     "agent/context.py": "1020fdbfb3ce80a1bf6497288effd17e3f0ae9baf826dfd47216a7b8a2a8c94a",
     "agent/README.md": "47a1b3b09cfe458f413470e758d3db493d915ef71f9f68e2811ecc1bbbc4f5c8",
-    "docs/COMPLETENESS.md": "c07e565594998ea2ac0496e5947dca50ddebf6623f2c15e63d399ff095608bfd",
+    "docs/COMPLETENESS.md": "02811396865b156cbb4a3c79580523f08614f27cdb6c591c7940667791296c46",
     "docs/VALIDATION.md": "b884cedf31c1c628366ece4a0ceecbbc71f11adee84aab2fe013f845932219c9",
     "docs/SETUP.md": "e69200fc3f593bc2a795177cb9ec787b49b0828fe693c42af069cbc2edb455ec",
     "docs/ARCHITECTURE.md": "e340a43a040e49f52ce018d83e370ff354e898e08bfd7e0f470c441b713cac05",
@@ -61,12 +61,13 @@
     "research/test_audit_calls.py": "99313a1d2aa6461df52fe5847473311b5cfd1c2f1cae3fd8efb98921315244db",
     "research/audit_calls.py": "e4a58dbf132a6177c2a88b613feb972185ac07e72704a47fdb13e0f0e54c4568",
     "research/train_numerical_v1.py": "e38204bb8d5e54f870f67548af64293e2ab9f631201b443a33d734a0a1036efb",
-    "research/README.md": "be8310f6fdd38279122ec4264c16c38892b555c8fbefd8101529b0924d78448f",
+    "research/README.md": "056a6b57ea32d3310aac7a47ed6823de5dcab13366a036b62df0bb90dca407e8",
     "research/requirements.txt": "5c12d85e7c08038d1dd9ffbf8119d12ce808885230a47e2bf65dcd9f114659d5",
     "deploy/vivameda-scout-learning-v2.service": "b7acd289e724466d0acdaedc5ea3482cad74e6ff827b6c491fd9705c50ddb490",
-    "deploy/vivameda-early-scout.service": "6acf8be40a62abfd875aecd9ef041c5cb9a12b2a10fa59e228f487ec8542ee5e",
-    "research/published_baseline/model.json": "e5cfd232fc60cb59fee2b8fd92bec71e8fce0a075fa01cb9037c572565a4c1b4",
-    "research/published_baseline/evaluation.json": "d8b07238f157eb7744c25d3193530e77ea727e63141d57cf2746e989e85e3f2b",
-    "research/published_baseline/preregistered_config.json": "faa79d13efa0aa83db0b508c8fc49e6eaff207f6515390a7cd880a2698c0334a"
-  }
+    "deploy/vivameda-early-scout.service": "6acf8be40a62abfd875aecd9ef041c5cb9a12b2a10fa59e228f487ec8542ee5e"
+  },
+  "withheld_pending_explicit_approval": [
+    "fitted coefficients",
+    "evaluation artifacts"
+  ]
 }
