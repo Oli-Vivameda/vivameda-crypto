@@ -126,6 +126,8 @@ def expire(c,now):
  # Independent of launch joins, provider availability and polling selection.
  count=c.execute("UPDATE v2_cases SET status='RESOLVED' WHERE status='ACTIVE' AND decision_ts<?",
                  (now-max(H)*60-180,)).rowcount
+ count+=c.execute("""UPDATE v2_cases SET status='RESOLVED' WHERE status='ACTIVE' AND source='LEDGER_ALERT'
+ AND (decision_ts<? OR EXISTS(SELECT 1 FROM v2_outcomes o WHERE o.id=v2_cases.id AND o.horizon=60))""",(now-3780,)).rowcount
  c.commit()
  if count:logging.info('v2 expired cases=%s',count)
  return count
@@ -165,14 +167,16 @@ def track(c):
   c.execute('''UPDATE v2_state SET peak_mc=?,peak_ts=?,trough_mc=?,trough_ts=?,last_mc=?,last_liq=?,
   last_ts=?,max_mult=?,min_mult=?,label=? WHERE id=?''',(pm,pts,tm,tts,mc,liq,now,maxm,minm,lab,cid))
   age=(now-dts)/60
-  for h in H:
+  ledger_case=c.execute('SELECT source FROM v2_cases WHERE id=?',(cid,)).fetchone()[0]=='LEDGER_ALERT'
+  for h in ((60,) if ledger_case else H):
    if age<h or c.execute('SELECT 1 FROM v2_outcomes WHERE id=? AND horizon=?',(cid,h)).fetchone():continue
    late=max(0,now-(dts+h*60))
    if late>180:continue
    dd=mc/max(1,pm)-1
    c.execute('INSERT INTO v2_outcomes VALUES(?,?,?,?,?,?,?,?,?,?)',(cid,h,now,late,mc,liq,mult,maxm,minm,dd))
    horizon_metric(c,cid,dts,h,em,now)
-   logging.info('v2 checkpoint id=%s horizon_min=%s observed_ts=%s lateness_s=%s multiple=%.4f',cid,h,now,late,mult)
+   if ledger_case:logging.info('LEDGER_CHECKPOINT horizon_min=%s observed_ts=%s lateness_s=%s',h,now,late)
+   else:logging.info('v2 checkpoint id=%s horizon_min=%s observed_ts=%s lateness_s=%s multiple=%.4f',cid,h,now,late,mult)
  c.commit()
 def challenge(c):
  now=int(time.time());stamp=now//900*900
@@ -184,7 +188,7 @@ def challenge(c):
    LEFT JOIN v2_outcomes o ON o.id=d.id AND o.horizon=?
    LEFT JOIN v2_horizon_metrics m ON m.id=d.id AND m.horizon=?
     AND m.observed_ts=o.observed_ts
-   WHERE d.decision_ts+?*60+180<=?''',(h,h,h,now)).fetchall()
+   WHERE d.source!='LEDGER_ALERT' AND d.decision_ts+?*60+180<=?''',(h,h,h,now)).fetchall()
   groups={}
   for source,rg,dts,ots,late,multiple,liq,ok,peak in rows:
    g=groups.setdefault((source,rg),[0,0,0,0,0,0,0])
@@ -218,6 +222,12 @@ def main():
   try:
    expire(c,int(time.time()))
    capture(c);import_alerts(c);seed(c);track(c)
+   try:
+    prod.ledger_match(c)
+    logging.info('LEDGER_HEALTH %s',json.dumps(prod.ledger_health(c),sort_keys=True))
+   except Exception:
+    logging.exception('LEDGER_MATCH_FAILED')
+    prod.ledger_fail(c,'match_failed')
    if time.time()-last>900:challenge(c);last=time.time()
   except Exception as e:logging.exception('loop %s',e)
   time.sleep(60)
