@@ -84,4 +84,30 @@ class SyncNativeCandidateTests(unittest.TestCase):
         r=reconcile(sync_sample());self.assertEqual(len(r['state_updates']),1)
         self.assertFalse(any(x['kind']=='sync_native' for x in r['receipts']))
 
+class LifecycleAndSupplyTests(unittest.TestCase):
+    def test_closed_account_can_start_new_lifecycle(self):
+        tx=sync_sample();g=tx['meta']['innerInstructions'][0]['instructions'];g.extend(copy.deepcopy(g[-6:]))
+        r=reconcile(tx);self.assertEqual(r['status'],'ENDPOINT_AMOUNTS_MATCH')
+        self.assertEqual(len(r['lifecycle_events']),1);self.assertEqual(len(r['state_updates']),2)
+        self.assertFalse(r['history_coverage_complete'])
+    def test_recreation_without_close_rejected(self):
+        tx=sync_sample();g=tx['meta']['innerInstructions'][0]['instructions'];second=copy.deepcopy(g[-6:]);g.pop();g.extend(second)
+        self.assertEqual(reconcile(tx)['status'],'UNKNOWN')
+    def test_recreation_wrong_program_rejected(self):
+        tx=sync_sample();g=tx['meta']['innerInstructions'][0]['instructions'];second=copy.deepcopy(g[-6:]);second[1]['parsed']['info']['owner']=SYSTEM;g.extend(second)
+        self.assertEqual(reconcile(tx)['status'],'UNKNOWN')
+    def test_mint_burn_accounting_not_transfer_or_authority_proof(self):
+        from test_dflow_reconcile import SRC,MINT
+        tx=sample();g=tx['meta']['innerInstructions'][0]['instructions']
+        for kind in ('mintTo','burn'):
+            g.append({'programId':SPL,'stackHeight':2,'parsed':{'type':kind,'info':{'account':SRC,'mint':MINT,'amount':'7'}}})
+        r=reconcile(tx);self.assertEqual(r['status'],'ENDPOINT_AMOUNTS_MATCH')
+        self.assertEqual(len(r['receipts']),1);self.assertEqual(len(r['state_updates']),2)
+        self.assertIn('mint_burn_authority_and_supply_unverified',r['blockers'])
+    def test_burn_underflow_and_wrong_mint_refused(self):
+        from test_dflow_reconcile import SRC,MINT
+        for mint,amount in ((MINT,'999999'),(WSOL,'1')):
+            tx=sample();tx['meta']['innerInstructions'][0]['instructions'].append({'programId':SPL,'stackHeight':2,'parsed':{'type':'burn','info':{'account':SRC,'mint':mint,'amount':amount}}})
+            self.assertEqual(reconcile(tx)['status'],'UNKNOWN')
+
 if __name__=='__main__':unittest.main()
