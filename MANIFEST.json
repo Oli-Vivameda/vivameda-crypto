@@ -89,7 +89,7 @@
     "scout/dflow_decoder.py": "40f43aa7864b3f0afa7f0ce182bab0e9339abf7248b09497c19ec6e545a25150",
     "scout/dflow_schema.json": "0b849cec2747c875630bb021acfec2ce7aa6f2a28f78b03ed5cb44a2b135c021",
     "scout/test_dflow_decoder.py": "f3b1b48352e2e39c41de1fd53506df76dafe2197a386e1e593545ec604e7d171",
-    "docs/DFLOW_DECODER_20261004.md": "05c3e576562e8819a5d69ba12c99096f6be19de7e034df40f83fa40f3100b4a6",
+    "docs/DFLOW_DECODER_20261004.md": "637e5f3483506fad526aa963de39f8c3439ef584ac7b3d032f4e3d3e7cf7e6a0",
     "scout/dflow_reconcile.py": "ddccad4bf40fc775876517b660ca5467d18fcbb2d1e949eb4a78349aa22935d4",
     "scout/test_dflow_reconcile.py": "ffa248d3ee7d90ee8745e555e287da0188d75f303e2e66ce01cadb733f637641",
     "research/dflow_reconciliation_results.json": "5ff6fc307350ab791ea8fb4f98c2ad6f3fa77fd43bf09f3ca3b67f3d7e17113a",
@@ -97,8 +97,8 @@
     "scripts/test_replay_wallet_cache.py": "04716f88520621c8aab8531c59555679fb2d96fb26345d873667a8d09e49f451",
     "scripts/export_wallet_failure_samples.py": "70a5577f0a719da8f2b65247da0785eba2b72b49ba83412497b6222750fa2c8c",
     "scripts/test_export_wallet_failure_samples.py": "05a4390782969d0a4a9ce231dcf29048bc51ffefc6ac77409b5bcfc8ce029b55",
-    "scout/dflow_auxiliary.py": "0f71ed723dbe77f08d4095eab43f2bcc3ebbb1141f7b205f248273210e9e1ad0",
-    "scout/test_dflow_auxiliary.py": "27721e3dc22363ce8dde1e75a1655b398e4a965a19a4114e210e54f0ca0d11bc",
+    "scout/dflow_auxiliary.py": "518b6c66eb83268dbdcf2ce6b37ea4511682a3117d4ef93e2daadad17b4472d0",
+    "scout/test_dflow_auxiliary.py": "f52e44781ea88ca902e6ec906de5913bc25f328db8f19fd598118a8b2b16002c",
     "scout/dflow_reconcile_candidate.py": "69cd336365800876ce5a94792b559aaa5295685442bda35c3cb446f7148f6e0e",
     "scout/test_dflow_reconcile_candidate.py": "4454f05d9cf70a70074b7ae223526f63b34603de46569182a4aa3508e10909d8",
     "scripts/freeze_wallet_replay.py": "4a24925f60565f5f9a81292c3c5d4a32f670264639e6a837a91960913e3a1ea2",
@@ -188,11 +188,12 @@
   },
   "dflow_auxiliary_candidate": {
     "status": "offline_not_integrated_or_deployed",
-    "tests_total": 33,
+    "tests_total": 52,
     "new_tests": 6,
     "previously_unknown_layouts_decoded": 3,
     "complete_history_claimed": false,
-    "native_underflow_fix_verified": false
+    "native_underflow_fix_verified": false,
+    "transfer_sol_layout_supported": true
   },
   "pump_close_candidate": {
     "status": "offline_not_deployed",
@@ -222,11 +223,11 @@
     "transactions": 243,
     "cohort_sha256": "52241298442326d0363bff5839e94c6e739b4a49e5642eb1b5adb11bbd4b3c51",
     "baseline_matches": 156,
-    "previous_candidate_matches": 234,
-    "candidate_matches": 237,
-    "unresolved": 6,
+    "previous_candidate_matches": 237,
+    "candidate_matches": 238,
+    "unresolved": 5,
     "regressions_against_baseline": 0,
-    "tests_passed": 50,
+    "tests_passed": 52,
     "complete_history_claims": 0,
     "production_changed": false,
     "development_sample": true,
@@ -247,6 +248,7 @@
     "unexplained_bytes": 8,
     "net_amount_consistent": true,
     "reconciler_changed": false,
-    "history_coverage_complete": false
+    "history_coverage_complete": false,
+    "published_schema_revisions_checked": 16
   }
 }
