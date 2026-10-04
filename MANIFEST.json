@@ -89,7 +89,7 @@
     "scout/dflow_decoder.py": "40f43aa7864b3f0afa7f0ce182bab0e9339abf7248b09497c19ec6e545a25150",
     "scout/dflow_schema.json": "0b849cec2747c875630bb021acfec2ce7aa6f2a28f78b03ed5cb44a2b135c021",
     "scout/test_dflow_decoder.py": "f3b1b48352e2e39c41de1fd53506df76dafe2197a386e1e593545ec604e7d171",
-    "docs/DFLOW_DECODER_20261004.md": "6a0b07aca0ee8dda1fee7b22d3a8cb7c810d483372a74acef3631742f71a50ea",
+    "docs/DFLOW_DECODER_20261004.md": "05c3e576562e8819a5d69ba12c99096f6be19de7e034df40f83fa40f3100b4a6",
     "scout/dflow_reconcile.py": "ddccad4bf40fc775876517b660ca5467d18fcbb2d1e949eb4a78349aa22935d4",
     "scout/test_dflow_reconcile.py": "ffa248d3ee7d90ee8745e555e287da0188d75f303e2e66ce01cadb733f637641",
     "research/dflow_reconciliation_results.json": "5ff6fc307350ab791ea8fb4f98c2ad6f3fa77fd43bf09f3ca3b67f3d7e17113a",
@@ -239,5 +239,14 @@
     "sample_event_pda_matches": 3,
     "runtime_pda_verification": false,
     "historical_executable_verified": false
+  },
+  "pump_sell_diagnostic": {
+    "status": "blocked_event_schema_suffix",
+    "instruction_bytes": 391,
+    "official_schema_consumed_bytes": 383,
+    "unexplained_bytes": 8,
+    "net_amount_consistent": true,
+    "reconciler_changed": false,
+    "history_coverage_complete": false
   }
 }
