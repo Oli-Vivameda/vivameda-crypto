@@ -57,7 +57,7 @@
     "scout/test_wallet_telegram.py": "1db46d858640cb61031e2040ad466540156a777be001eb167aa62226e121e834",
     "scout/pool_screening.py": "e5822988b2b0592e8eaf293b9748779acbaeabbca64c4c21825dd9cb57e2172f",
     "scripts/verify_release.py": "f8f72c7fa4baf3fadc72f09219c6b4e696d3cac4a1c0adbc488f358b0cf8521c",
-    "scripts/export_monitor_sources.py": "be797099d0f6d12241e5292ec8fc41958a6a17066f2e955d26b579dd799376aa",
+    "scripts/export_monitor_sources.py": "0cda04899305d26f17c39f5176aeab4861c7a789a4664402d8bf5b48848c0dd3",
     "research/test_audit_calls.py": "99313a1d2aa6461df52fe5847473311b5cfd1c2f1cae3fd8efb98921315244db",
     "research/audit_calls.py": "e4a58dbf132a6177c2a88b613feb972185ac07e72704a47fdb13e0f0e54c4568",
     "research/train_numerical_v1.py": "e38204bb8d5e54f870f67548af64293e2ab9f631201b443a33d734a0a1036efb",
@@ -114,5 +114,11 @@
     "target_eligible": 200,
     "server_commit": "6ca620b",
     "receipt_commit": "167a501"
+  },
+  "coverage_diagnostics_export": {
+    "status": "prepared; owner run required",
+    "destination": "private review directory in shared engineering checkout",
+    "includes": "numeric coverage blockers and previously missing monitor source",
+    "production_changed": false
   }
 }
