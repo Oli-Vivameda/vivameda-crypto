@@ -207,3 +207,12 @@ A strict event-version check blocks promotion: the child instruction contains 39
 Official IDL retrieved from `https://raw.githubusercontent.com/pump-fun/pump-public-docs/main/idl/pump.json`; SHA-256 `ffe966c42f1af41652ee753fe2f1e3f7cd4077d7e6f49faf3138959c8b56064b`. Trace job `22c899e0673737885b00543e6cde2eef`; official layout job `29c3f3544e8109ea5a443c43f4812178`; field/length diagnostic `83163f10f15eb667a77d29e5ed25aa2c`. Raw transactions and identities remain private.
 
 Next requirement: obtain the matching historical event schema and verify payout/fee recipient roles and deployed program semantics before adding a narrow, version-pinned sell handler. Until then: 237/243 endpoint matches, six unresolved, zero complete-history claims. No production change.
+
+
+## DFlow transfer_sol layout (2026-10-04)
+
+Added the transfer_sol layout from the previously verified on-chain IDL (SHA-256 `2d48c967de1fcfa93186c21cee90c2df362da5cbc4dc68219a8a2e8c31c29d82`). The decoder requires the exact discriminator, 16-byte payload, three valid message accounts and the System Program in the third position. The u64 parameter is decoded as an instruction parameter only; no transfer receipt or execution proof is fabricated. Existing parsed effects supply endpoint accounting.
+
+All 52 DFlow tests pass, including zero/max-u64 and malformed payload/account rejection. On the unchanged frozen cohort, matches increase from 237 to **238/243 (97.9%)**, with zero regressions. Remaining UNKNOWN cases: three Token-2022 residuals, one historical WSOL reserve gap, and the Pump sell event-version mismatch. Complete-history claims remain zero. No production or gate changes. Tests/replay job: `e365aa82c5833ae7937bd06dab3a19a4`.
+
+Follow-up on the Pump schema gap: all 16 published pump.json revisions returned by the official repository history were checked. None defines the observed 391-byte sell event; the newest accounts for 383 bytes. History job `d8915fa4210efcbf554250b7c424ec68`. This rules out the retrieved published revisions, not every possible deployed or unpublished schema.
