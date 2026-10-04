@@ -27,7 +27,7 @@
     "scout/test_wallet_intelligence.py": "d7e251dc4c413fdef522ec5b6bc57b5dfa2eb86a2f6d80ab83b250b7ab7bb477",
     "scout/audit_crypto_readonly.py": "06ebe5e23b149be0dc5168ad547ecfa490567af9d222b2b937f3d9ea8f381f4d",
     "scout/protocol_screening.py": "ca049acdde2198e70d83a82d95552b4bd193116de0b4d28f64c34cd699827636",
-    "scout/early_scout.py": "15fd3941b8ed8322462c4a410565824383df84e95cca807a5190d2db03addcf2",
+    "scout/early_scout.py": "995d3a577681657966b282d6cc97dc77dff7601910b3ccbc2faf0a8d78105b92",
     "scout/wallet_worker.py": "78a1f56048116c843d10eb0af1a4bbd621590c9806ae0dd3bbb11f6652b47480",
     "scout/test_crypto_stack.py": "f7bd8cf52b06d26d2ec3a23c5d2700eaa1a8226f13d890dbe3039ec5eb575f59",
     "scout/WALLET_INTELLIGENCE.md": "f75bf88df80abf3721d1a652de7f324b922e5acce5f677907abda55489126697",
@@ -35,7 +35,7 @@
     "scout/test_protocol_screening.py": "26abcd877226f7297d8870e43c83f0b37d9ff5a024079216422f00b472a3fc8d",
     "scout/DEX_BROWSER_BUILD.md": "0ca3268c293654f3ab09d5014c7880726b086ca59646f24c38ff1a4128e304f8",
     "scout/install_wallet_intelligence.py": "ca796e1f207a0d9a41f23ab8861910c1919dd4b1f3fafeb7ce0de94b262a0c00",
-    "scout/scout_learning_v2.py": "fc2cb81c3d29049e0377a5ca6ad0693aebbb0d710864d0b70e625f157664ed4c",
+    "scout/scout_learning_v2.py": "369c5bd13f2bc66c54ab0d86c499542b13bd711e63448f463f8925d43608f59d",
     "scout/vivameda-wallet-intelligence.timer": "8d4d24c579693cca5e0384ae1b65f3aea11d7d0144bb3cdd8027c17555211ef0",
     "scout/wallet_telegram.py": "a4be32a7bc1af6b072cc775d27bb415bf1140713066c864fd90ecee25d400604",
     "scout/dex_browser_worker.py": "bae7cadffcc0415be4c9d004b722f74cbcb865489d82b9fdad864ddfc8ad3d61",
@@ -74,7 +74,9 @@
     "scripts/test_wallet_diagnostics.py": "4e4065747ef1d246f590c5fa8472e51983357afad13727e8b6acf471291c5c40",
     "research/CRYPTO_AUDIT_20261004.md": "5e28cba35985815722e2fa253b651075982532bab1dea1bd4e39142c86dfb490",
     "research/prediction_ledger.py": "3d15843fdcadd65f8084c4b2675c013c0c88948558d678a5ea6061eb0c87f813",
-    "research/test_prediction_ledger.py": "6b495a2e41908d8f51346da39a8c48dc609622f171a1cffb8c6811de5c906b96"
+    "research/test_prediction_ledger.py": "6b495a2e41908d8f51346da39a8c48dc609622f171a1cffb8c6811de5c906b96",
+    "scout/test_live_ledger.py": "f2c5469fca1ba5955c3e804c34d2e835156cc88c270113a1e14fed3e95be0a29",
+    "research/LEDGER_ACTIVATION_20261004.md": "f1e44e2e9febfb322e3a3a443c2786afc4df4df2b90869872cd95ed9cacdc759"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -96,11 +98,21 @@
     "date": "2026-10-04",
     "document": "research/CRYPTO_AUDIT_20261004.md",
     "refit": false,
-    "forward_evaluation": "specification frozen; not activated"
+    "forward_evaluation": "activated 2026-10-04T06:45:43Z; see prediction_ledger"
   },
   "prediction_ledger": {
-    "status": "storage core tested; scanner integration and activation pending",
-    "tests_passed": 9,
-    "production_changed": false
+    "status": "live; activation verified in production logs",
+    "activated_at_utc": "2026-10-04T06:45:43Z",
+    "deadline_utc": "2026-11-03T06:45:43+00:00",
+    "excluded_mints": 152817,
+    "predictions_at_activation": 0,
+    "tests_passed": 167,
+    "reviewed_release": "cea5d4cbb7eddbe3f20f2cd533e63eab4cabd465e0baace9dba2bf0449d0a5e5",
+    "backup_id": "20261004T064542Z",
+    "activation_head_sha256": "fc160dffd0d3c2304e38e54c205ddc96b32245e87ebc96dc6f88a6b80f3b4e5a",
+    "model_probability_affects_alerts": false,
+    "target_eligible": 200,
+    "server_commit": "6ca620b",
+    "receipt_commit": "167a501"
   }
 }
