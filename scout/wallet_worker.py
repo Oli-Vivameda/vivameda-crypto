@@ -3,6 +3,35 @@ import argparse, fcntl, html, json, shutil, sqlite3, time
 from pathlib import Path
 from full_screening import collect as collect_full
 from free_risk_evidence import valid, candidate_retry_delay, transient_issue
+def focus_research(db,eligible,current,now):
+    """One stable 15-minute focus; every fourth eligible pass explores the queue."""
+    db.execute("CREATE TABLE IF NOT EXISTS research_focus(id INTEGER PRIMARY KEY CHECK(id=1),mint TEXT,identity TEXT,until_ts INTEGER,passes INTEGER)")
+    rows={r[0]:r for r in eligible if r[0] in current}
+    if not rows:return None
+    focus=db.execute("SELECT mint,identity,until_ts,passes FROM research_focus WHERE id=1").fetchone()
+    def identity(mint):return json.dumps([current[mint].get("pair"),current[mint].get("creator")])
+    def viable(mint):
+        status=db.execute("SELECT last_status FROM queue WHERE mint=?",(mint,)).fetchone()
+        return mint in current and not (status and status[0]=="SCREENED_REJECT")
+    valid_focus=bool(focus and focus[0] in current and identity(focus[0])==focus[1] and now<focus[2] and viable(focus[0]))
+    if not valid_focus:
+        candidates=[r for r in eligible if r[0] in current and viable(r[0])]
+        # Rotate after a lease, even if the old token still has highest priority.
+        alternatives=[r for r in candidates if not focus or r[0]!=focus[0]]
+        if alternatives:candidates=alternatives
+        if not candidates:
+            db.execute("DELETE FROM research_focus");db.commit()
+            return next(iter(rows.values()))
+        chosen=max(candidates,key=lambda r:int(current[r[0]].get("screening_priority",0)))
+        focus=(chosen[0],identity(chosen[0]),now+900,0)
+    passes=focus[3]+1
+    db.execute("INSERT OR REPLACE INTO research_focus VALUES(1,?,?,?,?)",(focus[0],focus[1],focus[2],passes));db.commit()
+    if passes%4==0:
+        other=next((r for r in eligible if r[0] in current and r[0]!=focus[0]),None)
+        if other:return other
+    # Respect the existing candidate backoff; never force a not-due focus.
+    return rows.get(focus[0],next(iter(rows.values())))
+
 def cycle(inbox,root,now=None,research=True,rpc_budget=None):
     now=int(time.time()) if now is None else now
     root=Path(root);root.mkdir(parents=True,exist_ok=True)
@@ -52,7 +81,13 @@ def cycle(inbox,root,now=None,research=True,rpc_budget=None):
         db.commit()
         ordering="research_due,next_due,priority DESC,seen DESC" if research else "priority DESC,next_due,seen DESC"
         eligible=db.execute("SELECT mint,attempts FROM queue WHERE next_due<=? ORDER BY "+ordering,(now,)).fetchall()
-        selected=next((row for row in eligible if row[0] in current),None)
+        selected=focus_research(db,eligible,current,now) if research else next((row for row in eligible if row[0] in current),None)
+        if not research:
+            # Fast refresh of another token must not postpone the focused research.
+            exists=db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='research_focus'").fetchone()
+            focus=db.execute("SELECT mint,until_ts FROM research_focus WHERE id=1").fetchone() if exists else None
+            if focus and now<focus[1]:
+                selected=next((row for row in eligible if row[0] in current and row[0]!=focus[0]),None)
         if not selected: return {"status":"idle","identity_pending":len(deferred)}
         mint,attempts=selected
         # Lease before network work prevents tight retry loops after a crash.
