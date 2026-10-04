@@ -89,12 +89,14 @@
     "scout/dflow_decoder.py": "40f43aa7864b3f0afa7f0ce182bab0e9339abf7248b09497c19ec6e545a25150",
     "scout/dflow_schema.json": "0b849cec2747c875630bb021acfec2ce7aa6f2a28f78b03ed5cb44a2b135c021",
     "scout/test_dflow_decoder.py": "f3b1b48352e2e39c41de1fd53506df76dafe2197a386e1e593545ec604e7d171",
-    "docs/DFLOW_DECODER_20261004.md": "d1dad7a4f2070197969bb94ec06580a2005a254e95e5a60c73f6d098cb08ceab",
+    "docs/DFLOW_DECODER_20261004.md": "b3e52075fe52f5116f56d6438223600d02263bd4a0d9884c4ae76a9e73d1b1a0",
     "scout/dflow_reconcile.py": "ddccad4bf40fc775876517b660ca5467d18fcbb2d1e949eb4a78349aa22935d4",
     "scout/test_dflow_reconcile.py": "ffa248d3ee7d90ee8745e555e287da0188d75f303e2e66ce01cadb733f637641",
     "research/dflow_reconciliation_results.json": "5ff6fc307350ab791ea8fb4f98c2ad6f3fa77fd43bf09f3ca3b67f3d7e17113a",
     "scripts/replay_wallet_cache.py": "77a1183d3d243b3bd96986d71c7603dd58e65f84a20688e90f40455e7e4a9de8",
-    "scripts/test_replay_wallet_cache.py": "04716f88520621c8aab8531c59555679fb2d96fb26345d873667a8d09e49f451"
+    "scripts/test_replay_wallet_cache.py": "04716f88520621c8aab8531c59555679fb2d96fb26345d873667a8d09e49f451",
+    "scripts/export_wallet_failure_samples.py": "70a5577f0a719da8f2b65247da0785eba2b72b49ba83412497b6222750fa2c8c",
+    "scripts/test_export_wallet_failure_samples.py": "05a4390782969d0a4a9ce231dcf29048bc51ffefc6ac77409b5bcfc8ce029b55"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -160,11 +162,22 @@
     "production_changed": false
   },
   "wallet_cache_replay": {
-    "status": "prepared_owner_run_pending",
+    "status": "production_cache_replayed_diagnostic_samples_pending",
     "helper_tests_passed": 7,
     "fixture_transactions": 5,
     "fixture_receipts": 50,
     "production_changed": false,
-    "complete_history_claimed": false
+    "complete_history_claimed": false,
+    "cached_rows": 1000,
+    "dflow_transactions": 254,
+    "endpoint_amounts_matched": 155,
+    "unresolved": 99,
+    "receipt_count": 3031
+  },
+  "wallet_failure_samples": {
+    "status": "prepared_owner_run_pending",
+    "tests_passed": 4,
+    "max_samples": 6,
+    "private_output_only": true
   }
 }
