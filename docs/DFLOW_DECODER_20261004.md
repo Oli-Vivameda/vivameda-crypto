@@ -128,3 +128,21 @@ Paired replay on the six saved private failures: baseline zero endpoint matches;
 Validation: 37 DFlow tests pass locally and on Hetzner. Four additional test methods cover refund accounting, unchanged input, persistent semantic blockers, missing creation, bad discriminator length, bad roles/permissions/owner/endpoints, duplicate close and unchanged baseline behavior. The private replay is saved in engineering job `490c717ca0f25677f880eeae3db81a0d`; tests in `ff8ae37f1ee363112454cbfcdf31d527`.
 
 This is an offline accounting candidate, not a production coverage release. Next work is PDA/historical-version evidence and historical wrapped-SOL reserve handling. A broader frozen paired replay is required before any claim about cache-wide improvement.
+
+## Conditional same-transaction SyncNative candidate
+
+The two remaining examples create, initialize, synchronize and close a legacy SPL wrapped-SOL ATA within one transaction. No token-account endpoint snapshot survives. Both observed creation instructions fund 1,488,440 lamports, but that number is not hardcoded as a reserve.
+
+Primary source inspection confirms that the associated-token-account program's fresh-account branch funds `rent.minimum_balance(space).max(1)`, and token initialization records a native reserve. Current token source also recomputes rent during `syncNative`; historical stored-reserve behavior cannot be assumed universally. References and inspected byte hashes:
+
+- https://github.com/solana-program/associated-token-account/blob/main/program/src/processor.rs — `e8bf0dd2d9ac87ebc488faf73dee2530df6d6dc83bc19907def973c5209953ca`
+- https://github.com/solana-program/associated-token-account/blob/main/program/src/tools/account.rs — `92961c7884332d4f1ea3356034b6823cf1a9f086ab4249e9aeff4d17388ddb53`
+- https://github.com/solana-program/token/blob/main/program/src/processor.rs — `400cdf9d6d5d18cb3cade83abda7ad4ffb3894ede5e29c189cf8fa2dfa5160a1`
+
+The offline candidate now supports only a narrow conditional creation chain: parsed ATA create/createIdempotent parent, matching account/funder/mint/programs, direct system create of a 165-byte legacy SPL account, zero pre-existing lamports, funding greater than one lamport, matching initialization parent and wallet, and unchanged funding balance at initialization. `syncNative` updates token state without emitting a transfer or moving lamports. Pre-existing accounts, missing reserve evidence, Token-2022 native accounts, balance decreases and inconsistent identity remain UNKNOWN. This deliberately conservative subset does not claim support for every valid token-program version.
+
+The creation amount is used conditionally as reserve evidence from the same transaction. It is not an archived state observation or verified historical executable. `ata_rent_and_historical_program_semantics_unverified` and existing semantic blockers remain. Historical current-state queries were not substituted for missing evidence.
+
+Paired replay of the six selected saved failures now produces six endpoint matches, up from four with the prior candidate and zero with the original reconciler. Both SyncNative cases now match. All six still have `history_coverage_complete:false`; this is conditional accounting, not complete wallet coverage or a population estimate. Replay job: `483d1a8ec3831c656307d1983d9048f0`.
+
+43 DFlow tests pass, including six added methods for conditional SyncNative state updates, wrong parents, invalid funding/size/owner, pre-existing balances, initialization identity and absence of fictitious transfer receipts. Production remains unchanged. PDA derivation, historical deployed-version verification, extension semantics and a broader frozen paired replay remain required before production promotion.
