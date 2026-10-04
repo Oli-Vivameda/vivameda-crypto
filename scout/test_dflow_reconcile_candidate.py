@@ -1,6 +1,6 @@
 import copy
 import unittest
-from dflow_reconcile_candidate import reconcile, PUMP_AMM, PUMP_CLOSE, SYSTEM
+from dflow_reconcile_candidate import reconcile, PUMP_AMM, PUMP_CLOSE, SYSTEM, ATA, WSOL, SPL
 from protocol_screening import b58encode
 from test_dflow_reconcile import sample, USER, CLOSE, SPONSOR
 
@@ -41,5 +41,47 @@ class CandidateTests(unittest.TestCase):
         self.assertEqual(reconcile(tx)['status'],'UNKNOWN')
     def test_existing_sample_unchanged(self):
         self.assertEqual(reconcile(sample())['status'],'ENDPOINT_AMOUNTS_MATCH')
+
+def sync_sample():
+    tx=sample();msg=tx['transaction']['message'];keys=msg['accountKeys']
+    for a in (ATA,WSOL):
+        if a not in [k['pubkey'] for k in keys]:
+            keys.append({'pubkey':a,'signer':False});tx['meta']['preBalances'].append(100);tx['meta']['postBalances'].append(100)
+    v=[k['pubkey'] for k in keys].index(CLOSE)
+    tx['meta']['preBalances'][v]=tx['meta']['postBalances'][v]=0
+    tx['meta']['innerInstructions'][0]['instructions'].extend([
+      {'programId':ATA,'stackHeight':2,'parsed':{'type':'create','info':{'account':CLOSE,'source':USER,'mint':WSOL,'wallet':USER,'tokenProgram':SPL,'systemProgram':SYSTEM}}},
+      {'programId':SYSTEM,'stackHeight':3,'parsed':{'type':'createAccount','info':{'newAccount':CLOSE,'source':USER,'lamports':100,'space':165,'owner':SPL}}},
+      {'programId':SPL,'stackHeight':3,'parsed':{'type':'initializeAccount3','info':{'account':CLOSE,'mint':WSOL,'owner':USER}}},
+      {'programId':SYSTEM,'stackHeight':2,'parsed':{'type':'transfer','info':{'source':USER,'destination':CLOSE,'lamports':7}}},
+      {'programId':SPL,'stackHeight':2,'parsed':{'type':'syncNative','info':{'account':CLOSE}}},
+      {'programId':SPL,'stackHeight':2,'parsed':{'type':'closeAccount','info':{'account':CLOSE,'destination':USER,'owner':USER}}}])
+    return tx
+
+class SyncNativeCandidateTests(unittest.TestCase):
+    def test_conditional_sync_preserves_hold(self):
+        tx=sync_sample();before=copy.deepcopy(tx);r=reconcile(tx)
+        self.assertEqual(r['status'],'ENDPOINT_AMOUNTS_MATCH')
+        self.assertEqual(r['state_updates'][0]['raw_amount'],'7')
+        self.assertEqual(r['state_updates'][0]['reserve_lamports'],'100')
+        self.assertFalse(r['history_coverage_complete']);self.assertEqual(tx,before)
+        self.assertIn('ata_rent_and_historical_program_semantics_unverified',r['blockers'])
+    def test_wrong_parent_refused(self):
+        tx=sync_sample();tx['meta']['innerInstructions'][0]['instructions'][-6]['programId']=SYSTEM
+        self.assertEqual(reconcile(tx)['status'],'UNKNOWN')
+    def test_bad_funding_refused(self):
+        for field,value in [('owner',SYSTEM),('space',166),('space',True),('lamports',1)]:
+            tx=sync_sample();tx['meta']['innerInstructions'][0]['instructions'][-5]['parsed']['info'][field]=value
+            with self.subTest(field=field,value=value):self.assertEqual(reconcile(tx)['status'],'UNKNOWN')
+    def test_preexisting_balance_refused(self):
+        tx=sync_sample();names=[k['pubkey'] for k in tx['transaction']['message']['accountKeys']]
+        tx['meta']['preBalances'][names.index(CLOSE)]=1
+        self.assertEqual(reconcile(tx)['status'],'UNKNOWN')
+    def test_initialization_identity_refused(self):
+        tx=sync_sample();tx['meta']['innerInstructions'][0]['instructions'][-4]['parsed']['info']['owner']=SPONSOR
+        self.assertIn('sync_native_historical_reserve_missing',reconcile(tx)['blockers'])
+    def test_sync_is_state_update_not_transfer(self):
+        r=reconcile(sync_sample());self.assertEqual(len(r['state_updates']),1)
+        self.assertFalse(any(x['kind']=='sync_native' for x in r['receipts']))
 
 if __name__=='__main__':unittest.main()
