@@ -254,7 +254,14 @@ def history_packet(client,selection,now,priority_owner=None,scope_key=None):
             "addresses_observed":len(windows),"owners_complete_fresh":sum(
                 w["pagination_complete"] and w["pending_transactions"]==0 and w["null_timestamps"]==0
                 and not w["unknown_programs"] and 0<=now-w["head_at"]<=LIMITS["max_age"] for w in merged),
-            "owners_with_activity_age":sum(w["activity_age_lower_bound"] is not None for w in merged)}}
+            "owners_with_activity_age":sum(w["activity_age_lower_bound"] is not None for w in merged),
+            # Overlapping blockers among observed owners; absent owners are counted above.
+            "owners_missing_addresses":sum(w["addresses_reviewed"]<w["addresses_required"] for w in merged),
+            "owners_incomplete_pagination":sum(not w["pagination_complete"] for w in merged),
+            "owners_pending_transactions":sum(w["pending_transactions"]>0 for w in merged),
+            "owners_null_timestamps":sum(w["null_timestamps"]>0 for w in merged),
+            "owners_unsupported_programs":sum(bool(w["unknown_programs"]) for w in merged),
+            "owners_stale":sum(not 0<=now-w["head_at"]<=LIMITS["max_age"] for w in merged)}}
     ref=client.store.evidence("screen-history:"+json.dumps(selection),body)
     body["evidence_refs"]=[ref]
     return body,issues
@@ -349,6 +356,8 @@ def collect(mint,creator,pair,root,budget=40,research=True,time_budget=140):
         previous.get("screening",{}).get("checks",{}).get(k,{}).get("status")=="REJECT" for k in background):
         client.session.close();store.db.close()
         previous["fast_refresh_deferred"]="background_rejection_requires_research"
+        # Current invocation made no requests; preserve saved evidence timestamps.
+        previous["rpc_requests_used"]=0
         return previous
     packet={"policy":POLICY,"mint":mint,"pair":pair,"creator":creator}
     result={"schema":"wallet-intelligence-v3","mint":mint,"pair":pair,"developer":creator,
