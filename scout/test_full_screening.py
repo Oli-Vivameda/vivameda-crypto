@@ -591,3 +591,39 @@ class SharedHistoryIndexTests(unittest.TestCase):
    result,_=history_packet(client,[("a",100,"a"),("b",100,"b")],NOW+1,scope_key="mint:rotate")
   self.assertTrue(seen[0].startswith("a"));self.assertEqual(seen[1],"b1")
   self.assertEqual(result["index_metrics"]["transaction_attempts"],1);store.db.close()
+
+class FocusedHistoryTests(unittest.TestCase):
+ def test_owner_addresses_are_adjacent_with_fixed_budget(self):
+  store=Store(":memory:");client=Mock();client.store=store;client.left=7;client.deadline=time.monotonic()+140;seen=[]
+  def visit(client,wallet,seconds,now):
+   client.left-=2;seen.append(wallet)
+   return {"wallet":wallet,"window_start":now-seconds,"head_at":now,"pagination_complete":True,"null_timestamps":0}
+  with patch("full_screening.index_window",side_effect=visit):
+   result,_=history_packet(client,[("a",100,"ownerB"),("m",100,"ownerA"),("z",100,"ownerA")],NOW,scope_key="focus")
+  self.assertEqual(seen,["m","z"])
+  self.assertEqual(result["coverage_summary"]["owners_complete_fresh"],1)
+  self.assertEqual(result["coverage_summary"]["owners_missing"],1)
+  store.db.close()
+ def test_failed_tail_keeps_head_and_resumes_without_redating(self):
+  store=Store(":memory:");client=Mock();client.store=store;client.left=10
+  head=[{"signature":"s"+str(i),"blockTime":NOW-i,"err":None} for i in range(1000)]
+  client.rpc.side_effect=[head,RuntimeError("provider_failure")]
+  with self.assertRaises(RuntimeError):index_window(client,"wallet",86400,NOW)
+  self.assertEqual(store.db.execute("SELECT before_sig FROM screen_ranges").fetchone()[0],"s999")
+  client.rpc.reset_mock();client.rpc.side_effect=[[]]
+  result=index_window(client,"wallet",86400,NOW+1)
+  self.assertEqual(client.rpc.call_count,1)
+  self.assertEqual(client.rpc.call_args.args[1][1]["before"],"s999")
+  self.assertEqual(result["head_at"],NOW)
+  self.assertTrue(result["pagination_complete"])
+  store.db.close()
+ def test_expired_head_refresh_preserves_gap_safety(self):
+  store=Store(":memory:");client=Mock();client.store=store;client.left=1
+  client.rpc.return_value=[{"signature":"old"+str(i),"blockTime":NOW-i,"err":None} for i in range(1000)]
+  index_window(client,"wallet",86400,NOW)
+  client.rpc.return_value=[{"signature":"new"+str(i),"blockTime":NOW+121-i,"err":None} for i in range(1000)]
+  result=index_window(client,"wallet",86400,NOW+121)
+  self.assertEqual(client.rpc.call_count,2)
+  self.assertFalse(result["pagination_complete"])
+  self.assertEqual(result["head_at"],NOW+121)
+  store.db.close()
