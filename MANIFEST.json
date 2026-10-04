@@ -9,7 +9,7 @@
     "requirements.txt": "0d0d2938e5443f318fc97363f42cffe3309df1b718cc2bf713263a68cb7bbee5",
     "README.md": "0e34b5ffb30461ec450ba7a41d608de0a7a75aaf16639e9ba943515431e11dd9",
     "SECURITY.md": "fe6ff00dd33525fee4c4fdeff8eea567ee5801705fcad953880bf9f1d58a7a8c",
-    "scripts/export_monitor_sources.py": "0cda04899305d26f17c39f5176aeab4861c7a789a4664402d8bf5b48848c0dd3",
+    "scripts/export_monitor_sources.py": "0918f7a19ed5d2fda85d041c949eaeca0ea3f928940f597a8f577e4611c12922",
     "scripts/install_wallet_connector.py": "703fee1b3985d6afae524cc52c2427198050e8fbcb3140046deb3ab5fd543052",
     "scripts/WALLET_CONNECTOR.md": "34774e617c6bc420d9a71274323a496baccefdbd8965dd6f696bf6cc6422b255",
     "scripts/verify_release.py": "f8f72c7fa4baf3fadc72f09219c6b4e696d3cac4a1c0adbc488f358b0cf8521c",
@@ -26,7 +26,7 @@
     "research/prediction_ledger.py": "3d15843fdcadd65f8084c4b2675c013c0c88948558d678a5ea6061eb0c87f813",
     "legacy/scout_learning.py": "835b3e6cd854ddbb11b0a8af4d2fa8c0fe64b468533e7a14ea714df07e6b5c44",
     "docs/SETUP.md": "0c5ba2e5780db52d942178616d9acee83a2b317625859c1f020a72a6854857b0",
-    "docs/COVERAGE_20261004.md": "58556e6065510e56376ec59d2473d0bc417d82da3195c2448358e2d68f629954",
+    "docs/COVERAGE_20261004.md": "b5b089412561c9f0b627966ee3a1ef5b577493707ccaa0f6c4b62c1b58bd123e",
     "docs/VALIDATION.md": "b884cedf31c1c628366ece4a0ceecbbc71f11adee84aab2fe013f845932219c9",
     "docs/COMPLETENESS.md": "4933897dced82a72070e8482bbca52e30b70ae6788de93d4e3d9dda4ef4234dd",
     "docs/MONITORS.md": "c4c26f29431b8aaa2a339fa6e23cf70cd2d4212cb31229009b402ddd46f0841b",
@@ -84,7 +84,8 @@
     "monitors/pool-monitor/developer_checks.py": "18f721f724136c70ec4a568cf53c65b01945f785713d05f893330db160c7f3eb",
     "monitors/pool-monitor/developer_watch.example.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
     "monitors/pool-monitor/monitor.py": "07307805bfce8838f41a9b472f4346b6761369f15eb7ee7079bb4224555c8835",
-    "monitors/watchlist/watch.py": "edde0979dc8faef91b61689bbc3ab29efbf6c971c46ba9c9ffa51f7f8bbce180"
+    "monitors/watchlist/watch.py": "edde0979dc8faef91b61689bbc3ab29efbf6c971c46ba9c9ffa51f7f8bbce180",
+    "scripts/test_export_monitor_sources.py": "469630668f9c55e736b722b505e0bd47784264ad3c7054db05045858ef7bc343"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -128,7 +129,8 @@
     "destination": "private review directory in shared engineering checkout",
     "includes": "numeric coverage blockers and previously missing monitor source",
     "production_changed": false,
-    "review_date_utc": "2026-10-04"
+    "review_date_utc": "2026-10-04",
+    "program_diagnostics_status": "prepared and offline-tested; owner run pending"
   },
   "exported_source_components_complete": true,
   "limitations": [
