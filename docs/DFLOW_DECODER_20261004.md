@@ -42,3 +42,33 @@ Run the standalone tests from repository root:
 ```sh
 python3 -m unittest discover -s scout -p 'test_dflow_decoder.py'
 ```
+
+## Downstream transfer accounting — follow-up
+
+Implemented `scout/dflow_reconcile.py` and 17 additional tests. The combined suite now passes 27 tests locally and on Hetzner. It remains offline: no production import, gate change or deployment.
+
+The reconciler reconstructs instruction-parent paths from root indices and stack heights. Token owners, transfer authorities and close authorities remain separate fields. Transfers under sibling invocations or other top-level instructions keep separate provenance. Declared sponsor actions do not turn their accounts into common-owner evidence. Platform-fee transfer purpose remains unverified; a matching amount alone does not label a fee or sale. No common-control edges are emitted.
+
+Accounting covers explicit parsed token transfers, native transfers, account funding, network fee deduction and token-account close refunds/unwraps. It compares reconstructed amounts against transaction-wide token and lamport endpoint balances. Token owner changes stop reconciliation before subsequent receipts could use stale ownership; close-authority changes do not alter token ownership. Unsupported effects, missing traces, invalid stack heights, missing balances and residual differences remain blockers.
+
+The same five saved public transactions replayed without network calls. Results are recorded in `research/dflow_reconciliation_results.json` (no account identities or transaction bodies):
+
+| Sample | Accounting records | Token residuals | Lamport residuals | Full history complete |
+|---|---:|---:|---:|---|
+| 0 | 10 | 0 | 0 | No |
+| 1 | 7 | 0 | 0 | No |
+| 2 | 11 | 0 | 0 | No |
+| 3 | 8 | 0 | 0 | No |
+| 4 | 14 | 0 | 0 | No |
+
+Total: 50 records = 38 token transfers, 3 native transfers, 5 account-funding records and 4 close refunds/unwraps. Network fees are separately deducted from the fee-payer balance during reconciliation. `ENDPOINT_AMOUNTS_MATCH` means the explicit accounting matches endpoints; it is not PASS, and offsetting unrecognized effects can still exist. Every result retains `history_coverage_complete: false` and `downstream_program_semantics_unverified`. Samples 0, 2 and 4 additionally flag Token-2022 extensions and new wrapped-SOL reserve verification.
+
+This convenience sample is not a representative coverage estimate. The production collector's protected cache has not been replayed with this component. Actual unsupported-owner reduction and freshness/capacity remain unproven. No paid calls, trades, model changes or screening relaxations occurred.
+
+Added tests cover authority/owner separation, inner-sibling and outer-root isolation, missing traces, stack jumps/duplicates, omitted transfers, incorrect fees/mints, missing balance sides, endpoint identity changes, close authority, owner changes, invalid amounts/underflows, failed transactions, duplicate balances, close-refund classification and input immutability.
+
+Primary accounting references: https://solana.com/docs/rpc/json-structures and https://solana.com/docs/tokens/basics/close-account .
+
+```sh
+python3 -m unittest discover -s scout -p 'test_dflow*.py'
+```
