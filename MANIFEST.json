@@ -89,10 +89,12 @@
     "scout/dflow_decoder.py": "40f43aa7864b3f0afa7f0ce182bab0e9339abf7248b09497c19ec6e545a25150",
     "scout/dflow_schema.json": "0b849cec2747c875630bb021acfec2ce7aa6f2a28f78b03ed5cb44a2b135c021",
     "scout/test_dflow_decoder.py": "f3b1b48352e2e39c41de1fd53506df76dafe2197a386e1e593545ec604e7d171",
-    "docs/DFLOW_DECODER_20261004.md": "bc6bb8eeb98ede8d385571ea8fc0d851aee902730c9898b4178d0a643b1d2d55",
+    "docs/DFLOW_DECODER_20261004.md": "d1dad7a4f2070197969bb94ec06580a2005a254e95e5a60c73f6d098cb08ceab",
     "scout/dflow_reconcile.py": "ddccad4bf40fc775876517b660ca5467d18fcbb2d1e949eb4a78349aa22935d4",
     "scout/test_dflow_reconcile.py": "ffa248d3ee7d90ee8745e555e287da0188d75f303e2e66ce01cadb733f637641",
-    "research/dflow_reconciliation_results.json": "5ff6fc307350ab791ea8fb4f98c2ad6f3fa77fd43bf09f3ca3b67f3d7e17113a"
+    "research/dflow_reconciliation_results.json": "5ff6fc307350ab791ea8fb4f98c2ad6f3fa77fd43bf09f3ca3b67f3d7e17113a",
+    "scripts/replay_wallet_cache.py": "77a1183d3d243b3bd96986d71c7603dd58e65f84a20688e90f40455e7e4a9de8",
+    "scripts/test_replay_wallet_cache.py": "04716f88520621c8aab8531c59555679fb2d96fb26345d873667a8d09e49f451"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -156,5 +158,13 @@
     "endpoint_amounts_matched": 5,
     "reconciliation_records": 50,
     "production_changed": false
+  },
+  "wallet_cache_replay": {
+    "status": "prepared_owner_run_pending",
+    "helper_tests_passed": 7,
+    "fixture_transactions": 5,
+    "fixture_receipts": 50,
+    "production_changed": false,
+    "complete_history_claimed": false
   }
 }
