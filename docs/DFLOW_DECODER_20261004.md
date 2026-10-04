@@ -162,3 +162,22 @@ python3 -I /var/lib/vivameda-engineering/repo/client_learning/public_crypto_rele
 ```
 
 Broader paired results are pending this capture. The resulting convenience cohort will support a like-for-like decoder comparison, not a representative wallet-population estimate. The prior six-case result remains 6/6 conditional endpoint matches, with zero complete-history claims and 43 DFlow tests passing. Historical program and token-extension semantics remain unresolved; no deployment is performed.
+
+
+## Frozen cohort: lifecycle and mint/burn accounting (2026-10-04)
+
+The owner captured 243 DFlow transactions from 1,000 cached rows, without a bounded stop. Canonical transaction SHA-256: `52241298442326d0363bff5839e94c6e739b4a49e5642eb1b5adb11bbd4b3c51`. Raw transactions remain private.
+
+| Offline reconciler | Endpoint matches | Unresolved |
+|---|---:|---:|
+| Original baseline | 156/243 (64.2%) | 87 |
+| Previous candidate | 229/243 (94.2%) | 14 |
+| Lifecycle and mint/burn candidate | 234/243 (96.3%) | 9 |
+
+The new candidate handles observed token-account close/recreate sequences only when the tracked balance is zero and the token program matches. It also accounts for parsed mintTo/burn amounts with identity and amount bounds checks. Mint/burn state updates are not transfer receipts; authority and supply verification remain explicit blockers. Four recreation cases and one mint/burn case now reconcile. All 48 DFlow tests pass. Against the original baseline, 78 cases improve and zero regress. Complete-history claims remain zero.
+
+Remaining accounting failures: three Token-2022 token residuals, one missing historical WSOL reserve, four native underflows, and one unsupported DFlow transfer_sol layout. Residuals are not automatically interpreted as fees or refunds. Historical executable semantics, extension state and wallet-history completeness remain unresolved even for endpoint matches.
+
+This convenience cohort has now informed development. These percentages describe this fixed sample only; they are not held-out accuracy estimates or evidence of predictive performance. No population confidence interval is claimed. No production code, scanner threshold, or coverage gate changed.
+
+Verification jobs: tests `bccfb7e9206af8e452c4ce46ca227952`; paired replay `c138980782e674644271e8fea77abe07`. Candidate SHA-256: `f3995a1f3cc419f50e5eff8cb69e3ce4c13ce803bfaca70c88ae734c53718171`.
