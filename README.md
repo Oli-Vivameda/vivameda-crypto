@@ -2,7 +2,7 @@
 
 Solana early-breakout scanning, wallet screening, Telegram alerts, forward outcome tracking and experimental research.
 
-**Release status:** scanner, wallet, V2 learning and crypto-agent source are published. The full live setup is still incomplete: survivor/watchlist and pool-monitor source await an owner export from protected directories. See [coverage](docs/COMPLETENESS.md). Full cluster/age evidence is not guaranteed.
+**Release status:** scanner, wallet, V2 learning and crypto-agent source are published. The exported watchlist, pool monitor, developer checks and legacy tracker are now included. The watchlist tracks three configured tokens; it is not a broad survivor-discovery scanner. Private live configuration/data and fresh-host validation remain outside this release. See [coverage](docs/COMPLETENESS.md). Full cluster/age evidence is not guaranteed.
 
 ## Included
 - 11 equal-weight scoring signals; alert thresholds 8 and 10.
@@ -10,6 +10,8 @@ Solana early-breakout scanning, wallet screening, Telegram alerts, forward outco
 - Creator reconciliation, ownership census, durable wallet history indexing, clusters, activity-age bounds, maps and capacity diagnostics.
 - ALERT/SHADOW forward learning, crypto-only agent context and research rules.
 - Numerical training code, experimental fitted coefficients and evaluation, tests, configuration example and systemd units.
+
+See [monitor signals and setup](docs/MONITORS.md) for the additional components and their limitations.
 
 ## Documentation
 | Guide | Contents |
@@ -21,7 +23,7 @@ Solana early-breakout scanning, wallet screening, Telegram alerts, forward outco
 | [Setup](docs/SETUP.md) | Dependencies, installation and health |
 | [Agent](agent/README.md) | Standalone context integration |
 | [Research](research/README.md) | Model, data schema and limits |
-| [Completeness](docs/COMPLETENESS.md) | Missing protected components |
+| [Completeness](docs/COMPLETENESS.md) | Source coverage and remaining limitations |
 | [Validation](docs/VALIDATION.md) | Checks performed and remaining gaps |
 | [Security](SECURITY.md) | Publication boundary |
 
