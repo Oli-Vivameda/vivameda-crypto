@@ -71,7 +71,8 @@
     "scripts/install_wallet_connector.py": "703fee1b3985d6afae524cc52c2427198050e8fbcb3140046deb3ab5fd543052",
     "scripts/WALLET_CONNECTOR.md": "34774e617c6bc420d9a71274323a496baccefdbd8965dd6f696bf6cc6422b255",
     "scripts/wallet_ops.py": "1f212c7a2fc489ff1fdf30e46619038f89d942d9bd442b6d90a0d027180b8c37",
-    "scripts/test_wallet_diagnostics.py": "4e4065747ef1d246f590c5fa8472e51983357afad13727e8b6acf471291c5c40"
+    "scripts/test_wallet_diagnostics.py": "4e4065747ef1d246f590c5fa8472e51983357afad13727e8b6acf471291c5c40",
+    "research/CRYPTO_AUDIT_20261004.md": "5e28cba35985815722e2fa253b651075982532bab1dea1bd4e39142c86dfb490"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -84,9 +85,15 @@
     "tests_passed": 85
   },
   "focused_collection": {
-    "deployment": "prepared, not deployed",
+    "deployment": "deployed and hash-verified 2026-10-04",
     "tests_passed": 133,
     "reviewed_wallet_bundle": "b948040c90c65afc31761a0a085c9d111adab4539821aaa5cfd06cfc45e0d116",
     "live_coverage_improvement_verified": false
+  },
+  "model_audit": {
+    "date": "2026-10-04",
+    "document": "research/CRYPTO_AUDIT_20261004.md",
+    "refit": false,
+    "forward_evaluation": "specification frozen; not activated"
   }
 }
