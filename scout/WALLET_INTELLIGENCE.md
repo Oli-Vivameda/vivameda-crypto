@@ -22,3 +22,11 @@ Work holds below 3 GiB free disk or above 2 GiB of top-level evidence files. Rat
 Code: /opt/vivameda-wallet-intelligence. Private runtime state: /var/lib/vivameda-wallet-intelligence/data. Candidate exporter has no network; worker cannot access the scanner directory. Dedicated accounts own runtime state; root owns installed code.
 
 See ../docs/SETUP.md. The installer validates bundled hashes; without --install it changes no services. Cloning does not deploy.
+
+## Collection audit — 4 October 2026
+
+Prepared update, not yet deployed: deferred fast passes make zero RPC calls and now report zero instead of reusing a previous research count. Saved rejection evidence and its timestamp remain unchanged. Coverage summaries now count missing address parts, incomplete pagination, pending transactions, null timestamps, unsupported programs and stale heads separately. These counts overlap and exclude wholly unobserved owners (already reported as owners_missing).
+
+The existing collector rotates addresses and transactions and caches transaction bodies. Complete history requires all required addresses, decoded transactions and supported programs, with heads at most 300 seconds old. Hundreds or thousands of required addresses compete within a 60-request research budget across the candidate queue. Cache reuse does not make old observations fresh. This is a capacity constraint, not evidence of clean wallets. No RPC budget, screening threshold or alert gate was changed.
+
+85 screening and wallet-pipeline tests passed on Hetzner, including zero-call deferral, original timestamp preservation, missing address counts and stale cache counts. The local test attempt lacked requests; it did not run. Further work should measure a fixed cohort's blocker counts and address/transaction throughput before changing scheduling or purchasing capacity. Full cluster/age coverage is not claimed.
