@@ -1,0 +1,16 @@
+[Unit]
+Description=Vivameda +10 Percent Watchlist Check
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=vivameda-monitor
+Group=vivameda-monitor
+WorkingDirectory=/opt/vivameda-crypto-watchlist
+ExecStart=/usr/bin/python3 /opt/vivameda-crypto-watchlist/watch.py
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/vivameda-crypto-watchlist
