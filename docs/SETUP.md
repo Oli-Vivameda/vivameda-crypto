@@ -1,6 +1,6 @@
 # Installation and operation
 
-The published scanner/wallet/learning components target Python 3.10+ on Linux with systemd. The offline suite is checked on Python 3.12. Survivor/watchlist and pool-monitor installation is pending their source export; see COMPLETENESS.md. The templates here are new distribution templates, not a claim that every live unit is identical.
+The published scanner/wallet/learning components target Python 3.10+ on Linux with systemd. The offline suite is checked on Python 3.12. Additional exported monitor setup is documented in MONITORS.md; see COMPLETENESS.md for limitations. The templates here are new distribution templates, not a claim that every live unit is identical.
 
 ## Offline verification
 
@@ -28,7 +28,7 @@ sudo useradd --system --user-group --no-create-home --shell /usr/sbin/nologin vi
 sudo install -d -m 755 /opt/vivameda-crypto-early-scout
 sudo install -m 644 scout/*.py /opt/vivameda-crypto-early-scout/
 sudo install -d -o vivameda-scout -g vivameda-scout -m 750 /opt/vivameda-crypto-early-scout/data /opt/vivameda-crypto-early-scout/logs
-sudo install -m 644 deploy/*.service /etc/systemd/system/
+sudo install -m 644 deploy/vivameda-early-scout.service deploy/vivameda-scout-learning-v2.service /etc/systemd/system/
 sudo install -o vivameda-scout -g vivameda-scout -m 600 credentials.example.json /opt/vivameda-crypto-early-scout/credentials.json
 ```
 
