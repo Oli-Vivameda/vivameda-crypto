@@ -42,6 +42,34 @@ class CandidateTests(unittest.TestCase):
     def test_existing_sample_unchanged(self):
         self.assertEqual(reconcile(sample())['status'],'ENDPOINT_AMOUNTS_MATCH')
 
+class BondingCloseCandidateTests(unittest.TestCase):
+    def bonding_sample(self):
+        from dflow_reconcile_candidate import PUMP_BONDING
+        tx=close_sample()
+        for key in tx['transaction']['message']['accountKeys']:
+            if key['pubkey']==PUMP_AMM:key['pubkey']=PUMP_BONDING
+        g=tx['meta']['innerInstructions'][0]['instructions']
+        g[-2]['parsed']['info']['owner']=PUMP_BONDING
+        g[-1]['programId']=PUMP_BONDING;g[-1]['accounts'][-1]=PUMP_BONDING
+        return tx
+    def test_bonding_close_uses_tracked_refund_and_keeps_hold(self):
+        tx=self.bonding_sample();r=reconcile(tx)
+        self.assertEqual(r['status'],'ENDPOINT_AMOUNTS_MATCH')
+        self.assertEqual(r['receipts'][-1]['raw_amount'],'100')
+        self.assertIn('pump_close_pda_and_deployed_version_unverified',r['blockers'])
+        self.assertFalse(r['history_coverage_complete'])
+    def test_bonding_close_rejects_cross_program_and_missing_creation(self):
+        for kind in ('owner','executable','missing_creation','nonzero_endpoint','duplicate'):
+            tx=self.bonding_sample();g=tx['meta']['innerInstructions'][0]['instructions']
+            if kind=='owner':g[-2]['parsed']['info']['owner']=PUMP_AMM
+            if kind=='executable':g[-1]['accounts'][-1]=SYSTEM
+            if kind=='missing_creation':del g[-2]
+            if kind=='nonzero_endpoint':
+                names=[k['pubkey'] for k in tx['transaction']['message']['accountKeys']]
+                tx['meta']['postBalances'][names.index(CLOSE)]=1
+            if kind=='duplicate':g.append(copy.deepcopy(g[-1]))
+            with self.subTest(kind=kind):self.assertEqual(reconcile(tx)['status'],'UNKNOWN')
+
 def sync_sample():
     tx=sample();msg=tx['transaction']['message'];keys=msg['accountKeys']
     for a in (ATA,WSOL):
