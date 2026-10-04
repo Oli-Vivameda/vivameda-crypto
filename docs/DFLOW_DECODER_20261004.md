@@ -196,3 +196,14 @@ Six cases remain UNKNOWN: three Token-2022 residuals, one historical WSOL reserv
 Complete-history claims remain zero. Production and screening gates are unchanged. This is the same development sample, not held-out validation.
 
 Tests job: `3151088bf385c56c86dd6d7cfd685aa1`. Replay: `d7f321dfe540a75933a47fc0749d43d6`. Address audit: `486911ecd99f41ca6c107593bd888766`. The first replay submission exceeded command argument limits and did not run; the successful replay compares prior pass/fail membership from the saved previous replay. Candidate SHA-256: `69cd336365800876ce5a94792b559aaa5295685442bda35c3cb446f7148f6e0e`.
+
+
+## Remaining Pump sell: event version mismatch (2026-10-04)
+
+Private trace inspection found a Pump sell instruction with a child TradeEvent. Its token amount agrees with the parsed token transfer. Decoding the fields defined by the official Pump IDL gives gross SOL of 898,151,339 lamports, protocol fee 8,532,438 and creator fee 2,694,455. The resulting net amount is 886,924,446 lamports, exactly the subsequent native transfer that currently underflows in the offline candidate. Endpoint changes also show the protocol fee split into two equal amounts of 4,266,219 lamports, matching the event's buyback fee. These are diagnostic consistencies, not verified execution semantics.
+
+A strict event-version check blocks promotion: the child instruction contains 391 bytes including the Anchor CPI-event and TradeEvent discriminators. The retrieved official schema accounts for only 383 bytes. Eight trailing bytes remain unexplained. Ignoring that suffix or assigning it a guessed meaning would hide schema drift. The current reconciler therefore remains unchanged and the case stays UNKNOWN.
+
+Official IDL retrieved from `https://raw.githubusercontent.com/pump-fun/pump-public-docs/main/idl/pump.json`; SHA-256 `ffe966c42f1af41652ee753fe2f1e3f7cd4077d7e6f49faf3138959c8b56064b`. Trace job `22c899e0673737885b00543e6cde2eef`; official layout job `29c3f3544e8109ea5a443c43f4812178`; field/length diagnostic `83163f10f15eb667a77d29e5ed25aa2c`. Raw transactions and identities remain private.
+
+Next requirement: obtain the matching historical event schema and verify payout/fee recipient roles and deployed program semantics before adding a narrow, version-pinned sell handler. Until then: 237/243 endpoint matches, six unresolved, zero complete-history claims. No production change.
