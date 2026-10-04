@@ -9,6 +9,8 @@ from protocol_screening import SPL, TOKEN22, b58decode
 ATA = 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'
 
 PUMP_AMM = 'pAMMBay6oceH9fJKBRHGP5D4bD4sWpmSwMn52FMfXEA'
+PUMP_BONDING = '6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P'
+PUMP_CLOSE_PROGRAMS = {PUMP_AMM, PUMP_BONDING}
 PUMP_CLOSE = bytes.fromhex('f945a4da9667548a')
 
 SYSTEM = '11111111111111111111111111111111'
@@ -120,17 +122,17 @@ def reconcile(tx):
                 'purpose': 'unverified', 'common_control_evidence': False, **extra})
         for row in trace:
             ins = row['instruction']; program = ins.get('programId'); parsed = ins.get('parsed')
-            if not isinstance(parsed, dict) and program == PUMP_AMM and b58decode(ins.get('data', ''))[:8] == PUMP_CLOSE:
+            if not isinstance(parsed, dict) and program in PUMP_CLOSE_PROGRAMS and b58decode(ins.get('data', ''))[:8] == PUMP_CLOSE:
                 # Narrow candidate: same-transaction creation with known owner and zero endpoints.
                 if b58decode(ins['data']) != PUMP_CLOSE: raise EvidenceError('pump_close_data_length')
                 accounts = ins.get('accounts')
                 if not isinstance(accounts, list) or len(accounts) != 4: raise EvidenceError('pump_close_accounts')
                 user, vault, event, executable = map(acc, accounts)
-                if executable != PUMP_AMM or user == vault: raise EvidenceError('pump_close_roles')
+                if executable != program or user == vault: raise EvidenceError('pump_close_roles')
                 keymap = {k['pubkey']: k for k in keys}
                 if keymap[user].get('signer') is not True or any(keymap[a].get('writable') is not True for a in (user, vault)):
                     raise EvidenceError('pump_close_permissions')
-                if vault in pump_closed or created_native.get(vault) != PUMP_AMM:
+                if vault in pump_closed or created_native.get(vault) != program:
                     raise EvidenceError('pump_close_creation_unverified')
                 if meta['preBalances'][names.index(vault)] != 0 or post_native[vault] != 0:
                     raise EvidenceError('pump_close_endpoints')
