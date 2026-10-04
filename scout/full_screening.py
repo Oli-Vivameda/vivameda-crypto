@@ -100,8 +100,6 @@ def index_window(client,wallet,seconds,now):
       wallet TEXT PRIMARY KEY,head TEXT,before_sig TEXT,lower_ts INTEGER,ended INTEGER,
       head_at INTEGER,null_times INTEGER)""")
     previous=db.execute("SELECT head,before_sig,lower_ts,ended,head_at,null_times FROM screen_ranges WHERE wallet=?",(wallet,)).fetchone()
-    rows=client.rpc("getSignaturesForAddress",[wallet,{"limit":1000,"commitment":"finalized"}])
-    if not isinstance(rows,list):raise ValueError("invalid_signatures")
     def ingest(items):
         for row in items:
             if not isinstance(row.get("signature"),str):raise ValueError("invalid_signature")
@@ -109,17 +107,27 @@ def index_window(client,wallet,seconds,now):
                 DO UPDATE SET ts=COALESCE(excluded.ts,signatures.ts),failed=excluded.failed""",
                 (wallet,row["signature"],row.get("blockTime"),int(row.get("err") is not None)))
         db.commit()
-    ingest(rows)
-    head=rows[0]["signature"] if rows else None
-    contiguous=bool(previous and previous[0] and any(r["signature"]==previous[0] for r in rows))
-    timestamps=[r["blockTime"] for r in rows if type(r.get("blockTime")) is int]
-    lower=min(timestamps) if timestamps else None
-    nulls=sum(type(r.get("blockTime")) is not int for r in rows)
-    before=rows[-1]["signature"] if rows else None;ended=len(rows)<1000
-    if contiguous:
-        before=previous[1]
-        lower=min([t for t in (lower,previous[2]) if t is not None],default=None)
-        ended=bool(previous[3]);nulls+=previous[5]
+    # A recent head and an unfinished historical tail are separate work items.
+    # Reusing a head never advances its observation timestamp.
+    if previous and not previous[3] and (previous[2] is None or previous[2]>cutoff) and 0<=now-previous[4]<=120:
+        head,before,lower,ended,head_at,nulls=previous
+    else:
+        rows=client.rpc("getSignaturesForAddress",[wallet,{"limit":1000,"commitment":"finalized"}])
+        if not isinstance(rows,list):raise ValueError("invalid_signatures")
+        ingest(rows)
+        head=rows[0]["signature"] if rows else None
+        contiguous=bool(previous and previous[0] and any(r["signature"]==previous[0] for r in rows))
+        timestamps=[r["blockTime"] for r in rows if type(r.get("blockTime")) is int]
+        lower=min(timestamps) if timestamps else None
+        nulls=sum(type(r.get("blockTime")) is not int for r in rows)
+        before=rows[-1]["signature"] if rows else None;ended=len(rows)<1000
+        if contiguous:
+            before=previous[1]
+            lower=min([t for t in (lower,previous[2]) if t is not None],default=None)
+            ended=bool(previous[3]);nulls+=previous[5]
+        head_at=now
+    # Preserve successful head progress if the subsequent backward page fails.
+    db.execute("INSERT OR REPLACE INTO screen_ranges VALUES(?,?,?,?,?,?,?)",(wallet,head,before,lower,int(ended),head_at,nulls));db.commit()
     # At most one backward page per wallet per pass; leave budget for other wallets.
     if not ended and (lower is None or lower>cutoff) and client.left>1:
         older=client.rpc("getSignaturesForAddress",[wallet,{"limit":1000,"commitment":"finalized","before":before}])
@@ -130,8 +138,8 @@ def index_window(client,wallet,seconds,now):
         nulls+=sum(type(r.get("blockTime")) is not int for r in older)
         before=older[-1]["signature"] if older else before;ended=len(older)<1000
     nulls=db.execute("SELECT count(*) FROM signatures WHERE wallet=? AND ts IS NULL",(wallet,)).fetchone()[0]
-    db.execute("INSERT OR REPLACE INTO screen_ranges VALUES(?,?,?,?,?,?,?)",(wallet,head,before,lower,int(ended),now,nulls));db.commit()
-    return {"wallet":wallet,"window_start":cutoff,"head_at":now,"pagination_complete":bool(ended or (lower is not None and lower<=cutoff)),
+    db.execute("INSERT OR REPLACE INTO screen_ranges VALUES(?,?,?,?,?,?,?)",(wallet,head,before,lower,int(ended),head_at,nulls));db.commit()
+    return {"wallet":wallet,"window_start":cutoff,"head_at":head_at,"pagination_complete":bool(ended or (lower is not None and lower<=cutoff)),
             "null_timestamps":nulls,"provider_scope":"contiguous provider-returned address history; not guaranteed lifetime"}
 def history_packet(client,selection,now,priority_owner=None,scope_key=None):
     db=client.store.db;windows=[];issues=[]
@@ -142,15 +150,15 @@ def history_packet(client,selection,now,priority_owner=None,scope_key=None):
     # Persist round-robin position so a bounded pass cannot starve tail addresses.
     db.execute("CREATE TABLE IF NOT EXISTS screen_schedule(key TEXT PRIMARY KEY,offset INTEGER)")
     schedule_key=scope_key or hashlib.sha256(json.dumps(sorted(selection),sort_keys=True).encode()).hexdigest()
-    db.execute("CREATE TABLE IF NOT EXISTS screen_address_cursor(scope TEXT PRIMARY KEY,last_address TEXT)")
+    db.execute("CREATE TABLE IF NOT EXISTS screen_owner_address_cursor(scope TEXT PRIMARY KEY,last_owner TEXT,last_address TEXT)")
     # Developer primary and token-account histories precede holder rotation.
     priorities=sorted((row for row in selection if row[2]==priority_owner),key=lambda row:(row[0]!=priority_owner,row[0]))[:4]
-    regular=sorted(row for row in selection if row not in priorities)
+    regular=sorted((row for row in selection if row not in priorities),key=lambda row:(row[2],row[0]))
     prior=db.execute("SELECT offset FROM screen_schedule WHERE key=?",(schedule_key,)).fetchone()
     offset=(prior[0] if prior else 0)%max(1,len(regular))
     if scope_key:
-        cursor=db.execute("SELECT last_address FROM screen_address_cursor WHERE scope=?",(scope_key,)).fetchone()
-        if cursor:offset=next((i for i,row in enumerate(regular) if row[0]>cursor[0]),0)
+        cursor=db.execute("SELECT last_owner,last_address FROM screen_owner_address_cursor WHERE scope=?",(scope_key,)).fetchone()
+        if cursor:offset=next((i for i,row in enumerate(regular) if (row[2],row[0])>tuple(cursor)),0)
     ordered=priorities+regular[offset:]+regular[:offset]
     reserve=max(1,client.left//3)
     for wallet,seconds,owner in ordered:
@@ -166,7 +174,7 @@ def history_packet(client,selection,now,priority_owner=None,scope_key=None):
             if "rpc_method_cooldown_" in str(exc):break
         if (wallet,seconds,owner) not in priorities:
             offset=(offset+1)%max(1,len(regular))
-            if scope_key:db.execute("INSERT OR REPLACE INTO screen_address_cursor VALUES(?,?)",(scope_key,wallet))
+            if scope_key:db.execute("INSERT OR REPLACE INTO screen_owner_address_cursor VALUES(?,?,?)",(scope_key,owner,wallet))
         db.execute("INSERT OR REPLACE INTO screen_schedule VALUES(?,?)",(schedule_key,offset));db.commit()
     # Reuse durable progress without laundering its head timestamp or completeness.
     for wallet,seconds,owner in selection:
