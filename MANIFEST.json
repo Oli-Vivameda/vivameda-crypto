@@ -89,7 +89,7 @@
     "scout/dflow_decoder.py": "40f43aa7864b3f0afa7f0ce182bab0e9339abf7248b09497c19ec6e545a25150",
     "scout/dflow_schema.json": "0b849cec2747c875630bb021acfec2ce7aa6f2a28f78b03ed5cb44a2b135c021",
     "scout/test_dflow_decoder.py": "f3b1b48352e2e39c41de1fd53506df76dafe2197a386e1e593545ec604e7d171",
-    "docs/DFLOW_DECODER_20261004.md": "8061a36b7a987767f72c1b1fe13f831e53d2ee52664dde3bf16351290e5b53e6",
+    "docs/DFLOW_DECODER_20261004.md": "3252b761ee673a37473b33b78ddca5b4cd6fa81a871e8c60556236e3a54e3d10",
     "scout/dflow_reconcile.py": "ddccad4bf40fc775876517b660ca5467d18fcbb2d1e949eb4a78349aa22935d4",
     "scout/test_dflow_reconcile.py": "ffa248d3ee7d90ee8745e555e287da0188d75f303e2e66ce01cadb733f637641",
     "research/dflow_reconciliation_results.json": "5ff6fc307350ab791ea8fb4f98c2ad6f3fa77fd43bf09f3ca3b67f3d7e17113a",
@@ -99,8 +99,8 @@
     "scripts/test_export_wallet_failure_samples.py": "05a4390782969d0a4a9ce231dcf29048bc51ffefc6ac77409b5bcfc8ce029b55",
     "scout/dflow_auxiliary.py": "0f71ed723dbe77f08d4095eab43f2bcc3ebbb1141f7b205f248273210e9e1ad0",
     "scout/test_dflow_auxiliary.py": "27721e3dc22363ce8dde1e75a1655b398e4a965a19a4114e210e54f0ca0d11bc",
-    "scout/dflow_reconcile_candidate.py": "9d6cd4653a39cc47247bc4bc7df303413139ec881b052daa47503fe76f254dcc",
-    "scout/test_dflow_reconcile_candidate.py": "346f18e2f8d99936c4e68756ae6eea3ca686c11d7f2b93a58b712fc8179ab6ac",
+    "scout/dflow_reconcile_candidate.py": "f3995a1f3cc419f50e5eff8cb69e3ce4c13ce803bfaca70c88ae734c53718171",
+    "scout/test_dflow_reconcile_candidate.py": "7cfc340993e49508a7364a582f2b5fbf5481b4d27d07b92deb9bb19d2e2db2f5",
     "scripts/freeze_wallet_replay.py": "4a24925f60565f5f9a81292c3c5d4a32f670264639e6a837a91960913e3a1ea2",
     "scripts/test_freeze_wallet_replay.py": "4a2691ddf12b6c5c8167f9e5a7ab7cfa04de3790ed057a985c8170a6a1c0995f"
   },
@@ -215,9 +215,20 @@
     "runtime_integrated": false
   },
   "frozen_wallet_replay": {
-    "status": "owner_capture_pending",
+    "status": "offline_paired_replay_complete",
     "capture_tests_passed": 2,
     "max_rows": 1000,
-    "private_output_only": true
+    "private_output_only": true,
+    "transactions": 243,
+    "cohort_sha256": "52241298442326d0363bff5839e94c6e739b4a49e5642eb1b5adb11bbd4b3c51",
+    "baseline_matches": 156,
+    "previous_candidate_matches": 229,
+    "candidate_matches": 234,
+    "unresolved": 9,
+    "regressions_against_baseline": 0,
+    "tests_passed": 48,
+    "complete_history_claims": 0,
+    "production_changed": false,
+    "development_sample": true
   }
 }
