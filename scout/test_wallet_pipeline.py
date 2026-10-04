@@ -124,8 +124,10 @@ class CandidateBackoffTests(unittest.TestCase):
    good={"issues":[],"events":[],"wallet_histories":[],"screening":{"verdict":"HOLD","checks":{}}}
    with patch("wallet_worker.time.time",return_value=1000),patch("wallet_worker.collect_full",return_value=good):
     self.assertEqual(cycle(p,root,1000)["mint"],A)
-   with patch("wallet_worker.time.time",return_value=1121),patch("wallet_worker.collect_full",return_value=good):
-    self.assertEqual(cycle(p,root,1121)["mint"],B)
+   for now,expected in ((1121,A),(1242,A),(1363,B)):
+    feed=json.loads(p.read_text());feed["exported_at"]=now;p.write_text(json.dumps(feed))
+    with patch("wallet_worker.time.time",return_value=now),patch("wallet_worker.collect_full",return_value=good):
+     self.assertEqual(cycle(p,root,now)["mint"],expected)
  def test_generic_timeout_is_candidate_scoped(self):
   with tempfile.TemporaryDirectory() as d:
    p=Path(d)/"feed";root=Path(d)/"data"
@@ -208,3 +210,43 @@ class IdentityQueueTests(unittest.TestCase):
   ns["upsert_pump"](c,[dict(row,creator=B)]);self.assertEqual(c.execute("SELECT creator FROM launches").fetchone()[0],B)
   ns["upsert_pump"](c,[dict(row,creator=A)]);self.assertEqual(c.execute("SELECT creator FROM launches").fetchone()[0],B)
   c.close()
+
+class FocusScheduleTests(unittest.TestCase):
+ def setUp(self):
+  self.db=sqlite3.connect(":memory:")
+  self.db.execute("CREATE TABLE queue(mint TEXT,last_status TEXT)")
+  self.db.executemany("INSERT INTO queue VALUES(?,?)",[("a","SCREENED_HOLD"),("b","SCREENED_HOLD")])
+  self.current={"a":{"pair":"pa","creator":"ca","screening_priority":10},"b":{"pair":"pb","creator":"cb","screening_priority":1}}
+ def tearDown(self):self.db.close()
+ def choose(self,now=1000,eligible=None):
+  from wallet_worker import focus_research
+  return focus_research(self.db,eligible or [("b",0),("a",0)],self.current,now)[0]
+ def test_three_focused_passes_then_exploration(self):
+  self.assertEqual([self.choose(1000+i) for i in range(4)],["a","a","a","b"])
+ def test_lease_rotates_even_when_priority_is_unchanged(self):
+  self.assertEqual(self.choose(),"a")
+  self.assertEqual(self.choose(1900),"b")
+ def test_removed_and_rejected_focus_are_replaced(self):
+  self.choose();self.current.pop("a");self.assertEqual(self.choose(),"b")
+ def test_rejection_releases_focus(self):
+  self.choose();self.db.execute("UPDATE queue SET last_status='SCREENED_REJECT' WHERE mint='a'")
+  self.assertEqual(self.choose(),"b")
+ def test_backoff_is_respected(self):
+  self.choose();self.assertEqual(self.choose(1001,[("b",0)]),"b")
+ def test_identity_change_drops_old_focus(self):
+  self.choose();self.current["a"]["creator"]="changed"
+  self.assertEqual(self.choose(1001),"b")
+
+class FocusFastLaneTests(unittest.TestCase):
+ def test_fast_lane_does_not_postpone_due_focus(self):
+  with tempfile.TemporaryDirectory() as d:
+   p=Path(d)/"feed";root=Path(d)/"data"
+   p.write_text(json.dumps({"exported_at":1000,"candidates":[{"mint":A,"pair":A,"creator":B,"screening_priority":2},{"mint":B,"pair":A,"creator":B}]}))
+   good={"issues":[],"events":[],"wallet_histories":[],"screening":{"verdict":"HOLD","checks":{}}}
+   with patch("wallet_worker.time.time",return_value=1000),patch("wallet_worker.collect_full",return_value=good):
+    self.assertEqual(cycle(p,root,1000)["mint"],A)
+   with patch("wallet_worker.time.time",return_value=1121),patch("wallet_worker.collect_full",return_value=good):
+    self.assertEqual(cycle(p,root,1121,research=False)["mint"],B)
+   db=sqlite3.connect(root/"queue.sqlite")
+   self.assertEqual(db.execute("SELECT next_due FROM queue WHERE mint=?",(A,)).fetchone()[0],1120)
+   db.close()
