@@ -1,6 +1,6 @@
-# Release coverage — 3 October 2026
+# Release coverage — 4 October 2026
 
-This repository publishes the accessible crypto implementation. It is not yet the complete requested live setup.
+All eight files from the owner-run missing-source export have been reviewed and included. Source coverage does not establish complete wallet evidence or a reproduced live deployment.
 
 | Area | State |
 |---|---|
@@ -14,9 +14,11 @@ This repository publishes the accessible crypto implementation. It is not yet th
 | Historical call audit and safeguards | Included; private captures excluded |
 | Browser evidence worker | Included; optional installation not freshly verified |
 | Scanner/wallet/learning installation | Instructions and units included; offline tests verified, fresh host installation unverified |
-| Survivor/watchlist and pool-monitor implementations | BLOCKED: engineering account denied read access to both live source files |
-| Legacy scout_learning.py service source | Not in tracked checkout; fixed-path owner export also checks it |
+| Three-token watchlist, pool monitor and developer checks | Exported source included; signal definitions and setup in MONITORS.md |
+| Legacy scout_learning.py and service | Archived for transparency; not the prospective outcome tracker |
 
-The only authorized server execution channel runs as an unprivileged engineering account. Source permission failures cannot be repaired by relabeling the package complete or substituting newly invented survivor logic. `scripts/export_monitor_sources.py` is a narrowly scoped, owner-run read-only export for the missing code. It never restarts services, edits production files, reads credentials/configuration databases or calls a network service. Its output is private and must be reviewed before adding files to this public repository.
+The owner-run export recovered all eight requested source/unit files, with no missing entries. Credentials, live configuration, watch references, databases, messages and runtime logs remain private. The source files were parsed/compiled without executing the watchlist's top-level network and notification loop. A new-host installation and live monitor behavior have not been verified by this publication pass.
 
-Survivor thresholds, configured assets, schedules and any custom imports require verification after export. This repository does not claim that a desired 3–6-day survivor strategy is implemented merely because it was discussed.
+The watchlist contains JEANPHIL, 20xx and CHIIKAWA and a +10% move trigger. It does not implement universe-wide 3–6-day survivor discovery. The legacy learner uses provider ATH information and must not supply prospective ledger labels. See MONITORS.md.
+
+Wallet cluster/age coverage is still incomplete. The 4 October diagnostic sample recorded 87/1,356 owners observed and zero complete-fresh owners. Blockers overlap: 85 owners had pending transactions, 68 unsupported programs, 60 stale histories, 19 incomplete pagination and 16 missing addresses. No gate was relaxed. See COVERAGE_20261004.md.
