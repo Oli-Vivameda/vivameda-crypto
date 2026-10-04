@@ -116,3 +116,15 @@ The three unknown-layout examples contain two `wrap_sol` instructions and one `u
 Validation: 33 DFlow tests pass locally and on Hetzner, including six new auxiliary tests. All three previously unknown auxiliary instructions decode on the saved private traces; all nine top-level DFlow instructions across the six traces decode. Complete-history claims remain zero. This is a layout improvement only: native underflows and `syncNative` accounting remain unresolved. No revised 1,000-row cache match rate is claimed.
 
 Next: establish PumpSwap close/refund semantics and account roles, then add explicit receipts and negative regression cases; separately establish historical WSOL reserve evidence before supporting `syncNative`. Production remains unchanged. Private samples are retained on Hetzner and are not published.
+
+## Offline close-refund accounting candidate
+
+Primary developer documentation explicitly states that `close_user_volume_accumulator` returns the accumulator's rent-exemption lamports to the signing user: https://t.me/s/pump_tech_updates/11. This supports refund direction independently of balance fitting; it is not verification of the historical deployed executable.
+
+Added a separate `scout/dflow_reconcile_candidate.py` using auxiliary layout dispatch and a narrow PumpSwap close handler. It requires the exact eight-byte discriminator, four message accounts, correct program role, signing/writable user, writable accumulator, same-transaction creation owned by PumpSwap, zero accumulator endpoint balances, and no duplicate close. The refund uses the tracked account balance, never a hardcoded 1,346,200-lamport correction. It emits a distinct `program_account_close_refund` receipt. PDA derivation and historical deployed-version verification remain explicit blockers. The original pinned reconciler and production imports remain unchanged.
+
+Paired replay on the six saved private failures: baseline zero endpoint matches; candidate four endpoint matches. All three native-underflow examples now reconcile, each recording a 1,346,200-lamport close refund. The unwrap example also reconciles. Both wrap examples remain UNKNOWN with `syncNative` unsupported and token underflow. No complete-history claim is made for any example. This deliberately selected six-case diagnostic set provides no estimate of the improvement over all cached transactions.
+
+Validation: 37 DFlow tests pass locally and on Hetzner. Four additional test methods cover refund accounting, unchanged input, persistent semantic blockers, missing creation, bad discriminator length, bad roles/permissions/owner/endpoints, duplicate close and unchanged baseline behavior. The private replay is saved in engineering job `490c717ca0f25677f880eeae3db81a0d`; tests in `ff8ae37f1ee363112454cbfcdf31d527`.
+
+This is an offline accounting candidate, not a production coverage release. Next work is PDA/historical-version evidence and historical wrapped-SOL reserve handling. A broader frozen paired replay is required before any claim about cache-wide improvement.
