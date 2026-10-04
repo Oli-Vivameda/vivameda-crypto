@@ -1,0 +1,25 @@
+{
+  "provider": "dexscreener",
+  "poll_seconds": 30,
+  "max_gap_seconds": 90,
+  "rearm_percent": 2,
+  "cooldown_seconds": 300,
+  "alert_ttl_seconds": 300,
+  "retention_days": 7,
+  "notify_recovery": true,
+  "notify_heartbeat": false,
+  "tokens": [
+    {
+      "enabled": false,
+      "name": "REPLACE_NAME",
+      "chain": "solana",
+      "contract": "REPLACE_MINT",
+      "pool": "REPLACE_POOL",
+      "dex": "REPLACE_DEX",
+      "quote": "REPLACE_QUOTE_MINT",
+      "levels": [],
+      "marketcap_levels": [],
+      "monitor_only": true
+    }
+  ]
+}
