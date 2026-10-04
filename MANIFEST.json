@@ -72,7 +72,9 @@
     "scripts/WALLET_CONNECTOR.md": "34774e617c6bc420d9a71274323a496baccefdbd8965dd6f696bf6cc6422b255",
     "scripts/wallet_ops.py": "1f212c7a2fc489ff1fdf30e46619038f89d942d9bd442b6d90a0d027180b8c37",
     "scripts/test_wallet_diagnostics.py": "4e4065747ef1d246f590c5fa8472e51983357afad13727e8b6acf471291c5c40",
-    "research/CRYPTO_AUDIT_20261004.md": "5e28cba35985815722e2fa253b651075982532bab1dea1bd4e39142c86dfb490"
+    "research/CRYPTO_AUDIT_20261004.md": "5e28cba35985815722e2fa253b651075982532bab1dea1bd4e39142c86dfb490",
+    "research/prediction_ledger.py": "3d15843fdcadd65f8084c4b2675c013c0c88948558d678a5ea6061eb0c87f813",
+    "research/test_prediction_ledger.py": "6b495a2e41908d8f51346da39a8c48dc609622f171a1cffb8c6811de5c906b96"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -95,5 +97,10 @@
     "document": "research/CRYPTO_AUDIT_20261004.md",
     "refit": false,
     "forward_evaluation": "specification frozen; not activated"
+  },
+  "prediction_ledger": {
+    "status": "storage core tested; scanner integration and activation pending",
+    "tests_passed": 9,
+    "production_changed": false
   }
 }
