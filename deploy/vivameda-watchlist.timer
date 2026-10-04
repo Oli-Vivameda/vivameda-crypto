@@ -1,0 +1,11 @@
+[Unit]
+Description=Run Vivameda +10 Percent Watchlist Every 60 Seconds
+
+[Timer]
+OnBootSec=10s
+OnUnitActiveSec=60s
+AccuracySec=1s
+Unit=vivameda-watchlist.service
+
+[Install]
+WantedBy=timers.target
