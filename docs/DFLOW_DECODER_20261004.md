@@ -102,3 +102,17 @@ python3 -I /var/lib/vivameda-engineering/repo/client_learning/public_crypto_rele
 ```
 
 This is a new diagnostic sample; the earlier 1,000-row cohort was not frozen and cannot be claimed as an exact paired comparison. Diagnosis and regression fixes remain pending those private traces. Production screening is unchanged.
+
+## Six private failure traces: diagnosis and auxiliary candidate
+
+The private export returned three native-underflow traces and three unknown-layout traces. These are selected failures, not a random sample and not an estimate of prevalence.
+
+All three native-underflow examples follow the same observed sequence: transfer 10,000,000 lamports to an account, spend 1,346,200 creating a PumpSwap-owned account, then attempt to return 10,000,000. The reconstructed balance is 8,653,800 at the return. Between creation and return, the trace contains PumpSwap discriminator `f945a4da9667548a`. The official PumpSwap IDL names it `close_user_volume_accumulator`. The present accounting code skips that raw instruction. An omitted direct close refund is the working explanation; the exact refund destination and runtime semantics are not certified by the IDL alone. No balancing amount has been invented or inserted.
+
+Official reference: https://github.com/pump-fun/pump-public-docs/blob/main/idl/pump_amm.json. Retrieved bytes SHA256: `2091433899b07d003d98118ae6cd3c628960fd393b40710b6e15bce6d0e7f2d1`. This current reference is not historical deployed-bytecode proof.
+
+The three unknown-layout examples contain two `wrap_sol` instructions and one `unwrap_sol` instruction, all present in the previously verified on-chain DFlow IDL. Added `scout/dflow_auxiliary.py` as an offline candidate dispatcher: it retains the existing six-swap decoder and adds strict auxiliary discriminator, length, account-count, message-membership and fixed-program/mint checks. It explicitly does not verify PDA roles, historical reserves or execution semantics. It is not imported by production or the original pinned cache reconciler.
+
+Validation: 33 DFlow tests pass locally and on Hetzner, including six new auxiliary tests. All three previously unknown auxiliary instructions decode on the saved private traces; all nine top-level DFlow instructions across the six traces decode. Complete-history claims remain zero. This is a layout improvement only: native underflows and `syncNative` accounting remain unresolved. No revised 1,000-row cache match rate is claimed.
+
+Next: establish PumpSwap close/refund semantics and account roles, then add explicit receipts and negative regression cases; separately establish historical WSOL reserve evidence before supporting `syncNative`. Production remains unchanged. Private samples are retained on Hetzner and are not published.
