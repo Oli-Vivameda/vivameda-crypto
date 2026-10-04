@@ -1,0 +1,22 @@
+[Unit]
+Description=Vivameda Telegram Pool Monitor
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=vivameda-monitor
+Group=vivameda-monitor
+WorkingDirectory=/opt/vivameda-crypto-pool-monitor
+ExecStart=/usr/bin/python3 /opt/vivameda-crypto-pool-monitor/monitor.py
+Restart=always
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/vivameda-crypto-pool-monitor
+
+[Install]
+WantedBy=multi-user.target
