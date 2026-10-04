@@ -85,7 +85,11 @@
     "monitors/pool-monitor/developer_watch.example.json": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
     "monitors/pool-monitor/monitor.py": "07307805bfce8838f41a9b472f4346b6761369f15eb7ee7079bb4224555c8835",
     "monitors/watchlist/watch.py": "edde0979dc8faef91b61689bbc3ab29efbf6c971c46ba9c9ffa51f7f8bbce180",
-    "scripts/test_export_monitor_sources.py": "469630668f9c55e736b722b505e0bd47784264ad3c7054db05045858ef7bc343"
+    "scripts/test_export_monitor_sources.py": "469630668f9c55e736b722b505e0bd47784264ad3c7054db05045858ef7bc343",
+    "scout/dflow_decoder.py": "40f43aa7864b3f0afa7f0ce182bab0e9339abf7248b09497c19ec6e545a25150",
+    "scout/dflow_schema.json": "0b849cec2747c875630bb021acfec2ce7aa6f2a28f78b03ed5cb44a2b135c021",
+    "scout/test_dflow_decoder.py": "f3b1b48352e2e39c41de1fd53506df76dafe2197a386e1e593545ec604e7d171",
+    "docs/DFLOW_DECODER_20261004.md": "d1caa2d417cab7ed780e4c939aefea3f5daa39ac8beee022911c64bc3c92e4e3"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -130,7 +134,7 @@
     "includes": "numeric coverage blockers and previously missing monitor source",
     "production_changed": false,
     "review_date_utc": "2026-10-04",
-    "program_diagnostics_status": "prepared and offline-tested; owner run pending"
+    "program_diagnostics_status": "owner export reviewed; DFlow largest blocker; layout decoder offline only"
   },
   "exported_source_components_complete": true,
   "limitations": [
@@ -138,5 +142,12 @@
     "Fresh-host monitor installation unverified",
     "Watchlist is three configured tokens, not broad survivor discovery",
     "Full wallet cluster/age coverage not established"
-  ]
+  ],
+  "dflow_decoder": {
+    "status": "offline engineering validation; not deployed",
+    "tests_passed": 10,
+    "live_replay_transactions": 5,
+    "layout_decoded": 5,
+    "complete_history_claimed": false
+  }
 }
