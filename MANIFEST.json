@@ -30,18 +30,18 @@
     "scout/early_scout.py": "15fd3941b8ed8322462c4a410565824383df84e95cca807a5190d2db03addcf2",
     "scout/wallet_worker.py": "baaa4e66065625abab3233eb160a6b6ba3c92e901d3ed4c1a1701f3edd269ef7",
     "scout/test_crypto_stack.py": "f7bd8cf52b06d26d2ec3a23c5d2700eaa1a8226f13d890dbe3039ec5eb575f59",
-    "scout/WALLET_INTELLIGENCE.md": "2eabfdeeadb05e717f0827fb188c2c26a1fc94703667936cdc17e6e99ebc7fab",
-    "scout/full_screening.py": "606bc7c69795114dc971b6b391dab6ac30f53725a8a9f418a49bf0436012317a",
+    "scout/WALLET_INTELLIGENCE.md": "cb4b4b59668367dc4946cbc10e641825d873f0a6323935fba57b2f6b46a9058e",
+    "scout/full_screening.py": "a10816f174a2afd7ba8aff923cff31914e3dda43acfd89843adf21266de6a2ad",
     "scout/test_protocol_screening.py": "26abcd877226f7297d8870e43c83f0b37d9ff5a024079216422f00b472a3fc8d",
     "scout/DEX_BROWSER_BUILD.md": "0ca3268c293654f3ab09d5014c7880726b086ca59646f24c38ff1a4128e304f8",
-    "scout/install_wallet_intelligence.py": "e07ec7c1315b70460070d6b6f05e964b1539de16c73d69782f387c048a495804",
+    "scout/install_wallet_intelligence.py": "43885b2c9918626f9e2ff3f190f7123241d44437b51ac09596770c42e466a510",
     "scout/scout_learning_v2.py": "fc2cb81c3d29049e0377a5ca6ad0693aebbb0d710864d0b70e625f157664ed4c",
     "scout/vivameda-wallet-intelligence.timer": "8d4d24c579693cca5e0384ae1b65f3aea11d7d0144bb3cdd8027c17555211ef0",
     "scout/wallet_telegram.py": "a4be32a7bc1af6b072cc775d27bb415bf1140713066c864fd90ecee25d400604",
     "scout/dex_browser_worker.py": "bae7cadffcc0415be4c9d004b722f74cbcb865489d82b9fdad864ddfc8ad3d61",
     "scout/wallet_analysis.py": "88696a881e71db5956de02a7783bcd220abcee5de84a99ed10cfaa64f6f36f90",
     "scout/vivameda-wallet-candidates.timer": "1df6353a7f6122459158ee128ab3c69af26b67085606cf12f92650dec64a34a0",
-    "scout/test_full_screening.py": "df68a923ca4545930645f29a76b58a081b98921531d872cd541a538581dc4f23",
+    "scout/test_full_screening.py": "f0e7a2204a3800be2e44491f68f228c5f636771b7521737dfe837fc747de842f",
     "scout/test_free_risk_evidence.py": "6b75536131ec627774e8da039d5dc4f061baa8c8c181efe971ef1f232e04fb07",
     "scout/wallet_intelligence.py": "daaf6452ab817c95ab8dff1ac86cdf880d3b1ab94746c855b0ac6942be2b838f",
     "scout/wallet_candidates.py": "8b925165a887f32a45a3b5574b2682e67d51f628b39391ebca405f3286a2074c",
@@ -77,5 +77,10 @@
   "diagnostics_extension": {
     "server_commit": "6a4be80",
     "deployment": "deployed and live-verified 2026-10-04"
+  },
+  "collection_audit": {
+    "deployment": "prepared, not deployed",
+    "reviewed_wallet_bundle": "e72eb4115a550435648968affb1e80ce02718ed4bc9b685f22234a9a32f223d2",
+    "tests_passed": 85
   }
 }
