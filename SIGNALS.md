@@ -39,3 +39,6 @@ Research labels are not production entry signals.
 ## Survivor and pool-monitor rules
 Pending protected-source access. Services point to /opt/vivameda-crypto-watchlist/watch.py and /opt/vivameda-crypto-pool-monitor/monitor.py. Do not substitute learning regimes for survivor rules.
 
+
+## Additional monitor signals
+The watchlist, pool monitor and developer-account/vesting observations are documented in [MONITORS.md](docs/MONITORS.md). They are separate observation alerts and do not inherit the scanner's seven-check screening.
