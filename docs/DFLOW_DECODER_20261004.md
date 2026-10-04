@@ -181,3 +181,18 @@ Remaining accounting failures: three Token-2022 token residuals, one missing his
 This convenience cohort has now informed development. These percentages describe this fixed sample only; they are not held-out accuracy estimates or evidence of predictive performance. No population confidence interval is claimed. No production code, scanner threshold, or coverage gate changed.
 
 Verification jobs: tests `bccfb7e9206af8e452c4ce46ca227952`; paired replay `c138980782e674644271e8fea77abe07`. Candidate SHA-256: `f3995a1f3cc419f50e5eff8cb69e3ce4c13ce803bfaca70c88ae734c53718171`.
+
+
+## Pump bonding-curve close refunds (2026-10-04)
+
+Tracing the four native underflows identified three omitted close refunds from the Pump bonding-curve program (`6EF8rrecthR5Dkzon8Nwu78hRvfCKubJ14M5uBEwF6P`). The previous candidate recognized this close instruction only under PumpSwap. The [official Pump IDL](https://github.com/pump-fun/pump-public-docs/blob/main/idl/pump.json) defines the same close_user_volume_accumulator discriminator (`f945a4da9667548a`) and four-account layout.
+
+The offline candidate now allows the two explicit program IDs and checks that both the creation owner and executable account match the actual invoking program. Existing guards remain: exact instruction length, signer/writable permissions, same-transaction creation, zero endpoint balances and no duplicate close. Refund amounts come from tracked balances, never a fitted residual. No other program is admitted.
+
+On the unchanged 243-transaction frozen cohort, endpoint matches rise from **234 to 237 (97.5%)**. Three cases improve; zero regress against either the previous candidate or the original baseline (156 matches). All **50 tests pass**, including rejection of cross-program ownership, incorrect executable, absent creation, nonzero endpoints and duplicate close. Independent derivation matches the accumulator and event-authority addresses in all three cases; these sample checks are not integrated runtime verification or historical executable verification.
+
+Six cases remain UNKNOWN: three Token-2022 residuals, one historical WSOL reserve gap, one native underflow following a Pump sell, and one unsupported DFlow transfer_sol layout. The remaining sell case has a downstream native transfer with no preceding parsed native credit in the current accounting path. Resolving it requires supported decoding of the sell's direct balance effects; endpoint differences alone are insufficient evidence.
+
+Complete-history claims remain zero. Production and screening gates are unchanged. This is the same development sample, not held-out validation.
+
+Tests job: `3151088bf385c56c86dd6d7cfd685aa1`. Replay: `d7f321dfe540a75933a47fc0749d43d6`. Address audit: `486911ecd99f41ca6c107593bd888766`. The first replay submission exceeded command argument limits and did not run; the successful replay compares prior pass/fail membership from the saved previous replay. Candidate SHA-256: `69cd336365800876ce5a94792b559aaa5295685442bda35c3cb446f7148f6e0e`.
