@@ -148,6 +148,14 @@ def reconcile(tx):
             if not isinstance(info, dict): raise EvidenceError('invalid_parsed_info')
             if program == SYSTEM and kind in ('transfer', 'transferWithSeed', 'createAccount', 'createAccountWithSeed'):
                 src = acc(info['source']); dst = acc(info['newAccount'] if kind.startswith('create') else info['destination'])
+                if kind == 'createAccount' and dst in closed:
+                    if native[dst] != 0 or info.get('owner') != tokens[dst]['program']:
+                        raise EvidenceError('recreated_token_account_unverified')
+                    result.setdefault('lifecycle_events', []).append({'path': row['path'], 'account': dst,
+                        'kind': 'recreate_after_observed_close', 'previous_mint': tokens[dst]['mint'],
+                        'previous_owner': tokens[dst]['owner']})
+                    closed.remove(dst); tokens.pop(dst); created_native.pop(dst, None)
+                    native_reserves.pop(dst, None); ata_funding.pop(dst, None)
                 amount = uint(info['lamports']); before_funding = native[dst]; move_native(src, dst, amount)
                 parent = trace_by_path.get(row['parent'], {}).get('instruction', {})
                 parent_parsed = parent.get('parsed', {})
@@ -207,6 +215,20 @@ def reconcile(tx):
                     if a['mint'] == WSOL: move_native(src, dst, amount)
                     receipt(row, 'token_transfer', src, dst, amount, a['mint'], source_owner=a['owner'],
                             destination_owner=b['owner'], authority=info.get('authority'), token_program=program)
+                elif kind in ('mintTo', 'burn'):
+                    a = acc(info['account'])
+                    if a not in tokens or a in closed: raise EvidenceError('mint_burn_account_missing')
+                    state = tokens[a]
+                    if state['program'] != program or state['mint'] != acc(info['mint']) or state['mint'] == WSOL:
+                        raise EvidenceError('mint_burn_identity_mismatch')
+                    amount = uint(info['amount']); previous = state['amount']
+                    updated = previous + amount if kind == 'mintTo' else previous - amount
+                    if not 0 <= updated <= 2**64 - 1: raise EvidenceError('mint_burn_amount_bounds')
+                    state['amount'] = updated
+                    result.setdefault('state_updates', []).append({'path': row['path'], 'account': a,
+                        'kind': kind, 'raw_amount': str(amount), 'previous_raw_balance': str(previous),
+                        'raw_balance': str(updated), 'mint': state['mint'], 'authority_verified': False})
+                    result['blockers'].append('mint_burn_authority_and_supply_unverified')
                 elif kind == 'closeAccount':
                     a, dst = acc(info['account']), acc(info['destination'])
                     if a not in tokens or a in closed: raise EvidenceError('missing_close_state')
@@ -245,7 +267,7 @@ def reconcile(tx):
         result['blockers'].append('downstream_program_semantics_unverified')
         result['blockers'] = sorted(set(result['blockers']))
         # Accounting status never clears the semantic/coverage blockers.
-        accounting_blockers = set(result['blockers']) - {'downstream_program_semantics_unverified', 'token2022_extensions_unverified', 'new_wsol_reserve_unverified', 'pump_close_pda_and_deployed_version_unverified', 'ata_rent_and_historical_program_semantics_unverified'}
+        accounting_blockers = set(result['blockers']) - {'downstream_program_semantics_unverified', 'token2022_extensions_unverified', 'new_wsol_reserve_unverified', 'pump_close_pda_and_deployed_version_unverified', 'ata_rent_and_historical_program_semantics_unverified', 'mint_burn_authority_and_supply_unverified'}
         result['status'] = 'ENDPOINT_AMOUNTS_MATCH' if not accounting_blockers else 'UNKNOWN'
         result['endpoint_match_scope'] = 'explicit parsed effects and endpoint amounts; not full execution semantics'
     except (EvidenceError, ValueError, TypeError, KeyError, IndexError, AttributeError) as exc:
