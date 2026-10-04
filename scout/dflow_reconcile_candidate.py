@@ -6,6 +6,8 @@ from collections import Counter
 from dflow_auxiliary import decode_layout as decode_route, PROGRAM
 from protocol_screening import SPL, TOKEN22, b58decode
 
+ATA = 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL'
+
 PUMP_AMM = 'pAMMBay6oceH9fJKBRHGP5D4bD4sWpmSwMn52FMfXEA'
 PUMP_CLOSE = bytes.fromhex('f945a4da9667548a')
 
@@ -100,12 +102,13 @@ def reconcile(tx):
         pre = balances(meta.get('preTokenBalances')); post = balances(meta.get('postTokenBalances'))
         tokens = {a: dict(row) for a, row in pre.items()}
         trace = instructions(tx)
+        trace_by_path = {r['path']: r for r in trace}
         routes = {r['root']: decode_route(tx, r['root']) for r in trace if r['parent'] is None and r['instruction'].get('programId') == PROGRAM}
         result['route_layouts'] = [{'root': i, 'status': r['status'], 'instruction': r.get('instruction'),
                                   'actions': r.get('actions', [])} for i, r in routes.items()]
         if not routes: result['blockers'].append('no_top_level_dflow_route')
         if any(r['status'] != 'LAYOUT_DECODED' for r in routes.values()): result['blockers'].append('route_layout_unknown')
-        closed = set(); token22 = set(); raw_programs = Counter(); created_native = {}; pump_closed = set()
+        closed = set(); token22 = set(); raw_programs = Counter(); created_native = {}; pump_closed = set(); ata_funding = {}; native_reserves = {}
         def move_native(src, dst, amount):
             src, dst = acc(src), acc(dst)
             if native[src] < amount: raise EvidenceError('native_underflow')
@@ -145,7 +148,19 @@ def reconcile(tx):
             if not isinstance(info, dict): raise EvidenceError('invalid_parsed_info')
             if program == SYSTEM and kind in ('transfer', 'transferWithSeed', 'createAccount', 'createAccountWithSeed'):
                 src = acc(info['source']); dst = acc(info['newAccount'] if kind.startswith('create') else info['destination'])
-                amount = uint(info['lamports']); move_native(src, dst, amount)
+                amount = uint(info['lamports']); before_funding = native[dst]; move_native(src, dst, amount)
+                parent = trace_by_path.get(row['parent'], {}).get('instruction', {})
+                parent_parsed = parent.get('parsed', {})
+                parent_info = parent_parsed.get('info', {})
+                if (kind == 'createAccount' and parent.get('programId') == ATA
+                    and parent_parsed.get('type') in ('create', 'createIdempotent')
+                    and parent_info.get('account') == dst and parent_info.get('source') == src
+                    and parent_info.get('mint') == WSOL and parent_info.get('tokenProgram') == SPL
+                    and parent_info.get('systemProgram') == SYSTEM
+                    and info.get('owner') == SPL and type(info.get('space')) is int and info['space'] == 165
+                    and before_funding == 0 and meta['preBalances'][names.index(dst)] == 0 and amount > 1):
+                    ata_funding[dst] = {'reserve': amount, 'parent': row['parent'], 'owner': parent_info.get('wallet')}
+
                 if kind.startswith('create'):
                     if dst in created_native or dst in pump_closed: raise EvidenceError('native_account_reinitialization')
                     created_native[dst] = address(info['owner'])
@@ -157,7 +172,26 @@ def reconcile(tx):
                     if a in tokens or a in closed: raise EvidenceError('account_reinitialization')
                     tokens[a] = {'mint': address(info['mint']), 'owner': address(info['owner']), 'amount': 0, 'program': program}
                     # Initial WSOL token amount depends on rent reserve, not just lamports.
-                    if tokens[a]['mint'] == WSOL: result['blockers'].append('new_wsol_reserve_unverified')
+                    if tokens[a]['mint'] == WSOL:
+                        result['blockers'].append('new_wsol_reserve_unverified')
+                        funding = ata_funding.get(a)
+                        if (program == SPL and funding and row['parent'] == funding['parent']
+                            and info['owner'] == funding['owner'] and native[a] == funding['reserve']):
+                            native_reserves[a] = funding['reserve']
+                            result['blockers'].append('ata_rent_and_historical_program_semantics_unverified')
+                elif kind == 'syncNative':
+                    a = acc(info['account'])
+                    if (program != SPL or a not in tokens or a in closed
+                        or tokens[a]['program'] != SPL or tokens[a]['mint'] != WSOL):
+                        raise EvidenceError('sync_native_identity_unverified')
+                    if a not in native_reserves: raise EvidenceError('sync_native_historical_reserve_missing')
+                    amount = native[a] - native_reserves[a]
+                    if amount < tokens[a]['amount']: raise EvidenceError('sync_native_decrease_unsupported')
+                    previous = tokens[a]['amount']; tokens[a]['amount'] = amount
+                    result.setdefault('state_updates', []).append({'path': row['path'], 'account': a,
+                        'kind': 'sync_native', 'previous_raw_amount': str(previous), 'raw_amount': str(amount),
+                        'reserve_lamports': str(native_reserves[a]),
+                        'evidence': 'conditional same-transaction ATA creation funding; not archived account state'})
                 elif kind in ('transfer', 'transferChecked'):
                     src, dst = acc(info['source']), acc(info['destination'])
                     if src not in tokens or dst not in tokens or src in closed or dst in closed:
@@ -211,7 +245,7 @@ def reconcile(tx):
         result['blockers'].append('downstream_program_semantics_unverified')
         result['blockers'] = sorted(set(result['blockers']))
         # Accounting status never clears the semantic/coverage blockers.
-        accounting_blockers = set(result['blockers']) - {'downstream_program_semantics_unverified', 'token2022_extensions_unverified', 'new_wsol_reserve_unverified', 'pump_close_pda_and_deployed_version_unverified'}
+        accounting_blockers = set(result['blockers']) - {'downstream_program_semantics_unverified', 'token2022_extensions_unverified', 'new_wsol_reserve_unverified', 'pump_close_pda_and_deployed_version_unverified', 'ata_rent_and_historical_program_semantics_unverified'}
         result['status'] = 'ENDPOINT_AMOUNTS_MATCH' if not accounting_blockers else 'UNKNOWN'
         result['endpoint_match_scope'] = 'explicit parsed effects and endpoint amounts; not full execution semantics'
     except (EvidenceError, ValueError, TypeError, KeyError, IndexError, AttributeError) as exc:
