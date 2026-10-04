@@ -4,6 +4,7 @@ No credentials/config reads, network, service changes or execution of source.
 Also exports bounded numeric wallet diagnostics, without raw wallet histories.
 """
 import ast, hashlib, json, os, pathlib, pwd, re, stat, tempfile
+from collections import Counter
 
 ROOTS=(pathlib.Path('/opt/vivameda-crypto-watchlist'),pathlib.Path('/opt/vivameda-crypto-pool-monitor'))
 LEGACY=pathlib.Path('/opt/vivameda-crypto-early-scout/scout_learning.py')
@@ -29,6 +30,24 @@ def numeric(value,keys):
     if not isinstance(value,dict):return {}
     return {k:value[k] for k in keys if type(value.get(k)) in (int,float) and 0<=value[k]<1e15}
 
+def program_blockers(history):
+    """Aggregate owner-program incidences within one report; never export owners."""
+    counts=Counter(); invalid=0
+    wallets=history.get('wallets',[]) if isinstance(history,dict) else []
+    if not isinstance(wallets,list):return {'programs':[], 'invalid_entries':1}
+    for wallet in wallets:
+        if not isinstance(wallet,dict):invalid+=1;continue
+        programs=wallet.get('unknown_programs',[])
+        if not isinstance(programs,list):invalid+=1;continue
+        seen=set()
+        for program in programs:
+            if isinstance(program,str) and (program=='unresolved_program' or re.fullmatch(r'[1-9A-HJ-NP-Za-km-z]{32,44}',program)):
+                seen.add(program)
+            else:invalid+=1
+        counts.update(seen)
+    return {'programs':[{'program_id':p,'owner_incidences':n} for p,n in sorted(counts.items(),key=lambda x:(-x[1],x[0]))],
+            'invalid_entries':invalid,'counts_overlap':True,'cross_report_owners_not_deduplicated':True}
+
 def wallet_diagnostics(root=WALLET_DATA):
     out={'read_only':True,'capacity_observations':[],'recent_report_coverage':[]}
     try:
@@ -43,6 +62,7 @@ def wallet_diagnostics(root=WALLET_DATA):
                 row=numeric(run,('rpc_requests_used',))
                 mint=run.get('mint');row['mint_sha256']=hashlib.sha256(mint.encode()).hexdigest() if isinstance(mint,str) else None
                 row['coverage']=numeric(run.get('history_coverage'),COVERAGE_KEYS)
+                row['index_metrics']=numeric(run.get('index_metrics'),('transaction_attempts','shared_transaction_bodies','indexed_addresses'))
                 e['runs'].append(row)
             out['capacity_observations'].append(e)
     except (OSError,ValueError,TypeError):out['capacity_unavailable']=True
@@ -53,7 +73,8 @@ def wallet_diagnostics(root=WALLET_DATA):
                 r=read_report(path);packet=r.get('screening_packet',{})
                 out['recent_report_coverage'].append({'mint_sha256':hashlib.sha256(path.stem.encode()).hexdigest(),
                     **numeric(r,('generated_at',)),
-                    'coverage':numeric(packet.get('history',{}).get('coverage_summary'),COVERAGE_KEYS)})
+                    'coverage':numeric(packet.get('history',{}).get('coverage_summary'),COVERAGE_KEYS),
+                    'program_blockers':program_blockers(packet.get('history',{}))})
             except (OSError,ValueError,TypeError):out['unreadable_report_count']=out.get('unreadable_report_count',0)+1
     except OSError:out['reports_unavailable']=True
     return out
