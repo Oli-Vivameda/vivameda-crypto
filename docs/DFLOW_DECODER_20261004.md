@@ -86,3 +86,19 @@ python3 -I /var/lib/vivameda-engineering/repo/client_learning/public_crypto_rele
 ```
 
 The command prints the private aggregate result path for engineering review. Production-cache results remain pending. Net endpoint agreement does not establish downstream semantics, historical Token-2022 extensions, or a historical wrapped-SOL reserve. No decoder is promoted into the coverage allowlist on this evidence alone.
+
+## Production-cache replay result and targeted diagnosis
+
+The owner-run replay at Unix timestamp 1791104031 examined 1,000 inserted cache rows: 254 DFlow transactions, 155 endpoint matches, 99 unresolved, 3,031 accounting records and zero complete-history claims. No rows were malformed or oversized and the time/byte budget did not stop the replay. This is a convenience sample, not a population estimate.
+
+Overlapping blocker counts: native underflow 53, token underflow 20, unknown route layout 24, native residual 15, token residual 3, account reinitialization 5, historical wrapped-SOL reserve unverified 247, Token-2022 extensions unverified 172 and downstream semantics unverified 176. Early exits mean later blockers are not exhaustively counted. Endpoint agreement does not clear semantic blockers.
+
+The aggregate does not identify the failing instruction or retain detailed layout rejection reasons. No causal fix is justified yet. `scripts/export_wallet_failure_samples.py` selects up to three native-underflow examples and three unknown-layout examples from a fresh bounded sample of at most 1,000 rows. It verifies pinned sources, opens the database read-only, makes no network calls and writes a private, mode-0600 JSON file for the engineering account. Generated transaction samples must never enter the public repository. Four tests check sample limits, database preservation, symlink refusal and rejection of coverage claims.
+
+Owner maintenance command:
+
+```sh
+python3 -I /var/lib/vivameda-engineering/repo/client_learning/public_crypto_release_20261003/export_wallet_failure_samples.py
+```
+
+This is a new diagnostic sample; the earlier 1,000-row cohort was not frozen and cannot be claimed as an exact paired comparison. Diagnosis and regression fixes remain pending those private traces. Production screening is unchanged.
