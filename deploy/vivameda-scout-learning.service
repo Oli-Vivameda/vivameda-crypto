@@ -1,0 +1,21 @@
+[Unit]
+Description=Vivameda Meme Scout Learning Tracker
+After=network-online.target vivameda-early-scout.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=vivameda-scout
+Group=vivameda-scout
+WorkingDirectory=/opt/vivameda-crypto-early-scout
+ExecStart=/usr/bin/python3 /opt/vivameda-crypto-early-scout/scout_learning.py
+Restart=always
+RestartSec=10
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/vivameda-crypto-early-scout
+
+[Install]
+WantedBy=multi-user.target
