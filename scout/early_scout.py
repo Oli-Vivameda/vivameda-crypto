@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import hashlib, json, logging, re, sqlite3, time
+import hashlib, json, logging, math, re, sqlite3, time
 from pathlib import Path
 import requests
 
@@ -571,7 +571,7 @@ def telegram(text):
               "disable_web_page_preview":"true"}, timeout=12)
     r.raise_for_status()
 
-def alert(con, row, pair, score, m, level):
+def alert(con, row, pair, score, m, level, ledger_rows=None, ledger_captured_ns=None):
     mint, created, creator, _, _, _ = row
     age = (int(time.time()*1000)-created)/3600000
     sec = basic_security(mint, creator)
@@ -606,7 +606,21 @@ def alert(con, row, pair, score, m, level):
       + f"Mint: {mint}\nPool: {pair.get('pairAddress')} ({pair.get('dexId')}/{qsym})\n"
       + f"https://dexscreener.com/solana/{pair.get('pairAddress')}"
     )
-    telegram(msg)
+    ledger_seq = None
+    try:
+        ledger_match(con)
+        ledger_seq = ledger_record(con, mint, ledger_rows, ledger_captured_ns, score, level, pair.get("pairAddress"))
+    except Exception:
+        logging.exception("LEDGER_RECORD_FAILED")
+        ledger_fail(con, "record_failed")
+    try:
+        telegram(msg)
+    except Exception:
+        try: ledger_delivery(con, ledger_seq, False)
+        except Exception: ledger_fail(con, "delivery_record_failed")
+        raise
+    try: ledger_delivery(con, ledger_seq, True)
+    except Exception: ledger_fail(con, "delivery_record_failed")
     con.execute("UPDATE launches SET alert_level=?,last_alert_ts=? WHERE mint=?",
                 (level, int(time.time()), mint))
     con.commit()
@@ -625,17 +639,222 @@ def enrich_and_score(con):
         if not pair:
             continue
         record_pair(con, mint, pair)
-        score, metrics, failed = score_candidate(history(con, mint))
+        decision_rows = history(con, mint)
+        captured_ns = time.time_ns()
+        score, metrics, failed = score_candidate(decision_rows)
         prev = con.execute("SELECT alert_level FROM launches WHERE mint=?",(mint,)).fetchone()[0]
         level = 2 if score >= 10 else (1 if score >= 8 else 0)
         if level > prev:
             try:
-                alert(con, row, pair, score, metrics, level)
+                alert(con, row, pair, score, metrics, level, decision_rows, captured_ns)
             except Exception as e:
                 logging.exception("alert failed %s: %s", mint, e)
 
+# Prospective ledger runtime v1. Lives in this source so the reviewed two-file
+# crypto deployment includes the whole runtime. No extra service or paid calls.
+LEDGER_VERSION = 'crypto_forward_v2_20261004_runtime1'
+LEDGER_PLAN_SHA256 = '5e28cba35985815722e2fa253b651075982532bab1dea1bd4e39142c86dfb490'
+LEDGER_FEATURES = ('band','pc5','pc1','buy_ratio','vol_mc','liq_change','vol_accel')
+LEDGER_MODEL = {'type': 'L2 logistic regression', 'features': ['band', 'pc5', 'pc1', 'buy_ratio', 'vol_mc', 'liq_change', 'vol_accel'], 'mean': [0.5714515528356651, 1.4973809523809527, 283.97166666666664, 0.6768091230195044, 2.070681823692103, 0.10699170745855573, 1.0019364948704794], 'scale': [0.754161433235202, 13.38687809182378, 270.37848794321695, 0.12554634956569816, 1.3350089760204908, 0.2187470825003618, 1.297246962409168], 'coefficients': [-2.880440878205335, 0.22001863007987396, -0.21765489196635218, 0.592822938529118, 0.26169061959322854, -0.31379048968321765, -0.1442328037383409, 0.2574084979753935], 'source_sha256': '3e2af3efebd6e50127ff545e2a7eaaea38745fd10ba184b0d66901c26a2bb39c', 'production': False}
+
+def ledger_json(x):
+    return json.dumps(x,sort_keys=True,separators=(',',':'),allow_nan=False)
+
+def ledger_hash(x):
+    return hashlib.sha256(ledger_json(x).encode()).hexdigest()
+
+def ledger_preprocess(rows):
+    # Same seven numerical inputs as V2 features + scanner metrics. Raw rows
+    # are copied before security review and persisted, not reconstructed later.
+    if not rows:return {}
+    cur=rows[-1];ps=[r[1] for r in rows if r[1]>0];ls=[r[3] for r in rows if r[3]>0]
+    if not ps:return {}
+    return {'band':(max(ps)-min(ps))/min(ps),'pc5':cur[10],'pc1':cur[11],
+        'buy_ratio':cur[8]/max(1,cur[8]+cur[9]),'vol_mc':cur[5]/max(1,cur[2]),
+        'liq_change':ls[-1]/ls[0]-1 if len(ls)>1 else 0,
+        'vol_accel':cur[4]/max(1,cur[5]/12)}
+
+def ledger_preprocessor_hash():
+    import inspect
+    return hashlib.sha256(inspect.getsource(ledger_preprocess).encode()).hexdigest()
+
+def ledger_event(c,kind,key,payload,now):
+    last=c.execute('SELECT seq,hash FROM pl_events ORDER BY seq DESC LIMIT 1').fetchone()
+    seq=last[0]+1 if last else 1;prev=last[1] if last else '0'*64
+    body=ledger_json(payload);h=ledger_hash([seq,kind,key,now,body,prev])
+    c.execute('INSERT INTO pl_events VALUES(?,?,?,?,?,?,?)',(seq,kind,key,now,body,prev,h))
+    return h
+
+def ledger_initialize(c):
+    c.executescript('''
+    CREATE TABLE IF NOT EXISTS pl_activation(id INTEGER PRIMARY KEY CHECK(id=1),body TEXT NOT NULL);
+    CREATE TABLE IF NOT EXISTS pl_excluded(mint TEXT PRIMARY KEY);
+    CREATE TABLE IF NOT EXISTS pl_predictions(seq INTEGER PRIMARY KEY,mint TEXT UNIQUE NOT NULL,
+      case_id TEXT UNIQUE NOT NULL,decision_ts INTEGER NOT NULL,body TEXT NOT NULL,valid INTEGER NOT NULL);
+    CREATE TABLE IF NOT EXISTS pl_results(seq INTEGER PRIMARY KEY,body TEXT NOT NULL,eligible INTEGER NOT NULL);
+    CREATE TABLE IF NOT EXISTS pl_events(seq INTEGER PRIMARY KEY,kind TEXT,key TEXT,ts INTEGER,
+      body TEXT,previous_hash TEXT,hash TEXT,UNIQUE(kind,key));
+    ''')
+    for table in ('pl_activation','pl_excluded','pl_predictions','pl_results','pl_events'):
+        for op in ('UPDATE','DELETE'):
+            c.execute(f"CREATE TRIGGER IF NOT EXISTS {table}_no_{op} BEFORE {op} ON {table} BEGIN SELECT RAISE(ABORT,'ledger append only'); END")
+    c.execute("CREATE TRIGGER IF NOT EXISTS pl_exclusions_frozen BEFORE INSERT ON pl_excluded WHEN EXISTS(SELECT 1 FROM pl_activation) BEGIN SELECT RAISE(ABORT,'exclusions frozen'); END")
+    c.commit();c.execute('PRAGMA synchronous=FULL')
+    c.execute('BEGIN IMMEDIATE')
+    try:
+        row=c.execute('SELECT body FROM pl_activation').fetchone()
+        if row:
+            a=json.loads(row[0])
+            if a['model_sha256']!=ledger_hash(LEDGER_MODEL) or a['preprocessor_sha256']!=ledger_preprocessor_hash():
+                raise ValueError('frozen ledger model/preprocessor changed')
+        else:
+            # One transaction excludes ALL known mints before the activation time.
+            c.execute('''INSERT INTO pl_excluded SELECT mint FROM launches UNION
+                SELECT mint FROM snapshots UNION SELECT mint FROM v2_cases''')
+            exclusions=[r[0] for r in c.execute('SELECT mint FROM pl_excluded ORDER BY mint')]
+            now=int(time.time());a={'version':LEDGER_VERSION,'activated_at':now,
+                'deadline':now+30*86400,'target_eligible':200,'horizon_seconds':3600,
+                'max_lateness':180,'max_gap':180,'baseline_probability':3/42,
+                'model_sha256':ledger_hash(LEDGER_MODEL),'model':LEDGER_MODEL,
+                'preprocessor_sha256':ledger_preprocessor_hash(),'plan_sha256':LEDGER_PLAN_SHA256,
+                'excluded_count':len(exclusions),'excluded_sha256':ledger_hash(exclusions),
+                'time_semantics':'local input capture and decision UTC; provider observation time not asserted',
+                'source':'ALERT decisions passing existing gates, before Telegram delivery'}
+            c.execute('INSERT INTO pl_activation VALUES(1,?)',(ledger_json(a),))
+            ledger_event(c,'activation','1',a,now)
+        c.commit()
+    except BaseException:c.rollback();raise
+    logging.info('LEDGER_ACTIVATION %s',ledger_json({k:v for k,v in a.items() if k!='model'}))
+    return a
+
+def ledger_stop(c,reason,now,cutoff_seq=None):
+    if not c.execute("SELECT 1 FROM pl_events WHERE kind='stop'").fetchone():
+        ledger_event(c,'stop','1',{'reason':reason,'cutoff_seq':cutoff_seq},now)
+
+def ledger_record(c,mint,rows,captured_ns,score,level,pair):
+    c.commit();c.execute('BEGIN IMMEDIATE')
+    try:
+        a=json.loads(c.execute('SELECT body FROM pl_activation').fetchone()[0]);now=int(time.time())
+        if now>=a['deadline']:
+            ledger_stop(c,'time_limit',now);c.commit();return None
+        if c.execute("SELECT 1 FROM pl_events WHERE kind='stop'").fetchone():c.commit();return None
+        if c.execute('SELECT 1 FROM pl_excluded WHERE mint=?',(mint,)).fetchone() or c.execute('SELECT 1 FROM pl_predictions WHERE mint=?',(mint,)).fetchone():
+            c.commit();return None
+        if a['preprocessor_sha256']!=ledger_preprocessor_hash() or a['model_sha256']!=ledger_hash(LEDGER_MODEL):
+            raise ValueError('frozen runtime changed')
+        reason=None;x={};p=None
+        if type(captured_ns) is not int or not a['activated_at']*10**9<=captured_ns<=time.time_ns():reason='capture_time'
+        elif not rows or any(r[0]>captured_ns/10**9 for r in rows):reason='future_or_missing_input'
+        else:
+            try:
+                x=ledger_preprocess(rows)
+                if not all(type(x.get(k)) in (int,float) and math.isfinite(x[k]) for k in LEDGER_FEATURES):raise ValueError('features')
+                if not all(type(v) in (int,float) and math.isfinite(v) for r in rows for v in r):raise ValueError('snapshot')
+                if rows[-1][2]<=0:raise ValueError('entry market cap')
+                m=a['model'];z=m['coefficients'][0]+sum(w*(x[k]-mu)/sd for k,w,mu,sd in zip(LEDGER_FEATURES,m['coefficients'][1:],m['mean'],m['scale']))
+                p=1/(1+math.exp(-max(-40,min(40,z))))
+            except (ValueError,TypeError,IndexError,ZeroDivisionError):reason='invalid_features_or_entry'
+        # Store invalid attempts too, preventing a later replacement for the mint.
+        clean=lambda v: v if type(v) in (int,float) and math.isfinite(v) else None
+        raw=[[clean(v) for v in r] for r in (rows or [])]
+        seq=c.execute('SELECT COALESCE(max(seq),0)+1 FROM pl_predictions').fetchone()[0]
+        cid=f'{mint}:ledger:{now}'
+        body={'decision_ts':now,'recorded_ns':time.time_ns(),'feature_capture_ns':captured_ns,
+            'source_snapshot':raw,'source_snapshot_sha256':ledger_hash(raw),
+            'features':{k:clean(v) for k,v in x.items()},'model_sha256':a['model_sha256'],
+            'preprocessor_sha256':a['preprocessor_sha256'],'model_probability':p,
+            'baseline_probability':3/42,'exclusion_reason':reason,'pair':pair,
+            'entry_mc':rows[-1][2] if not reason else None,'source':'ALERT'}
+        c.execute('INSERT INTO pl_predictions VALUES(?,?,?,?,?,?)',(seq,mint,cid,now,ledger_json(body),int(reason is None)))
+        ledger_event(c,'prediction',str(seq),{'seq':seq,'mint':mint,'case_id':cid,**body},now)
+        if reason is None:
+            # Dedicated source keeps existing ALERT/SHADOW statistics separate.
+            cur=rows[-1]
+            c.execute('''INSERT INTO v2_cases(id,mint,decision_ts,source,score,level,regime,features,entry_price,entry_mc,entry_liq)
+              VALUES(?,?,?,?,?,?,?,?,?,?,?)''',(cid,mint,now,'LEDGER_ALERT',score,level,'FROZEN',ledger_json(x),cur[1],cur[2],cur[3]))
+        else:
+            result={'reason':reason,'eligible':False}
+            c.execute('INSERT INTO pl_results VALUES(?,?,0)',(seq,ledger_json(result)))
+            ledger_event(c,'result',str(seq),result,now)
+        c.commit()
+        head=c.execute('SELECT hash FROM pl_events ORDER BY seq DESC LIMIT 1').fetchone()[0]
+        logging.info('LEDGER_RECORD seq=%s valid=%s head=%s',seq,reason is None,head)
+        return seq
+    except BaseException:c.rollback();raise
+
+def ledger_fail(c,reason):
+    # Ledger failures stop evaluation, not the existing alert service.
+    c.rollback()
+    try:
+        c.execute('BEGIN IMMEDIATE');ledger_stop(c,'integrity_error:'+reason,int(time.time()));c.commit()
+    except Exception:c.rollback();logging.exception('LEDGER_STOP_WRITE_FAILED')
+    logging.error('LEDGER_EVALUATION_STOPPED %s',reason)
+
+def ledger_delivery(c,seq,delivered):
+    if seq is None:return
+    c.execute('BEGIN IMMEDIATE')
+    try:
+        ledger_event(c,'delivery',str(seq),{'delivered':bool(delivered)},int(time.time()));c.commit()
+    except BaseException:c.rollback();raise
+
+def ledger_match(c):
+    # No label summaries or comparative scores are logged before the fixed stop.
+    if not c.execute("SELECT 1 FROM sqlite_master WHERE name='pl_activation'").fetchone():return
+    arow=c.execute('SELECT body FROM pl_activation').fetchone()
+    if not arow:return
+    c.commit();c.execute('BEGIN IMMEDIATE')
+    try:
+        a=json.loads(arow[0]);now=int(time.time())
+        pending=c.execute('''SELECT p.seq,p.case_id,p.decision_ts,p.body FROM pl_predictions p
+          LEFT JOIN pl_results r ON r.seq=p.seq WHERE r.seq IS NULL ORDER BY p.seq''').fetchall()
+        for seq,cid,dts,pbody in pending:
+            if now<dts+3600:continue
+            row=c.execute('''SELECT o.observed_ts,o.lateness,o.mc,m.coverage_ok,m.max_gap
+              FROM v2_outcomes o LEFT JOIN v2_horizon_metrics m ON m.id=o.id AND m.horizon=o.horizon
+              WHERE o.id=? AND o.horizon=60''',(cid,)).fetchone()
+            if row is None and now<=dts+3780:continue
+            reason='missing_endpoint';mult=None;ok=False
+            if row:
+                ots,late,mc,coverage,gap=row;entry=json.loads(pbody)['entry_mc']
+                if type(late) not in (int,float) or not 0<=late<=180 or ots!=dts+3600+late:reason='invalid_timing'
+                elif coverage!=1 or gap is None or gap>180:reason='incomplete_coverage'
+                elif type(mc) not in (int,float) or not math.isfinite(mc) or mc<=0 or entry<=0:reason='invalid_endpoint'
+                else:ok=True;reason=None;mult=mc/entry
+            result={'eligible':ok,'reason':reason,'multiple':mult,'outcome':int(mult>=2) if ok else None,
+                'matched_at':now,'endpoint_evidence':list(row) if row else None}
+            c.execute('INSERT INTO pl_results VALUES(?,?,?)',(seq,ledger_json(result),int(ok)))
+            ledger_event(c,'result',str(seq),result,now)
+        # Resolve in decision order: later outcomes cannot select the cohort
+        # ahead of an earlier case still waiting for its allowed endpoint.
+        n=0;cutoff=None
+        for seq,eligible in c.execute('SELECT p.seq,r.eligible FROM pl_predictions p LEFT JOIN pl_results r ON r.seq=p.seq ORDER BY p.seq'):
+            if eligible is None:break
+            n+=eligible
+            if n==a['target_eligible']:cutoff=seq;break
+        if cutoff is not None:ledger_stop(c,'sample_limit',now,cutoff)
+        elif now>=a['deadline']:ledger_stop(c,'time_limit',now)
+        c.commit()
+    except BaseException:c.rollback();raise
+
+def ledger_health(c):
+    arow=c.execute('SELECT body FROM pl_activation').fetchone()
+    if not arow:return {'status':'not_activated'}
+    a=json.loads(arow[0]);stop=c.execute("SELECT body FROM pl_events WHERE kind='stop'").fetchone()
+    pred=c.execute('SELECT count(*) FROM pl_predictions').fetchone()[0]
+    matched=c.execute('SELECT count(*),COALESCE(sum(eligible),0) FROM pl_results').fetchone()
+    head=c.execute('SELECT seq,hash FROM pl_events ORDER BY seq DESC LIMIT 1').fetchone()
+    return {'status':'enrollment_stopped' if stop else 'active','activated_at':a['activated_at'],
+        'deadline':a['deadline'],'predictions_or_exclusions':pred,'matched':matched[0],
+        'eligible':matched[1],'stop':json.loads(stop[0]) if stop else None,
+        'head_seq':head[0],'head_sha256':head[1],'excluded_mints':a['excluded_count']}
+
+
 def main():
     con = db()
+    try: ledger_initialize(con)
+    except Exception:
+        logging.exception("LEDGER_INITIALIZATION_FAILED")
+        ledger_fail(con, "initialization_failed")
     last_score = 0
     logging.info("early scout started; strict pre-alert screening active; incomplete evidence HOLD")
     while True:
