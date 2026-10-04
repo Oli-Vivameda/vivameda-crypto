@@ -1,0 +1,45 @@
+import copy
+import unittest
+from dflow_reconcile_candidate import reconcile, PUMP_AMM, PUMP_CLOSE, SYSTEM
+from protocol_screening import b58encode
+from test_dflow_reconcile import sample, USER, CLOSE, SPONSOR
+
+def close_sample():
+    tx=sample();msg=tx['transaction']['message'];keys=msg['accountKeys']
+    keys.append({'pubkey':PUMP_AMM,'signer':False,'writable':False})
+    tx['meta']['preBalances'].append(100);tx['meta']['postBalances'].append(100)
+    for k in keys:k['writable']=k['pubkey'] in (USER,CLOSE)
+    names=[k['pubkey'] for k in keys];v=names.index(CLOSE)
+    tx['meta']['preBalances'][v]=tx['meta']['postBalances'][v]=0
+    group=tx['meta']['innerInstructions'][0]['instructions']
+    group.extend([
+      {'programId':SYSTEM,'stackHeight':2,'parsed':{'type':'createAccount','info':{'source':USER,'newAccount':CLOSE,'lamports':100,'owner':PUMP_AMM,'space':137}}},
+      {'programId':PUMP_AMM,'stackHeight':2,'accounts':[USER,CLOSE,SPONSOR,PUMP_AMM],'data':b58encode(PUMP_CLOSE)}])
+    return tx
+
+class CandidateTests(unittest.TestCase):
+    def test_close_refund_keeps_semantic_hold(self):
+        tx=close_sample();before=copy.deepcopy(tx);r=reconcile(tx)
+        self.assertEqual(r['status'],'ENDPOINT_AMOUNTS_MATCH')
+        self.assertEqual(r['receipts'][-1]['raw_amount'],'100')
+        self.assertEqual(r['receipts'][-1]['kind'],'program_account_close_refund')
+        self.assertIn('pump_close_pda_and_deployed_version_unverified',r['blockers'])
+        self.assertFalse(r['history_coverage_complete']);self.assertEqual(tx,before)
+    def test_bad_close_rejected(self):
+        for kind in ('data','program','signer','writable','owner','endpoint','duplicate'):
+            tx=close_sample();g=tx['meta']['innerInstructions'][0]['instructions'];keys=tx['transaction']['message']['accountKeys']
+            if kind=='data':g[-1]['data']=b58encode(PUMP_CLOSE+b'\0')
+            if kind=='program':g[-1]['accounts'][-1]=SYSTEM
+            if kind=='signer':keys[0]['signer']=False
+            if kind=='writable':keys[0]['writable']=False
+            if kind=='owner':g[-2]['parsed']['info']['owner']=SYSTEM
+            if kind=='endpoint':tx['meta']['postBalances'][[k['pubkey'] for k in keys].index(CLOSE)]=1
+            if kind=='duplicate':g.append(copy.deepcopy(g[-1]))
+            with self.subTest(kind=kind):self.assertEqual(reconcile(tx)['status'],'UNKNOWN')
+    def test_no_creation_rejected(self):
+        tx=close_sample();del tx['meta']['innerInstructions'][0]['instructions'][-2]
+        self.assertEqual(reconcile(tx)['status'],'UNKNOWN')
+    def test_existing_sample_unchanged(self):
+        self.assertEqual(reconcile(sample())['status'],'ENDPOINT_AMOUNTS_MATCH')
+
+if __name__=='__main__':unittest.main()
