@@ -240,7 +240,7 @@ class FastRefreshTests(unittest.TestCase):
   import full_screening as f
   for name in ("wallet_clusters","developer_history","top_holder_ownership","wallet_age"):
    with self.subTest(name=name),tempfile.TemporaryDirectory() as root:
-    previous={"schema":"wallet-intelligence-v3","generated_at":1,
+    previous={"schema":"wallet-intelligence-v3","generated_at":1,"rpc_requests_used":60,
       "screening_packet":{"mint":MINT,"pair":PAIR,"creator":MINT},
       "screening":{"checks":{name:{"status":"REJECT"}}},"issues":[]}
     path=pathlib.Path(root)/(MINT+".json");path.write_text(json.dumps(previous));before=path.read_bytes()
@@ -249,6 +249,7 @@ class FastRefreshTests(unittest.TestCase):
     cls.return_value.rpc.assert_not_called()
     self.assertEqual(path.read_bytes(),before)
     self.assertEqual(out["generated_at"],1)
+    self.assertEqual(out["rpc_requests_used"],0)
     self.assertEqual(out["fast_refresh_deferred"],"background_rejection_requires_research")
  def test_fast_pass_skips_history_and_keeps_original_timestamp(self):
   import full_screening as f
@@ -288,6 +289,8 @@ class DurableHistoryTests(unittest.TestCase):
     body,issues=history_packet(client,[("good",100,"owner"),("bad",100,"owner")],NOW)
    self.assertTrue(issues)
    self.assertEqual(body["wallets"][0]["addresses_reviewed"],1)
+   self.assertEqual(body["coverage_summary"]["owners_missing_addresses"],1)
+   self.assertEqual(body["coverage_summary"]["owners_incomplete_pagination"],1)
    self.assertFalse(body["wallets"][0]["pagination_complete"])
    store.db.close()
  def test_cached_head_is_not_redated_and_longer_window_not_certified(self):
@@ -299,6 +302,7 @@ class DurableHistoryTests(unittest.TestCase):
    client.left=0
    body,_=history_packet(client,[("dev",1000,"dev")],NOW+400)
    self.assertEqual(body["wallets"][0]["head_at"],NOW)
+   self.assertEqual(body["coverage_summary"]["owners_stale"],1)
    self.assertFalse(body["wallets"][0]["pagination_complete"])
    store.db.close()
 
