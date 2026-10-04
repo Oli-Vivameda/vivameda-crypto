@@ -89,7 +89,7 @@
     "scout/dflow_decoder.py": "40f43aa7864b3f0afa7f0ce182bab0e9339abf7248b09497c19ec6e545a25150",
     "scout/dflow_schema.json": "0b849cec2747c875630bb021acfec2ce7aa6f2a28f78b03ed5cb44a2b135c021",
     "scout/test_dflow_decoder.py": "f3b1b48352e2e39c41de1fd53506df76dafe2197a386e1e593545ec604e7d171",
-    "docs/DFLOW_DECODER_20261004.md": "3faafa4fcae2d459788e04b9ddfa609e8b6d142b5169fa052b441ba667fed639",
+    "docs/DFLOW_DECODER_20261004.md": "de55fe057d86aeadf5ae80b3e2e34c1073adc8becac62c0baf56d739969dedea",
     "scout/dflow_reconcile.py": "ddccad4bf40fc775876517b660ca5467d18fcbb2d1e949eb4a78349aa22935d4",
     "scout/test_dflow_reconcile.py": "ffa248d3ee7d90ee8745e555e287da0188d75f303e2e66ce01cadb733f637641",
     "research/dflow_reconciliation_results.json": "5ff6fc307350ab791ea8fb4f98c2ad6f3fa77fd43bf09f3ca3b67f3d7e17113a",
@@ -98,7 +98,9 @@
     "scripts/export_wallet_failure_samples.py": "70a5577f0a719da8f2b65247da0785eba2b72b49ba83412497b6222750fa2c8c",
     "scripts/test_export_wallet_failure_samples.py": "05a4390782969d0a4a9ce231dcf29048bc51ffefc6ac77409b5bcfc8ce029b55",
     "scout/dflow_auxiliary.py": "0f71ed723dbe77f08d4095eab43f2bcc3ebbb1141f7b205f248273210e9e1ad0",
-    "scout/test_dflow_auxiliary.py": "27721e3dc22363ce8dde1e75a1655b398e4a965a19a4114e210e54f0ca0d11bc"
+    "scout/test_dflow_auxiliary.py": "27721e3dc22363ce8dde1e75a1655b398e4a965a19a4114e210e54f0ca0d11bc",
+    "scout/dflow_reconcile_candidate.py": "45339f02ee53d8216cb7a97a23723d3e6fa676fe3d72d91c875892bbada608ec",
+    "scout/test_dflow_reconcile_candidate.py": "afb03c71adc0aa848f5d29dc1fbff5d40baa36fe14242c58ca348e1521bedb10"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -189,5 +191,15 @@
     "previously_unknown_layouts_decoded": 3,
     "complete_history_claimed": false,
     "native_underflow_fix_verified": false
+  },
+  "pump_close_candidate": {
+    "status": "offline_not_deployed",
+    "tests_total": 37,
+    "private_paired_samples": 6,
+    "baseline_endpoint_matches": 0,
+    "candidate_endpoint_matches": 4,
+    "native_underflow_samples_reconciled": 3,
+    "complete_history_claimed": false,
+    "pda_and_historical_version_verified": false
   }
 }
