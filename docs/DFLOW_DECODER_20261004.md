@@ -146,3 +146,19 @@ The creation amount is used conditionally as reserve evidence from the same tran
 Paired replay of the six selected saved failures now produces six endpoint matches, up from four with the prior candidate and zero with the original reconciler. Both SyncNative cases now match. All six still have `history_coverage_complete:false`; this is conditional accounting, not complete wallet coverage or a population estimate. Replay job: `483d1a8ec3831c656307d1983d9048f0`.
 
 43 DFlow tests pass, including six added methods for conditional SyncNative state updates, wrong parents, invalid funding/size/owner, pre-existing balances, initialization identity and absence of fictitious transfer receipts. Production remains unchanged. PDA derivation, historical deployed-version verification, extension semantics and a broader frozen paired replay remain required before production promotion.
+
+## Independent address verification and frozen-cohort capture
+
+Using `solders==0.29.0` in an isolated temporary engineering dependency directory (not the production environment), independently derived addresses on the six private samples. All 3 PumpSwap closes matched the accumulator PDA (`user_volume_accumulator` plus user seed), event-authority PDA (`__event_authority`) and program role. All 11 parsed associated-token-account creations matched the wallet/token-program/mint-derived ATA. Three altered-user negative checks did not match the original accumulator. Job: `cc53aaa254c56867893ce1e822c24ef0`.
+
+These are sample-specific cryptographic address checks. They are not yet integrated into the candidate runtime, do not establish historical executable semantics and do not clear the candidate's conservative blockers. SDK reference: https://kevinheavey.github.io/solders/tutorials/pubkeys.html.
+
+Added `scripts/freeze_wallet_replay.py`: a root-run, read-only capture that reuses the hash-pinned bounded cache reader, saves all top-level DFlow transactions among at most 1,000 most recently inserted rows, and hashes their canonical JSON. It does not filter for failures or success. Existing limits remain: 2 MiB/body, 64 MiB scanned-body budget, 25-second cooperative time limit. The generated JSON is private (0600, engineering owner), is never uploaded publicly, and preserves exact input for repeated paired replay. No decoders execute during root capture, no network calls occur and no production files change. Two capture tests pass, covering input preservation, cohort hashing, invalid-row accounting and abort behavior, in addition to the existing bounded-reader tests.
+
+Owner command:
+
+```sh
+python3 -I /var/lib/vivameda-engineering/repo/client_learning/public_crypto_release_20261003/freeze_wallet_replay.py
+```
+
+Broader paired results are pending this capture. The resulting convenience cohort will support a like-for-like decoder comparison, not a representative wallet-population estimate. The prior six-case result remains 6/6 conditional endpoint matches, with zero complete-history claims and 43 DFlow tests passing. Historical program and token-extension semantics remain unresolved; no deployment is performed.
