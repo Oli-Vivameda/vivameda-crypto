@@ -72,3 +72,17 @@ Primary accounting references: https://solana.com/docs/rpc/json-structures and h
 ```sh
 python3 -m unittest discover -s scout -p 'test_dflow*.py'
 ```
+
+## Bounded collector-cache replay (prepared, not yet run on production cache)
+
+`scripts/replay_wallet_cache.py` reads at most 1,000 most recently inserted SQLite rows, with a 25-second cooperative time limit, 2 MiB per body and 64 MiB total body budget. This is an insertion-order convenience sample, not a representative or chronological cohort. Only top-level DFlow transactions are reconciled. The database is opened read-only; no network requests, screening changes or deployment occur. Output contains aggregate counts and allowlisted reasons, never raw wallet histories. Four source hashes are pinned before imports.
+
+Seven helper tests pass, including database preservation, sampling bounds, malformed input, privacy filtering, symlink refusal and rejection of unexpected complete-coverage claims. A temporary-cache replay of the five saved public transactions reproduces five endpoint matches and 50 receipts. These are fixture results, not a measurement of the production cache. All complete-history claims remain false.
+
+The engineering account cannot read the protected production cache. From the owner maintenance terminal, run:
+
+```sh
+python3 -I /var/lib/vivameda-engineering/repo/client_learning/public_crypto_release_20261003/replay_wallet_cache.py
+```
+
+The command prints the private aggregate result path for engineering review. Production-cache results remain pending. Net endpoint agreement does not establish downstream semantics, historical Token-2022 extensions, or a historical wrapped-SOL reserve. No decoder is promoted into the coverage allowlist on this evidence alone.
