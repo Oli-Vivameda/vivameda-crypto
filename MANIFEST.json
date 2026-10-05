@@ -146,10 +146,12 @@
     "agent/interpretation/INTERPRETATION_ACTIVATION_20261005.md": "10b0234aa7c9f24d9ad5ff8c13d54860ec818c7d463a2c806079254a64ed6505",
     "agent/interpretation/README.md": "e09061fe01d784ae73f0d6a0076ed3c8bec7b054effc0efad6a5868e98add981",
     "agent/interpretation/install_interpretation.py": "1acc31aa2938efe3f2b38b9e2ed30efe56ace22a7fa1b0a883f648c6914a752b",
-    "research/selection_audit/README.md": "b4d85f96556feb24a0c4eb81a862041df8cdaa4837df6145adc52457429389be",
+    "research/selection_audit/README.md": "9045778be8e82efe343e012f657e3648880b37da100355542275ce4c1e098f48",
     "research/selection_audit/export_history.py": "e32e0cab0404b356a6104150da742a38224b088d7b169b4dde06a572f0664a82",
     "research/selection_audit/audit_selection.py": "68d8b98522192929607f9abd0d9efe9634697dbb7cc4d0044331ab37098fb769",
-    "research/selection_audit/test_selection.py": "1ee8d47f1f30d5e6cf4cbe25089cea7b3a6a6d205d12b049baf67accfa3a9a57"
+    "research/selection_audit/test_selection.py": "1ee8d47f1f30d5e6cf4cbe25089cea7b3a6a6d205d12b049baf67accfa3a9a57",
+    "research/selection_audit/RESULTS_20261005.md": "375018c7afb7536d46e7c89d5d783ecc236f76211754a821c5c570f47b1ff5d3",
+    "research/selection_audit/HANDOVER_INDEX.md": "f46c93d6c48858fb16014aaa83005e28ac688ad723efcc394fef7c4234203d3b"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -379,11 +381,22 @@
     "receipt": "agent/interpretation/INTERPRETATION_ACTIVATION_20261005.md"
   },
   "crypto_selection_audit": {
-    "status": "engineering tested; protected historical export pending owner run",
+    "status": "historical audit completed; comparable-control gate failed",
     "tests_passed": 9,
     "production_changed": false,
     "live_ledger_results_read": false,
     "prospective_validation": false,
-    "source": "research/selection_audit/README.md"
+    "source": "research/selection_audit/README.md",
+    "historical_alert_tokens": 132,
+    "historical_shadow_observations": 312,
+    "eligible_shadow_entries": 4,
+    "matched_controls": 0,
+    "alert_60min_eligible": 71,
+    "alert_60min_missing_or_incomplete": 61,
+    "median_prealert_h1_change_pct": 170.0,
+    "scanner_advantage_established": false,
+    "results": "research/selection_audit/RESULTS_20261005.md",
+    "private_export_sha256": "40f15e61a47a904c3505c47c2fb5cdcdb1deaddb22b585276323c1fc0adefd69",
+    "next_gate": "separate frozen forward candidate/control protocol and reviewed capture instrumentation"
   }
 }
