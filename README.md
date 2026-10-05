@@ -15,7 +15,7 @@ A continuously running Solana small-cap observation and research system on Hetzn
 | Prediction ledger | Freeze shadow predictions and later eligible labels for a prospective baseline comparison | Activated; no completed validation claim |
 | Numerical model | Seven-feature logistic baseline, published coefficients and evaluation | Experimental; underperformed baseline; does not drive alerts |
 | Daily case learning | Matched first-call reviews, fresh agent memory and prospective paper journal | Live daily review and paper journal; daily supervision scheduled; decision-time endpoint extension activated |
-| Dedicated Crypto Lab agent | Separate conversations, crypto-only read tools and local evidence interpretation | Built and boundary-tested; connector activation pending; first model response timed out |
+| Dedicated Crypto Lab agent | Separate conversations, crypto-only read tools and local evidence interpretation | Activated; separate crypto conversations and tools verified; model interpretation remains unverified |
 | Agent context | Select dated crypto knowledge and limitations for an agent session | Public extraction; private conversational runtime excluded |
 | Trading-agent layer | Paper proposal records, owner feedback and versioned playbook | Scaffold; no continuous agent or live execution |
 | Transaction-decoder experiments | Offline DFlow/Pump endpoint reconciliation | Not promoted into production |
@@ -49,7 +49,7 @@ The watchlist and pool monitor run separate observation rules; their messages do
 | [Architecture](docs/ARCHITECTURE.md) | Source entry points, data flow and external effects |
 | [Research](research/README.md) | Baseline result, training schema and evaluation limits |
 | [Daily case learning](learning/README.md) | Matching rules, paper journal, agent integration, daily schedules and activation |
-| [Dedicated Crypto Lab agent](agent/CRYPTO_LAB.md) | Domain separation, tools, activation and training boundaries |
+| [Dedicated Crypto Lab agent](agent/CRYPTO_LAB.md) / [Activation receipt](agent/CRYPTO_AGENT_ACTIVATION_20261005.md) | Domain separation, tools, verified activation and training boundaries |
 | [Trading scaffold](agent_trader/README.md) | Paper proposals, feedback and execution integration requirements |
 | [Setup](docs/SETUP.md) | Dependencies, installation, health checks and rollback |
 | [Coverage](docs/COMPLETENESS.md) / [Validation](docs/VALIDATION.md) | Included source, tests and unresolved gaps |
