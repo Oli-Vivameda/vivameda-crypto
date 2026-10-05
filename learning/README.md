@@ -1,6 +1,6 @@
 # Daily crypto case learning
 
-Status: 5 October 2026. Implemented and tested in the engineering checkout; production activation pending the owner command below. The daily ChatGPT supervision task is enabled for approximately 09:00 Cyprus time, starting 6 October. It checks operation, reviews evidence and updates GitHub. It is separate from the server timers and cannot substitute for installation.
+Status: 5 October 2026. Installed at 12:11:52 UTC; both timers active and first review/journal runs verified successful. The daily ChatGPT supervision task is enabled for approximately 09:00 Cyprus time, starting 6 October. It checks operation, reviews evidence and updates GitHub. It is separate from the server timers and cannot substitute for installation.
 
 ## What changes
 
@@ -41,7 +41,7 @@ Engineering-server tests passed: 12/12. Installer validation passed without chan
 python3 /var/lib/vivameda-engineering/repo/client_learning/crypto_daily_learning_v1/install_daily_learning.py --install --expected-sha256 d63bc98534fa81af7357a6c9b802e1d4ae7ea20578b61538c62b0601a0207a9e
 ```
 
-The digest covers the five implementation/test files, in the installer-defined order. It does not cover this README. The installer backs up the conversational source, previous learning files and units in `/opt/vivameda-operations/crypto-learning-backup-*`, creates the first local review and enables both timers. If installation fails, report the exception and backup path; do not assume activation completed. No successful live deployment or real-data matched result is claimed in this release.
+The digest covers the five implementation/test files, in the installer-defined order. It does not cover this README. The installer backs up the conversational source, previous learning files and units in `/opt/vivameda-operations/crypto-learning-backup-*`, creates the first local review and enables both timers. If installation fails, report the exception and backup path; do not assume activation completed. Deployment verified on 5 October at approximately 12:12 UTC: both timers active; both service runs Result=success and ExecMainStatus=0. The initial review contains 139 development tokens, 78 eligible 60-minute endpoints, 61 missing/incomplete endpoints and six exploratory matched pairs; eight frozen-ledger identifiers excluded. These are case counts, not independent trades or demonstrated profitability. Backup: /opt/vivameda-operations/crypto-learning-backup-20261005T121152Z. Full source publication remains pending because browser upload timed out and the connector write was denied.
 
 Verify activation and fresh-context retrieval after installation:
 
