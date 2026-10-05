@@ -46,7 +46,7 @@
     "scout/vivameda-wallet-intelligence.service": "766541710a156071adb23665932e1a2c5d8945cf2de48d795f7295f4d143decc",
     "scout/protocol_screening.py": "ca049acdde2198e70d83a82d95552b4bd193116de0b4d28f64c34cd699827636",
     "scout/dex_browser_worker.py": "bae7cadffcc0415be4c9d004b722f74cbcb865489d82b9fdad864ddfc8ad3d61",
-    "scout/test_wallet_pipeline.py": "9ce04c77f7233f2e9f34a9958803fdc9f9ad85c5e1d1102f1987e7e3e427fc89",
+    "scout/test_wallet_pipeline.py": "12acdce38553c76a02b86691bf3ba76be3abd5892e68cc7ebedaff1615b142d5",
     "scout/test_wallet_intelligence.py": "d7e251dc4c413fdef522ec5b6bc57b5dfa2eb86a2f6d80ab83b250b7ab7bb477",
     "scout/vivameda-wallet-candidates.timer": "1df6353a7f6122459158ee128ab3c69af26b67085606cf12f92650dec64a34a0",
     "scout/vivameda-wallet-intelligence.timer": "8d4d24c579693cca5e0384ae1b65f3aea11d7d0144bb3cdd8027c17555211ef0",
@@ -58,7 +58,7 @@
     "scout/pool_screening.py": "e5822988b2b0592e8eaf293b9748779acbaeabbca64c4c21825dd9cb57e2172f",
     "scout/wallet_candidates.py": "8b925165a887f32a45a3b5574b2682e67d51f628b39391ebca405f3286a2074c",
     "scout/audit_crypto_readonly.py": "06ebe5e23b149be0dc5168ad547ecfa490567af9d222b2b937f3d9ea8f381f4d",
-    "scout/install_wallet_intelligence.py": "ca796e1f207a0d9a41f23ab8861910c1919dd4b1f3fafeb7ce0de94b262a0c00",
+    "scout/install_wallet_intelligence.py": "008a748988fa6f3729c4aacb73769ea1bda5cfad2904846abd0452d3a4628f6c",
     "scout/test_full_screening.py": "4705e2effdea6a1359b8ca666d47353f6175df5d75a61fc3838402e6f3f2b876",
     "scout/early_scout.py": "995d3a577681657966b282d6cc97dc77dff7601910b3ccbc2faf0a8d78105b92",
     "scout/test_live_ledger.py": "f2c5469fca1ba5955c3e804c34d2e835156cc88c270113a1e14fed3e95be0a29",
@@ -76,7 +76,7 @@
     "scout/vivameda-wallet-candidates.service": "26a8f81225d0c8fd15a733df8fd9e555474b698d86928ca187ec52533e20ac5a",
     "scout/wallet_analysis.py": "88696a881e71db5956de02a7783bcd220abcee5de84a99ed10cfaa64f6f36f90",
     "scout/scout_learning_v2.py": "369c5bd13f2bc66c54ab0d86c499542b13bd711e63448f463f8925d43608f59d",
-    "scout/wallet_worker.py": "78a1f56048116c843d10eb0af1a4bbd621590c9806ae0dd3bbb11f6652b47480",
+    "scout/wallet_worker.py": "e125bce1e09a5eb78c22347e7ddd5a4f69f50eeac231715ce702eb8281678835",
     "research/published_baseline/model.json": "e5cfd232fc60cb59fee2b8fd92bec71e8fce0a075fa01cb9037c572565a4c1b4",
     "research/published_baseline/evaluation.json": "d8b07238f157eb7744c25d3193530e77ea727e63141d57cf2746e989e85e3f2b",
     "research/published_baseline/preregistered_config.json": "faa79d13efa0aa83db0b508c8fc49e6eaff207f6515390a7cd880a2698c0334a",
@@ -102,7 +102,8 @@
     "scout/dflow_reconcile_candidate.py": "69cd336365800876ce5a94792b559aaa5295685442bda35c3cb446f7148f6e0e",
     "scout/test_dflow_reconcile_candidate.py": "4454f05d9cf70a70074b7ae223526f63b34603de46569182a4aa3508e10909d8",
     "scripts/freeze_wallet_replay.py": "4a24925f60565f5f9a81292c3c5d4a32f670264639e6a837a91960913e3a1ea2",
-    "scripts/test_freeze_wallet_replay.py": "4a2691ddf12b6c5c8167f9e5a7ab7cfa04de3790ed057a985c8170a6a1c0995f"
+    "scripts/test_freeze_wallet_replay.py": "4a2691ddf12b6c5c8167f9e5a7ab7cfa04de3790ed057a985c8170a6a1c0995f",
+    "scout/EVIDENCE_CAPACITY_20261005.md": "d99aa23ecb6c7b2d461d1023420c997cc54fff0ce4f17377ea3fea484ac2ac6e"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -250,5 +251,6 @@
     "reconciler_changed": false,
     "history_coverage_complete": false,
     "published_schema_revisions_checked": 16
-  }
+  },
+  "wallet_capacity_source_commit": "a7a7f52"
 }
