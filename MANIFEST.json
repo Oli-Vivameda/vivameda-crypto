@@ -5,9 +5,9 @@
   "sha256": {
     "credentials.example.json": "c58950f6be306e8860e318b8d3bfdadd2c8f4142c92149a83ac52530be0f0ab5",
     ".gitignore": "be399efba81fec45218410e877c3d3935a920538dd15e3ea558a8d5a2bdf68ec",
-    "SIGNALS.md": "561632569b1399e66ce8424626d46085e8a38d28fa9b4c97912a5d32488d22b7",
+    "SIGNALS.md": "e6912005df13615138935c45b77756b23dee636891cb85faed9d273723117cc8",
     "requirements.txt": "0d0d2938e5443f318fc97363f42cffe3309df1b718cc2bf713263a68cb7bbee5",
-    "README.md": "0e34b5ffb30461ec450ba7a41d608de0a7a75aaf16639e9ba943515431e11dd9",
+    "README.md": "ac8af45f9882024540348cb6d8c51f4650605b2e21d92931bfd78430e1ca7afe",
     "SECURITY.md": "fe6ff00dd33525fee4c4fdeff8eea567ee5801705fcad953880bf9f1d58a7a8c",
     "scripts/export_monitor_sources.py": "0918f7a19ed5d2fda85d041c949eaeca0ea3f928940f597a8f577e4611c12922",
     "scripts/install_wallet_connector.py": "703fee1b3985d6afae524cc52c2427198050e8fbcb3140046deb3ab5fd543052",
@@ -27,10 +27,10 @@
     "legacy/scout_learning.py": "835b3e6cd854ddbb11b0a8af4d2fa8c0fe64b468533e7a14ea714df07e6b5c44",
     "docs/SETUP.md": "0c5ba2e5780db52d942178616d9acee83a2b317625859c1f020a72a6854857b0",
     "docs/COVERAGE_20261004.md": "b5b089412561c9f0b627966ee3a1ef5b577493707ccaa0f6c4b62c1b58bd123e",
-    "docs/VALIDATION.md": "b884cedf31c1c628366ece4a0ceecbbc71f11adee84aab2fe013f845932219c9",
-    "docs/COMPLETENESS.md": "4933897dced82a72070e8482bbca52e30b70ae6788de93d4e3d9dda4ef4234dd",
+    "docs/VALIDATION.md": "f0cd1b0b960ff74543b13d5536db1be5e099d77570c5ecff35dec17b2cb838c4",
+    "docs/COMPLETENESS.md": "0568f3e2e3f6604e1a447261ae39ed7c4d5d25a9e493231d69798e17c5229e8e",
     "docs/MONITORS.md": "c4c26f29431b8aaa2a339fa6e23cf70cd2d4212cb31229009b402ddd46f0841b",
-    "docs/ARCHITECTURE.md": "e340a43a040e49f52ce018d83e370ff354e898e08bfd7e0f470c441b713cac05",
+    "docs/ARCHITECTURE.md": "8403a66d2c253e82feb4e6a9256b911268236b0850aab1635f26f25fc0a48310",
     "deploy/vivameda-scout-learning-v2.service": "b7acd289e724466d0acdaedc5ea3482cad74e6ff827b6c491fd9705c50ddb490",
     "deploy/vivameda-early-scout.service": "6acf8be40a62abfd875aecd9ef041c5cb9a12b2a10fa59e228f487ec8542ee5e",
     "deploy/vivameda-telegram-pool-monitor.service": "e75d73568e6e6857569882359237676f52f9c83ef4c75c64eaa23b039c0afab3",
@@ -42,7 +42,7 @@
     "agent/README.md": "47a1b3b09cfe458f413470e758d3db493d915ef71f9f68e2811ecc1bbbc4f5c8",
     "agent/test_context.py": "e8621cb8e443af51a40c37da4f556a4a7849995c1d0bbae9377e05b799181f99",
     "agent/knowledge_cards.json": "398b8261a0cdf22cc4cdf2d87bcc32c5f700146674ced119db390eee93224a27",
-    "scout/SCREENING_V2.md": "055c06cf5d396a73186d69cef08d41148519d16091450a6fba496f498cefd6fd",
+    "scout/SCREENING_V2.md": "66b6915f84c6f212ddd2c1492bc1a870ddb0f0796c834acf5dd884db7254a8c8",
     "scout/vivameda-wallet-intelligence.service": "766541710a156071adb23665932e1a2c5d8945cf2de48d795f7295f4d143decc",
     "scout/protocol_screening.py": "ca049acdde2198e70d83a82d95552b4bd193116de0b4d28f64c34cd699827636",
     "scout/dex_browser_worker.py": "bae7cadffcc0415be4c9d004b722f74cbcb865489d82b9fdad864ddfc8ad3d61",
@@ -54,7 +54,7 @@
     "scout/free_risk_evidence.py": "49408c03b8814fa969c2427d8f8170a1b653d8682a5b6a9c6d7048d66846bc6a",
     "scout/test_crypto_stack.py": "f7bd8cf52b06d26d2ec3a23c5d2700eaa1a8226f13d890dbe3039ec5eb575f59",
     "scout/full_screening.py": "3ff8a44c73dcaa34f10cf12eb6c861913cc2aa8b089f18bc5d89a1a1dc6bd0e1",
-    "scout/WALLET_INTELLIGENCE.md": "f75bf88df80abf3721d1a652de7f324b922e5acce5f677907abda55489126697",
+    "scout/WALLET_INTELLIGENCE.md": "675bc1da70a1b53c9a3dee0422ced2ff25532cf520f83305fbb52722287d4f69",
     "scout/pool_screening.py": "e5822988b2b0592e8eaf293b9748779acbaeabbca64c4c21825dd9cb57e2172f",
     "scout/wallet_candidates.py": "8b925165a887f32a45a3b5574b2682e67d51f628b39391ebca405f3286a2074c",
     "scout/audit_crypto_readonly.py": "06ebe5e23b149be0dc5168ad547ecfa490567af9d222b2b937f3d9ea8f381f4d",
@@ -103,7 +103,13 @@
     "scout/test_dflow_reconcile_candidate.py": "4454f05d9cf70a70074b7ae223526f63b34603de46569182a4aa3508e10909d8",
     "scripts/freeze_wallet_replay.py": "4a24925f60565f5f9a81292c3c5d4a32f670264639e6a837a91960913e3a1ea2",
     "scripts/test_freeze_wallet_replay.py": "4a2691ddf12b6c5c8167f9e5a7ab7cfa04de3790ed057a985c8170a6a1c0995f",
-    "scout/EVIDENCE_CAPACITY_20261005.md": "d99aa23ecb6c7b2d461d1023420c997cc54fff0ce4f17377ea3fea484ac2ac6e"
+    "scout/EVIDENCE_CAPACITY_20261005.md": "d99aa23ecb6c7b2d461d1023420c997cc54fff0ce4f17377ea3fea484ac2ac6e",
+    "docs/FULL_SETUP.md": "7b8a53a8da6b919baad74a1e765fb29e8f54400f7a139f34bfa7004aac30f725",
+    "docs/REPOSITORY_POLICY.md": "59759669828eced1932b170270fcdbecfdd4785941c7232dc60ca6aed4a47f18",
+    "agent_trader/README.md": "d3ed749204c25ec6466e67d862eff85d7eaba67f423e13455475c2320853efbe",
+    "agent_trader/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "agent_trader/agent.py": "b0a4c481b682d1c90efeaf2e29c3e26aec704d1c4a69a009cd381fbb8342515f",
+    "agent_trader/test_agent.py": "f724b98f24aeff60f1e33377f982c8af993de45891ab49398403ba7b3e02890d"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -252,5 +258,13 @@
     "history_coverage_complete": false,
     "published_schema_revisions_checked": 16
   },
-  "wallet_capacity_source_commit": "a7a7f52"
+  "wallet_capacity_source_commit": "a7a7f52",
+  "showcase": {
+    "updated": "2026-10-05",
+    "entry_point": "docs/FULL_SETUP.md",
+    "includes_paper_proposal_scaffold": true,
+    "live_execution": false,
+    "maintenance_policy": "docs/REPOSITORY_POLICY.md",
+    "private_execution_core_bundled": false
+  }
 }
