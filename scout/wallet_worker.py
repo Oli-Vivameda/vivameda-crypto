@@ -3,6 +3,10 @@ import argparse, fcntl, html, json, shutil, sqlite3, time
 from pathlib import Path
 from full_screening import collect as collect_full
 from free_risk_evidence import valid, candidate_retry_delay, transient_issue
+
+# Bounded headroom for the shared evidence database; never evict research evidence.
+EVIDENCE_LIMIT_BYTES = 4 * 1024**3
+MIN_FREE_BYTES = 3 * 1024**3
 def focus_research(db,eligible,current,now):
     """One stable 15-minute focus; every fourth eligible pass explores the queue."""
     db.execute("CREATE TABLE IF NOT EXISTS research_focus(id INTEGER PRIMARY KEY CHECK(id=1),mint TEXT,identity TEXT,until_ts INTEGER,passes INTEGER)")
@@ -40,8 +44,8 @@ def cycle(inbox,root,now=None,research=True,rpc_budget=None):
     except BlockingIOError: lock.close();return {"status":"already_running"}
     db=None
     try:
-        if shutil.disk_usage(root).free < 3*1024**3: return {"status":"capacity_hold"}
-        if sum(p.stat().st_size for p in root.glob("*") if p.is_file()) > 2*1024**3: return {"status":"evidence_quota_hold"}
+        if shutil.disk_usage(root).free < MIN_FREE_BYTES: return {"status":"capacity_hold"}
+        if sum(p.stat().st_size for p in root.glob("*") if p.is_file()) > EVIDENCE_LIMIT_BYTES: return {"status":"evidence_quota_hold"}
         payload=json.loads(Path(inbox).read_text())
         ts=payload.get("exported_at")
         if type(ts) is not int or not 0<=now-ts<=300: return {"status":"stale_candidate_feed"}

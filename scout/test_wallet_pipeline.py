@@ -250,3 +250,23 @@ class FocusFastLaneTests(unittest.TestCase):
    db=sqlite3.connect(root/"queue.sqlite")
    self.assertEqual(db.execute("SELECT next_due FROM queue WHERE mint=?",(A,)).fetchone()[0],1120)
    db.close()
+
+class EvidenceCapacityTests(unittest.TestCase):
+ def check_capacity(self,size,free):
+  from types import SimpleNamespace
+  with tempfile.TemporaryDirectory() as d:
+   root=Path(d)/"data";root.mkdir()
+   with (root/"wallets.sqlite").open("wb") as f:f.truncate(size)
+   feed=Path(d)/"feed"
+   feed.write_text(json.dumps({"exported_at":1000,"candidates":[]}))
+   with patch("wallet_worker.shutil.disk_usage",return_value=SimpleNamespace(free=free)),patch("wallet_worker.collect_full") as scan:
+    out=cycle(feed,root,1000)
+    scan.assert_not_called()
+   self.assertEqual((root/"wallets.sqlite").stat().st_size,size)
+   return out["status"]
+ def test_existing_two_gib_evidence_can_resume(self):
+  self.assertEqual(self.check_capacity(int(2.002*1024**3),10*1024**3),"idle")
+ def test_four_gib_limit_still_holds(self):
+  self.assertEqual(self.check_capacity(4*1024**3+1,10*1024**3),"evidence_quota_hold")
+ def test_three_gib_free_reserve_still_holds(self):
+  self.assertEqual(self.check_capacity(1,3*1024**3-1),"capacity_hold")

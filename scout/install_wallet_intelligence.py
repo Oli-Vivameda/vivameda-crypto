@@ -4,7 +4,21 @@ No scanner edits, permissions broadening, paid services or Telegram.
 """
 import argparse, ast, grp, hashlib, json, os, pwd, shutil, subprocess, sys
 from pathlib import Path
-EXPECTED = {'free_risk_evidence.py': '49408c03b8814fa969c2427d8f8170a1b653d8682a5b6a9c6d7048d66846bc6a', 'wallet_intelligence.py': 'daaf6452ab817c95ab8dff1ac86cdf880d3b1ab94746c855b0ac6942be2b838f', 'wallet_analysis.py': '88696a881e71db5956de02a7783bcd220abcee5de84a99ed10cfaa64f6f36f90', 'wallet_candidates.py': '8b925165a887f32a45a3b5574b2682e67d51f628b39391ebca405f3286a2074c', 'wallet_worker.py': '78a1f56048116c843d10eb0af1a4bbd621590c9806ae0dd3bbb11f6652b47480', 'vivameda-wallet-candidates.service': '26a8f81225d0c8fd15a733df8fd9e555474b698d86928ca187ec52533e20ac5a', 'vivameda-wallet-candidates.timer': '1df6353a7f6122459158ee128ab3c69af26b67085606cf12f92650dec64a34a0', 'vivameda-wallet-intelligence.service': '766541710a156071adb23665932e1a2c5d8945cf2de48d795f7295f4d143decc', 'vivameda-wallet-intelligence.timer': '8d4d24c579693cca5e0384ae1b65f3aea11d7d0144bb3cdd8027c17555211ef0', 'protocol_screening.py': 'ca049acdde2198e70d83a82d95552b4bd193116de0b4d28f64c34cd699827636', 'pool_screening.py': 'e5822988b2b0592e8eaf293b9748779acbaeabbca64c4c21825dd9cb57e2172f', 'full_screening.py': '3ff8a44c73dcaa34f10cf12eb6c861913cc2aa8b089f18bc5d89a1a1dc6bd0e1', 'screening_policy.py': 'd07690e75a3b64d4466f1334c5a1222f80dbde87b5c394db99a455d4b24d5ccd'}
+EXPECTED = {
+  "free_risk_evidence.py": "49408c03b8814fa969c2427d8f8170a1b653d8682a5b6a9c6d7048d66846bc6a",
+  "wallet_intelligence.py": "daaf6452ab817c95ab8dff1ac86cdf880d3b1ab94746c855b0ac6942be2b838f",
+  "wallet_analysis.py": "88696a881e71db5956de02a7783bcd220abcee5de84a99ed10cfaa64f6f36f90",
+  "wallet_candidates.py": "8b925165a887f32a45a3b5574b2682e67d51f628b39391ebca405f3286a2074c",
+  "wallet_worker.py": "e125bce1e09a5eb78c22347e7ddd5a4f69f50eeac231715ce702eb8281678835",
+  "vivameda-wallet-candidates.service": "26a8f81225d0c8fd15a733df8fd9e555474b698d86928ca187ec52533e20ac5a",
+  "vivameda-wallet-candidates.timer": "1df6353a7f6122459158ee128ab3c69af26b67085606cf12f92650dec64a34a0",
+  "vivameda-wallet-intelligence.service": "766541710a156071adb23665932e1a2c5d8945cf2de48d795f7295f4d143decc",
+  "vivameda-wallet-intelligence.timer": "8d4d24c579693cca5e0384ae1b65f3aea11d7d0144bb3cdd8027c17555211ef0",
+  "protocol_screening.py": "ca049acdde2198e70d83a82d95552b4bd193116de0b4d28f64c34cd699827636",
+  "pool_screening.py": "e5822988b2b0592e8eaf293b9748779acbaeabbca64c4c21825dd9cb57e2172f",
+  "full_screening.py": "3ff8a44c73dcaa34f10cf12eb6c861913cc2aa8b089f18bc5d89a1a1dc6bd0e1",
+  "screening_policy.py": "d07690e75a3b64d4466f1334c5a1222f80dbde87b5c394db99a455d4b24d5ccd"
+}
 BASE=Path(__file__).resolve().parent
 APP=Path("/opt/vivameda-wallet-intelligence")
 STATE=Path("/var/lib/vivameda-wallet-intelligence")
@@ -79,6 +93,5 @@ def main():
     command("/usr/bin/systemctl","restart","vivameda-early-scout.service")
     command("/usr/bin/systemctl","is-active","--quiet","vivameda-early-scout.service")
     print(json.dumps({"installed":True,"mode":"BOUNDED_SCREENING_V2","worker":status,
-                     "maps":str(STATE/"data"/"index.html"),"telegram_gate":"collector installed; scanner independently enforces three mandatory PASS checks and blocks any explicit REJECT"},indent=2))
+                     "maps":str(STATE/"data"/"index.html"),"telegram_gate":"collector installed; scanner independently requires seven fresh PASS checks"},indent=2))
 if __name__=="__main__":main()
-
