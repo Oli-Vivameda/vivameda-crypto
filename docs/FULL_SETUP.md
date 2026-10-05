@@ -85,3 +85,11 @@ Fresh-host installation and real message delivery have not been reproduced as pa
 Use [SETUP.md](SETUP.md) for offline checks and named service installation, [ARCHITECTURE.md](ARCHITECTURE.md) for entry points, [COMPLETENESS.md](COMPLETENESS.md) for distribution scope and [VALIDATION.md](VALIDATION.md) for test provenance. Do not enable archived units indiscriminately. Reviewed deployments preserve backups, hashes and existing thresholds; UNKNOWN is never cleared to force an alert.
 
 Every crypto code, rule, model, configuration behavior or deployment change must be reflected in GitHub under [REPOSITORY_POLICY.md](REPOSITORY_POLICY.md). New experiments must be labelled offline until actually deployed; stale historical records remain dated and point to current status rather than being rewritten as successful outcomes.
+
+## Daily case-memory learning (activated 5 October)
+
+[Daily learning source and activation guide](../learning/README.md) adds a local matched first-call review, a prospective paper decision journal and a fresh-memory wrapper for the existing crypto agent. Twelve engineering-server tests passed; production activation was verified on 5 October at approximately 12:12 UTC. A daily supervision automation is enabled around 09:00 Cyprus time starting 6 October; server review at 08:00 and paper journal approximately every minute are enabled following installation.
+
+Every frozen-ledger mint is excluded before development outcomes are queried. Matching uses eligible 60-minute endpoints and fixed regime/score/cap/liquidity/age/time calipers. Historical reconstructed features remain exploratory. New paper recommendations save contemporaneous snapshots and screening references; all seven fresh checks must PASS for ENTER_REVIEW. This stricter paper filter does not alter scanner admission. Case memory does not imply newly trained weights, a demonstrated trading edge or live execution. Public daily updates contain aggregates and deployment receipts, not private runtime records.
+
+The decision-time endpoint extension was activated at 12:29:55 UTC on 5 October. Its first run exited successfully; initial aggregate counts were zero in every action group. See [endpoint evaluation](../learning/PAPER_EVALUATION.md) and [activation receipt](../learning/ENDPOINT_ACTIVATION_20261005.md). No training or execution was enabled.
