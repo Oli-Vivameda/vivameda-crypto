@@ -7,7 +7,7 @@
     ".gitignore": "be399efba81fec45218410e877c3d3935a920538dd15e3ea558a8d5a2bdf68ec",
     "SIGNALS.md": "e6912005df13615138935c45b77756b23dee636891cb85faed9d273723117cc8",
     "requirements.txt": "0d0d2938e5443f318fc97363f42cffe3309df1b718cc2bf713263a68cb7bbee5",
-    "README.md": "ac8af45f9882024540348cb6d8c51f4650605b2e21d92931bfd78430e1ca7afe",
+    "README.md": "c6732808d25450e5985546927dc5ca7721b406dd47868b5a3125e63a37a92a5d",
     "SECURITY.md": "fe6ff00dd33525fee4c4fdeff8eea567ee5801705fcad953880bf9f1d58a7a8c",
     "scripts/export_monitor_sources.py": "0918f7a19ed5d2fda85d041c949eaeca0ea3f928940f597a8f577e4611c12922",
     "scripts/install_wallet_connector.py": "703fee1b3985d6afae524cc52c2427198050e8fbcb3140046deb3ab5fd543052",
@@ -27,7 +27,7 @@
     "legacy/scout_learning.py": "835b3e6cd854ddbb11b0a8af4d2fa8c0fe64b468533e7a14ea714df07e6b5c44",
     "docs/SETUP.md": "0c5ba2e5780db52d942178616d9acee83a2b317625859c1f020a72a6854857b0",
     "docs/COVERAGE_20261004.md": "b5b089412561c9f0b627966ee3a1ef5b577493707ccaa0f6c4b62c1b58bd123e",
-    "docs/VALIDATION.md": "f0cd1b0b960ff74543b13d5536db1be5e099d77570c5ecff35dec17b2cb838c4",
+    "docs/VALIDATION.md": "1712bad00c4fd09ebb716fbddf153ad337970309ccafcff0397591ebea173976",
     "docs/COMPLETENESS.md": "0568f3e2e3f6604e1a447261ae39ed7c4d5d25a9e493231d69798e17c5229e8e",
     "docs/MONITORS.md": "c4c26f29431b8aaa2a339fa6e23cf70cd2d4212cb31229009b402ddd46f0841b",
     "docs/ARCHITECTURE.md": "8403a66d2c253e82feb4e6a9256b911268236b0850aab1635f26f25fc0a48310",
@@ -104,12 +104,23 @@
     "scripts/freeze_wallet_replay.py": "4a24925f60565f5f9a81292c3c5d4a32f670264639e6a837a91960913e3a1ea2",
     "scripts/test_freeze_wallet_replay.py": "4a2691ddf12b6c5c8167f9e5a7ab7cfa04de3790ed057a985c8170a6a1c0995f",
     "scout/EVIDENCE_CAPACITY_20261005.md": "d99aa23ecb6c7b2d461d1023420c997cc54fff0ce4f17377ea3fea484ac2ac6e",
-    "docs/FULL_SETUP.md": "7b8a53a8da6b919baad74a1e765fb29e8f54400f7a139f34bfa7004aac30f725",
-    "docs/REPOSITORY_POLICY.md": "59759669828eced1932b170270fcdbecfdd4785941c7232dc60ca6aed4a47f18",
+    "docs/FULL_SETUP.md": "9d5af4954ff412c86a7f7d2966159f00b953571783b8449642c974cd5e72b2ff",
+    "docs/REPOSITORY_POLICY.md": "937df3adcdce8dde1722f0931c10580a48a3a93592755a925f643eb1245ff4f3",
     "agent_trader/README.md": "d3ed749204c25ec6466e67d862eff85d7eaba67f423e13455475c2320853efbe",
     "agent_trader/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
     "agent_trader/agent.py": "b0a4c481b682d1c90efeaf2e29c3e26aec704d1c4a69a009cd381fbb8342515f",
-    "agent_trader/test_agent.py": "f724b98f24aeff60f1e33377f982c8af993de45891ab49398403ba7b3e02890d"
+    "agent_trader/test_agent.py": "f724b98f24aeff60f1e33377f982c8af993de45891ab49398403ba7b3e02890d",
+    "learning/README.md": "c6f3f66931b6ba6fc73d6b09b66279794423992beaccc613861ffb8d040f27a0",
+    "learning/context.py": "734b05de4bb7c9d9a1e33f4eafef311a15b25cd2f0d2737e6425a4dc9868604c",
+    "learning/daily_learning.py": "370ca35a27033b7278f45470f8519e2ea2da0e8a5a00707d40e496b9bc00f468",
+    "learning/install_daily_learning.py": "7c2b982e82f723e48e255cbd6908b883489c4b2199902882e26589c63ac12767",
+    "learning/policy.json": "b77dbbcc94562894529b5247dcfe5b1834d6abd5645ea19c61e5ca9465367d36",
+    "learning/test_daily_learning.py": "3079b1a4d4fc99d77f3afb133037c93ec6e64f9f83b0dce8c3ccddcac4fab133",
+    "learning/paper_outcomes.py": "d113c22b879936912d9709e04dde39b37376a9d15665f3bd4c4af0dbb0b50768",
+    "learning/test_paper_outcomes.py": "ca0982ac11221fea45921cd6d8bd73b74666f1e6860c35d822606876c2e9bb99",
+    "learning/install_paper_outcomes.py": "402e2a1bb9ff2e28c3e67378fcf9eab67d2a18297d29524d60d01ee2cf4ea485",
+    "learning/PAPER_EVALUATION.md": "4d500750ef3f292886ea30ea11ea9edf29f168bcf7a756fd4b52dd072805185a",
+    "learning/ENDPOINT_ACTIVATION_20261005.md": "c60e5046cd63643457239062811b48090ed6c1c880b6ed8dbd902c7ccecbb488"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -266,5 +277,15 @@
     "live_execution": false,
     "maintenance_policy": "docs/REPOSITORY_POLICY.md",
     "private_execution_core_bundled": false
+  },
+  "learning_bundle_sha256": "d63bc98534fa81af7357a6c9b802e1d4ae7ea20578b61538c62b0601a0207a9e",
+  "learning_status": "activated 2026-10-05; base review/journal and decision-time endpoint extension verified",
+  "paper_endpoint_activation": {
+    "activated_at_utc": "2026-10-05T12:29:55Z",
+    "bundle_sha256": "f6bf9bfa741e3fe88f1225673b31c63054ea1514ada2c5c4597edcc260c8f1d9",
+    "tests_passed": 18,
+    "initial_eligible_endpoints": 0,
+    "weights_updated": false,
+    "live_execution": false
   }
 }

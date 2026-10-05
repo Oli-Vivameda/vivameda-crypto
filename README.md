@@ -14,6 +14,7 @@ A continuously running Solana small-cap observation and research system on Hetzn
 | Forward learning | ALERT/SHADOW cases, timed outcomes, regimes and horizon statistics | Live V2 tracker |
 | Prediction ledger | Freeze shadow predictions and later eligible labels for a prospective baseline comparison | Activated; no completed validation claim |
 | Numerical model | Seven-feature logistic baseline, published coefficients and evaluation | Experimental; underperformed baseline; does not drive alerts |
+| Daily case learning | Matched first-call reviews, fresh agent memory and prospective paper journal | Live daily review and paper journal; daily supervision scheduled; decision-time endpoint extension activated |
 | Agent context | Select dated crypto knowledge and limitations for an agent session | Public extraction; private conversational runtime excluded |
 | Trading-agent layer | Paper proposal records, owner feedback and versioned playbook | Scaffold; no continuous agent or live execution |
 | Transaction-decoder experiments | Offline DFlow/Pump endpoint reconciliation | Not promoted into production |
@@ -46,6 +47,7 @@ The watchlist and pool monitor run separate observation rules; their messages do
 | [Monitor signals](docs/MONITORS.md) | Watchlist, pool levels, activity, controls, account and vesting observations |
 | [Architecture](docs/ARCHITECTURE.md) | Source entry points, data flow and external effects |
 | [Research](research/README.md) | Baseline result, training schema and evaluation limits |
+| [Daily case learning](learning/README.md) | Matching rules, paper journal, agent integration, daily schedules and activation |
 | [Trading scaffold](agent_trader/README.md) | Paper proposals, feedback and execution integration requirements |
 | [Setup](docs/SETUP.md) | Dependencies, installation, health checks and rollback |
 | [Coverage](docs/COMPLETENESS.md) / [Validation](docs/VALIDATION.md) | Included source, tests and unresolved gaps |
@@ -61,6 +63,7 @@ python3 -m venv .venv
 .venv/bin/python -m unittest discover -s research -p 'test_*.py'
 .venv/bin/python -m unittest discover -s agent -p 'test_*.py'
 .venv/bin/python -m unittest discover -s agent_trader -p 'test_*.py'
+python3 -m unittest discover -s learning -p 'test_*.py'
 python3 scripts/verify_release.py
 ```
 
