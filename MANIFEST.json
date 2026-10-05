@@ -7,7 +7,7 @@
     ".gitignore": "be399efba81fec45218410e877c3d3935a920538dd15e3ea558a8d5a2bdf68ec",
     "SIGNALS.md": "e6912005df13615138935c45b77756b23dee636891cb85faed9d273723117cc8",
     "requirements.txt": "0d0d2938e5443f318fc97363f42cffe3309df1b718cc2bf713263a68cb7bbee5",
-    "README.md": "d9caa48969d096c1bb3f52eec88a9d168a45a394be25aea502757c1edbbcdc28",
+    "README.md": "8a468d5819273ff5ae1545f0ae4acf39801c1172353ba10bfb3af17357922f18",
     "SECURITY.md": "fe6ff00dd33525fee4c4fdeff8eea567ee5801705fcad953880bf9f1d58a7a8c",
     "scripts/export_monitor_sources.py": "0918f7a19ed5d2fda85d041c949eaeca0ea3f928940f597a8f577e4611c12922",
     "scripts/install_wallet_connector.py": "703fee1b3985d6afae524cc52c2427198050e8fbcb3140046deb3ab5fd543052",
@@ -138,7 +138,8 @@
     "agent/runtime/vivameda-crypto-model.service": "f37a712c2b9012c7ddf09f4efe41efdebf1d4399379908b72bdbd315be964eef",
     "agent/runtime/install_runtime.py": "28ab1943192a2ab945c2dbcacc71703de5c6983a712dbedb9e435fa781d5e27a",
     "agent/runtime/crypto_boundary.py": "e215b8d19c8fe7d828c3e2643a789eecc433bb9e3b1e4779ad0e7b4f8fe413b1",
-    "agent/runtime/README.md": "28647eed401b391f71671c0cf23e434aac5cfb4b33db3f3251127f0f1aba872c"
+    "agent/runtime/README.md": "7d06b9c8842cb0ffa2c7de1ff3f099fafc05f54e6d2de79d4e702a7f6e4820ce",
+    "agent/runtime/RUNTIME_ACTIVATION_20261005.md": "262e70438ef3ed9eff44b619aea459efed33e47bf3a0c0dd214e9f3c075484ad"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -307,12 +308,12 @@
     "live_execution": false
   },
   "crypto_agent": {
-    "status": "earlier activation superseded by concurrent company dispatcher replacement; runtime activation pending",
+    "status": "activated through isolated runtime; connector boundaries verified",
     "bundle_sha256": "53701ea8ce3a1e9795fb05bc98bb5c958b98e0993b7791ff2848ef0dd8b12bbc",
     "tests_passed": 19,
     "independent_status_verified": true,
     "model_response_verified": false,
-    "model_check": "timed out after 150 seconds",
+    "model_check": "MODEL_MODE_UNSUPPORTED; compatible inference configuration pending",
     "shared_base_model": "qwen3:4b",
     "dedicated_crypto_weights": false,
     "live_execution": false,
@@ -321,10 +322,10 @@
     "connector_status_verified": true,
     "company_request_blocked": true,
     "receipt": "agent/CRYPTO_AGENT_ACTIVATION_20261005.md",
-    "current_connector_boundary_verified": false
+    "current_connector_boundary_verified": true
   },
   "crypto_runtime": {
-    "status": "built and tested; owner activation pending",
+    "status": "activated; live connector and isolation checks verified",
     "bundle_sha256": "ffc7a1176509a54728862e17ea00893559b807330f0d086d4e3c13a6c290e98d",
     "tests_passed": 18,
     "source_preservation_verified": true,
@@ -333,6 +334,16 @@
     "model_mode_diagnostic": "installed qwen3:4b is Thinking-2507; think=false unsupported",
     "model_response_verified": false,
     "live_execution": false,
-    "private_runtime_bundled": false
+    "private_runtime_bundled": false,
+    "activated_at_utc": "2026-10-05T14:31:55.972709Z",
+    "receipt": "agent/runtime/RUNTIME_ACTIVATION_20261005.md",
+    "connector_status_verified": true,
+    "company_request_blocked": true,
+    "company_help_route_verified": true,
+    "inet_socket_blocked": true,
+    "company_paths_visible": false,
+    "connector_restart_required_for_v1": true,
+    "model_check": "MODEL_MODE_UNSUPPORTED",
+    "old_crypto_history_migrated": false
   }
 }
