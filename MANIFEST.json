@@ -7,7 +7,7 @@
     ".gitignore": "be399efba81fec45218410e877c3d3935a920538dd15e3ea558a8d5a2bdf68ec",
     "SIGNALS.md": "e6912005df13615138935c45b77756b23dee636891cb85faed9d273723117cc8",
     "requirements.txt": "0d0d2938e5443f318fc97363f42cffe3309df1b718cc2bf713263a68cb7bbee5",
-    "README.md": "c6732808d25450e5985546927dc5ca7721b406dd47868b5a3125e63a37a92a5d",
+    "README.md": "9a4b08cb29f5a7023355bdbff6eb7964208e0f47c7110d81e152a8f3037b067e",
     "SECURITY.md": "fe6ff00dd33525fee4c4fdeff8eea567ee5801705fcad953880bf9f1d58a7a8c",
     "scripts/export_monitor_sources.py": "0918f7a19ed5d2fda85d041c949eaeca0ea3f928940f597a8f577e4611c12922",
     "scripts/install_wallet_connector.py": "703fee1b3985d6afae524cc52c2427198050e8fbcb3140046deb3ab5fd543052",
@@ -120,7 +120,12 @@
     "learning/test_paper_outcomes.py": "ca0982ac11221fea45921cd6d8bd73b74666f1e6860c35d822606876c2e9bb99",
     "learning/install_paper_outcomes.py": "402e2a1bb9ff2e28c3e67378fcf9eab67d2a18297d29524d60d01ee2cf4ea485",
     "learning/PAPER_EVALUATION.md": "4d500750ef3f292886ea30ea11ea9edf29f168bcf7a756fd4b52dd072805185a",
-    "learning/ENDPOINT_ACTIVATION_20261005.md": "c60e5046cd63643457239062811b48090ed6c1c880b6ed8dbd902c7ccecbb488"
+    "learning/ENDPOINT_ACTIVATION_20261005.md": "c60e5046cd63643457239062811b48090ed6c1c880b6ed8dbd902c7ccecbb488",
+    "agent/crypto_agent.py": "9ff8c0bf056d7998a3c546a271e16fe2af1d4d3968ecc15f9f4b35eb14ced313",
+    "agent/crypto_boundary.py": "e215b8d19c8fe7d828c3e2643a789eecc433bb9e3b1e4779ad0e7b4f8fe413b1",
+    "agent/install_crypto_agent.py": "842796a41a0fb6575bd95444a8ece1e3dfa634c69ee35fadbfac9c1c8066158a",
+    "agent/test_crypto_agent.py": "6f77025cbc4094cd37f19e68b71939533f9d50afefd3223f417e4376abd8fff9",
+    "agent/CRYPTO_LAB.md": "3aa220271f2661e76485af9997f39d2bd6b779e487e06f6ef6ec38139220a05b"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -286,6 +291,17 @@
     "tests_passed": 18,
     "initial_eligible_endpoints": 0,
     "weights_updated": false,
+    "live_execution": false
+  },
+  "crypto_agent": {
+    "status": "built; connector activation pending",
+    "bundle_sha256": "53701ea8ce3a1e9795fb05bc98bb5c958b98e0993b7791ff2848ef0dd8b12bbc",
+    "tests_passed": 19,
+    "independent_status_verified": true,
+    "model_response_verified": false,
+    "model_check": "timed out after 150 seconds",
+    "shared_base_model": "qwen3:4b",
+    "dedicated_crypto_weights": false,
     "live_execution": false
   }
 }
