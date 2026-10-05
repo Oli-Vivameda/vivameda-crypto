@@ -145,7 +145,11 @@
     "agent/interpretation/crypto_agent.py": "75b58cf48ae1ec4d3bdf7cbfa800a8979331fadad2b450672a0a5648e9853a3a",
     "agent/interpretation/INTERPRETATION_ACTIVATION_20261005.md": "10b0234aa7c9f24d9ad5ff8c13d54860ec818c7d463a2c806079254a64ed6505",
     "agent/interpretation/README.md": "e09061fe01d784ae73f0d6a0076ed3c8bec7b054effc0efad6a5868e98add981",
-    "agent/interpretation/install_interpretation.py": "1acc31aa2938efe3f2b38b9e2ed30efe56ace22a7fa1b0a883f648c6914a752b"
+    "agent/interpretation/install_interpretation.py": "1acc31aa2938efe3f2b38b9e2ed30efe56ace22a7fa1b0a883f648c6914a752b",
+    "research/selection_audit/README.md": "b4d85f96556feb24a0c4eb81a862041df8cdaa4837df6145adc52457429389be",
+    "research/selection_audit/export_history.py": "e32e0cab0404b356a6104150da742a38224b088d7b169b4dde06a572f0664a82",
+    "research/selection_audit/audit_selection.py": "68d8b98522192929607f9abd0d9efe9634697dbb7cc4d0044331ab37098fb769",
+    "research/selection_audit/test_selection.py": "1ee8d47f1f30d5e6cf4cbe25089cea7b3a6a6d205d12b049baf67accfa3a9a57"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -373,5 +377,13 @@
     "private_runtime_bundled": false,
     "verification_elapsed_seconds": 130.38,
     "receipt": "agent/interpretation/INTERPRETATION_ACTIVATION_20261005.md"
+  },
+  "crypto_selection_audit": {
+    "status": "engineering tested; protected historical export pending owner run",
+    "tests_passed": 9,
+    "production_changed": false,
+    "live_ledger_results_read": false,
+    "prospective_validation": false,
+    "source": "research/selection_audit/README.md"
   }
 }
