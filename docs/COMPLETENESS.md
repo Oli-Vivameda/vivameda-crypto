@@ -22,3 +22,7 @@ The owner-run export recovered all eight requested source/unit files, with no mi
 The watchlist contains JEANPHIL, 20xx and CHIIKAWA and a +10% move trigger. It does not implement universe-wide 3–6-day survivor discovery. The legacy learner uses provider ATH information and must not supply prospective ledger labels. See MONITORS.md.
 
 Wallet cluster/age coverage is still incomplete. The 4 October diagnostic sample recorded 87/1,356 owners observed and zero complete-fresh owners. Blockers overlap: 85 owners had pending transactions, 68 unsupported programs, 60 stale histories, 19 incomplete pagination and 16 missing addresses. No gate was relaxed. See COVERAGE_20261004.md.
+
+## Showcase update - 5 October 2026
+
+[Full setup](FULL_SETUP.md) is the current overview. Public source now also includes the paper proposal/feedback scaffold in agent_trader/; this is not an autonomous trading service. The internal paper-execution core and full conversational runtime are described as private dependencies, not bundled source. The collection-audit and focused-collection patches were deployed on 4 October; the 4 GiB evidence cap on 5 October. Cluster/age coverage remains incomplete. Historical diagnostic samples above remain dated samples. Documentation and source publication do not establish a fresh-host installation or broad survivor discovery. No PDF is maintained; GitHub is the owner-requested showcase.

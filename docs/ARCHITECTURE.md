@@ -13,11 +13,17 @@
 | Agent context | agent/context.py | Select dated crypto rules and model limitations for a caller's session | No network, model calls or actions |
 | Numerical baseline | research/train_numerical_v1.py | Fit/evaluate an exploratory one-hour endpoint model | Local files only |
 | Browser evidence | scout/dex_browser_worker.py | Capture visible evidence for review | Browser page requests; no PASS or Telegram |
-| Watchlist/survivor monitor | Protected watch.py; export pending | Exact implementation and thresholds not yet available | Existing service, not yet distributed |
-| Pool monitor | Protected monitor.py; export pending | Exact implementation and thresholds not yet available | Existing service, not yet distributed |
+| Configured-token watchlist | monitors/watchlist/watch.py | Three-token +10% observed move and rearm | Public requests and separate Telegram notices |
+| Pool/developer monitor | monitors/pool-monitor/monitor.py and developer_checks.py | Configured levels, cap, liquidity, activity, authorities, accounts and vesting | Public reads and separate Telegram notices |
 
 Public sources in the copied code: Pump launch feed, DexScreener pair API, Solana mainnet RPC, PublicNode history RPC and Rugcheck reports. Their availability and free capacity are not guaranteed. No paid-provider account is enabled by this package.
 
 The scanner database is `/opt/vivameda-crypto-early-scout/data/early_scout.sqlite`. Candidate inbox and wallet reports live below `/var/lib/vivameda-wallet-intelligence/`. Wallet maps and raw evidence are runtime data, excluded from public Git. The full Vivameda agent, workforce models, connectors, client records and conversations are separate and are not required for the crypto scanner.
 
 There is no automated trade execution, signing, stop-loss order manager or promoted predictive model in this source distribution.
+
+## Research and proposal layers
+
+The live prospective ledger is implemented in research/prediction_ledger.py and called by the scanner. Its frozen shadow probabilities do not authorize alerts. Offline DFlow/Pump candidate decoders are not integrated into the production collector. agent_trader/agent.py is a paper proposal and feedback scaffold, not a continuous trader; its local APPROVED state is not an authenticated execution approval. The separate internal paper-execution core is described in FULL_SETUP.md and is not bundled.
+
+See [FULL_SETUP.md](FULL_SETUP.md) for the dated operating inventory and [REPOSITORY_POLICY.md](REPOSITORY_POLICY.md) for required publication updates. Runtime databases/maps remain private.
