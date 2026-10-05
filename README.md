@@ -1,44 +1,71 @@
-# Vivameda Crypto
+# Vivameda Crypto Lab
 
-Solana early-breakout scanning, wallet screening, Telegram alerts, forward outcome tracking and experimental research.
+A continuously running Solana small-cap observation and research system on Hetzner: early-breakout discovery, on-chain wallet screening, Telegram notifications, wallet maps and forward outcome tracking.
 
-**Release status:** scanner, wallet, V2 learning and crypto-agent source are published. The exported watchlist, pool monitor, developer checks and legacy tracker are now included. The watchlist tracks three configured tokens; it is not a broad survivor-discovery scanner. Private live configuration/data and fresh-host validation remain outside this release. See [coverage](docs/COMPLETENESS.md). Full cluster/age evidence is not guaranteed.
+**Start here:** [Full setup showcase](docs/FULL_SETUP.md). This repository is the public source and documentation of the crypto setup. It describes live components, offline experiments and unfinished integrations separately. It is a dated reference, not a live dashboard or a guarantee of profitable trading.
 
-## Included
-- 11 equal-weight scoring signals; alert thresholds 8 and 10.
-- Seven screening checks: three mandatory PASS checks; every explicit REJECT blocks; background UNKNOWN disclosed.
-- Creator reconciliation, ownership census, durable wallet history indexing, clusters, activity-age bounds, maps and capacity diagnostics.
-- ALERT/SHADOW forward learning, crypto-only agent context and research rules.
-- Numerical training code, experimental fitted coefficients and evaluation, tests, configuration example and systemd units.
+## The system at a glance
 
-See [monitor signals and setup](docs/MONITORS.md) for the additional components and their limitations.
+| Layer | What it does | Current status |
+|---|---|---|
+| Discovery and scoring | Collect launches and snapshots; score 11 signals; thresholds 8 / 10 | Live |
+| Wallet intelligence | Authenticate pools/creators/holdings; index histories; draw wallet-link maps; seven screening checks | Live; cluster/age/history coverage incomplete |
+| Notifications | Scanner admissions plus separate configured-token watchlist and pool/developer observations | Existing server components; source published |
+| Forward learning | ALERT/SHADOW cases, timed outcomes, regimes and horizon statistics | Live V2 tracker |
+| Prediction ledger | Freeze shadow predictions and later eligible labels for a prospective baseline comparison | Activated; no completed validation claim |
+| Numerical model | Seven-feature logistic baseline, published coefficients and evaluation | Experimental; underperformed baseline; does not drive alerts |
+| Agent context | Select dated crypto knowledge and limitations for an agent session | Public extraction; private conversational runtime excluded |
+| Trading-agent layer | Paper proposal records, owner feedback and versioned playbook | Scaffold; no continuous agent or live execution |
+| Transaction-decoder experiments | Offline DFlow/Pump endpoint reconciliation | Not promoted into production |
+| Broad survivor discovery / live trading | Universe-wide survivor discovery and broker/wallet execution | Not implemented |
 
-## Documentation
+## How it fits together
+
+```mermaid
+flowchart TD
+    A[Public launch and market feeds] --> B[Scanner: candidates and 11 signals]
+    B --> C[Wallet queue and evidence collection]
+    C --> D[Seven-check policy and wallet maps]
+    D --> E[Scanner admission and Telegram]
+    B --> F[V2 ALERT and SHADOW tracking]
+    F --> G[Timed outcomes and research]
+    B --> H[Frozen shadow prediction ledger]
+    H --> G
+```
+
+The watchlist and pool monitor run separate observation rules; their messages do not inherit scanner screening. The trading scaffold is separate and is not connected to this alert loop.
+
+## Explore the setup
+
 | Guide | Contents |
 |---|---|
-| [Signals](SIGNALS.md) | Candidate gates, scoring and regimes |
-| [Screening](scout/SCREENING_V2.md) | All seven checks and thresholds |
-| [Wallet operations](scout/WALLET_INTELLIGENCE.md) | Queue, budgets and coverage |
-| [Architecture](docs/ARCHITECTURE.md) | Components and data flow |
-| [Setup](docs/SETUP.md) | Dependencies, installation and health |
-| [Agent](agent/README.md) | Standalone context integration |
-| [Research](research/README.md) | Model, data schema and limits |
-| [Completeness](docs/COMPLETENESS.md) | Source coverage and remaining limitations |
-| [Validation](docs/VALIDATION.md) | Checks performed and remaining gaps |
-| [Security](SECURITY.md) | Publication boundary |
+| [Full setup](docs/FULL_SETUP.md) | Purpose, component inventory, schedules, agents/models, live snapshot and boundaries |
+| [Signals](SIGNALS.md) | All 11 score conditions, eligibility gates, regimes and outcome labels |
+| [Screening](scout/SCREENING_V2.md) | Seven decisions, freshness and admission policy |
+| [Wallet operations](scout/WALLET_INTELLIGENCE.md) | Queue, RPC budgets, coverage and storage guardrails |
+| [Monitor signals](docs/MONITORS.md) | Watchlist, pool levels, activity, controls, account and vesting observations |
+| [Architecture](docs/ARCHITECTURE.md) | Source entry points, data flow and external effects |
+| [Research](research/README.md) | Baseline result, training schema and evaluation limits |
+| [Trading scaffold](agent_trader/README.md) | Paper proposals, feedback and execution integration requirements |
+| [Setup](docs/SETUP.md) | Dependencies, installation, health checks and rollback |
+| [Coverage](docs/COMPLETENESS.md) / [Validation](docs/VALIDATION.md) | Included source, tests and unresolved gaps |
+| [Update policy](docs/REPOSITORY_POLICY.md) | Required GitHub synchronization for crypto changes |
+| [Security](SECURITY.md) | Public/private boundary |
 
-## Offline checks
+## Verify the source
+
 ```sh
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt -r research/requirements.txt
 .venv/bin/python -m unittest discover -s scout -p 'test_*.py'
 .venv/bin/python -m unittest discover -s research -p 'test_*.py'
 .venv/bin/python -m unittest discover -s agent -p 'test_*.py'
+.venv/bin/python -m unittest discover -s agent_trader -p 'test_*.py'
 python3 scripts/verify_release.py
 ```
 
-A score is not a probability. Activity age is a lower bound, not a creation date. Transfer links do not prove common ownership. Peak multiples are not realized profit. Missing evidence stays missing.
+A score is not a probability. Activity age is a lower bound, not a creation date. Transfer links do not establish common ownership. Peak multiples are not realized profit. Missing evidence remains missing.
 
-The experimental model used 42 training and 18 test tokens and underperformed its baseline (Brier 0.11047 vs 0.10034). It is not used for alerts. No Qwen fine-tuning, automated trading or guaranteed returns are claimed.
+The experimental model used 42 training and 18 test tokens: Brier 0.11047 versus baseline 0.10034 (lower is better). No profitable strategy, completed prospective validation, Qwen weight training or automated trade execution is claimed.
 
-Production credentials, keys, databases, chat records, client data and the separate workforce stack are excluded. This repository has fresh Git history. No license grant has yet been selected.
+Credentials, private live configuration, databases, messages, client material and the separate workforce stack remain server-side. Source templates do not reproduce private runtime state. Fresh-host installation remains unverified. No license grant has yet been selected.

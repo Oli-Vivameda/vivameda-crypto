@@ -37,7 +37,7 @@ Labels, in order: max multiple >=10/5/3/2 yields 10X_PLUS/5X/3X/2X; >=1.35 yield
 Research labels are not production entry signals.
 
 ## Survivor and pool-monitor rules
-Pending protected-source access. Services point to /opt/vivameda-crypto-watchlist/watch.py and /opt/vivameda-crypto-pool-monitor/monitor.py. Do not substitute learning regimes for survivor rules.
+Source is published under `monitors/watchlist/` and `monitors/pool-monitor/`. The watchlist observes three configured tokens and a +10% move; broad survivor discovery is not implemented. See [MONITORS.md](docs/MONITORS.md) for all monitor rules. Do not substitute learning regimes for survivor discovery.
 
 
 ## Additional monitor signals
