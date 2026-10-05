@@ -17,7 +17,7 @@ Cluster PASS requires all selected supported 24-hour histories. Observed excessi
 Complete holder discovery does not establish cluster/age completeness. Public-provider capacity may leave most holders unreviewed while mandatory checks pass.
 
 ## Capacity and installation
-Work holds below 3 GiB free disk or above 2 GiB of top-level evidence files. Rate limits, missing/pruned history and unsupported instructions remain coverage constraints.
+Work holds below 3 GiB free disk or above 4 GiB of top-level evidence files (5 October capacity release; see EVIDENCE_CAPACITY_20261005.md). Rate limits, missing/pruned history and unsupported instructions remain coverage constraints.
 
 Code: /opt/vivameda-wallet-intelligence. Private runtime state: /var/lib/vivameda-wallet-intelligence/data. Candidate exporter has no network; worker cannot access the scanner directory. Dedicated accounts own runtime state; root owns installed code.
 
@@ -25,7 +25,7 @@ See ../docs/SETUP.md. The installer validates bundled hashes; without --install 
 
 ## Collection audit — 4 October 2026
 
-Prepared update, not yet deployed: deferred fast passes make zero RPC calls and now report zero instead of reusing a previous research count. Saved rejection evidence and its timestamp remain unchanged. Coverage summaries now count missing address parts, incomplete pagination, pending transactions, null timestamps, unsupported programs and stale heads separately. These counts overlap and exclude wholly unobserved owners (already reported as owners_missing).
+Deployed and verified on 4 October 2026 (see MANIFEST.json collection_audit): deferred fast passes make zero RPC calls and now report zero instead of reusing a previous research count. Saved rejection evidence and its timestamp remain unchanged. Coverage summaries now count missing address parts, incomplete pagination, pending transactions, null timestamps, unsupported programs and stale heads separately. These counts overlap and exclude wholly unobserved owners (already reported as owners_missing).
 
 The existing collector rotates addresses and transactions and caches transaction bodies. Complete history requires all required addresses, decoded transactions and supported programs, with heads at most 300 seconds old. Hundreds or thousands of required addresses compete within a 60-request research budget across the candidate queue. Cache reuse does not make old observations fresh. This is a capacity constraint, not evidence of clean wallets. No RPC budget, screening threshold or alert gate was changed.
 
@@ -33,7 +33,7 @@ The existing collector rotates addresses and transactions and caches transaction
 
 ## Focused collection release — 4 October 2026
 
-Prepared and tested; deployment pending. Research holds one eligible token for a 900-second lease, reserves every fourth eligible research pass for another queued token, and rotates the focus at lease expiry. Missing/changed identities and explicit research rejections release the focus. Candidate backoff and the fresh inbox requirement still apply. The fast lane skips the focused token during its lease so it cannot postpone research.
+Deployed and hash-verified on 4 October 2026 (see MANIFEST.json focused_collection); population-level coverage improvement remains unproven. Research holds one eligible token for a 900-second lease, reserves every fourth eligible research pass for another queued token, and rotates the focus at lease expiry. Missing/changed identities and explicit research rejections release the focus. Candidate backoff and the fresh inbox requirement still apply. The fast lane skips the focused token during its lease so it cannot postpone research.
 
 Holder addresses are ordered by owner then address, using a new durable owner/address cursor. Budget exhaustion can still split an owner; the next visit resumes after the last address. Developer priority is retained. The old cursor table is retained for rollback.
 

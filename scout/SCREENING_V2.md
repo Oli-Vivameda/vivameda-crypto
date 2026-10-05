@@ -24,7 +24,7 @@ Holder discovery uses public-provider hints and RPC account census where availab
 
 The scheduled batch runs research first (60 RPC calls / 90 seconds) and fast refresh second (20 RPC calls / 45 seconds), at most 80 requests total. RPC rate limits and network errors use bounded candidate-specific retry. Research-budget exhaustion and unsupported transaction responses do not create a global outage. History indexing and rotation persist in SQLite. See WALLET_INTELLIGENCE.md for operations and direct-call defaults.
 
-The map shows PASS/HOLD/REJECT and reasons, plus evidence and wallet links. Raw evidence remains server-side. Storage guardrails remain 3 GiB free disk and 2 GiB evidence-directory size; reaching them holds work.
+The map shows PASS/HOLD/REJECT and reasons, plus evidence and wallet links. Raw evidence remains server-side. Storage guardrails remain 3 GiB free disk and 4 GiB top-level evidence-file size (updated 5 October 2026; see EVIDENCE_CAPACITY_20261005.md); reaching them holds work.
 
 Only the scanner sends Telegram. No message is sent by tests or the collector. Public-provider limits can prevent sufficient evidence and therefore prevent alerts. The live probe is not a passing candidate and no profitable trading performance has been established.
 
