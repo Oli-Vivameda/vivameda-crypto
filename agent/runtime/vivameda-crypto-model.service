@@ -1,0 +1,44 @@
+[Unit]
+Description=Vivameda restricted crypto inference gateway
+After=network.target
+
+[Service]
+Type=simple
+User=vivameda-crypto-model
+Group=vivameda-crypto
+WorkingDirectory=/opt/vivameda-crypto-runtime
+ExecStart=/usr/bin/python3 /opt/vivameda-crypto-runtime/model_proxy.py
+Restart=on-failure
+RestartSec=3
+UMask=0077
+Environment=PYTHONDONTWRITEBYTECODE=1
+RuntimeDirectory=vivameda-crypto-model
+RuntimeDirectoryMode=0750
+CPUQuota=25%
+CPUWeight=20
+MemoryMax=96M
+TasksMax=8
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+ProtectKernelLogs=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+RestrictAddressFamilies=AF_UNIX AF_INET
+IPAddressDeny=any
+IPAddressAllow=127.0.0.1
+TemporaryFileSystem=/var:ro /opt:ro /mnt:ro /run:rw
+BindReadOnlyPaths=/opt/vivameda-crypto-runtime
+BindPaths=/run/vivameda-crypto-model
+ReadWritePaths=/run/vivameda-crypto-model
+StandardOutput=null
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

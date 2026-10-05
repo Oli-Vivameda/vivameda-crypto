@@ -1,0 +1,46 @@
+[Unit]
+Description=Vivameda isolated Crypto Lab queue and worker
+Requires=vivameda-crypto-model.service
+After=vivameda-crypto-model.service
+
+[Service]
+Type=simple
+User=vivameda-crypto
+Group=vivameda-crypto
+WorkingDirectory=/opt/vivameda-crypto-runtime
+ExecStart=/usr/bin/python3 /opt/vivameda-crypto-runtime/crypto_runtime.py
+Restart=on-failure
+RestartSec=3
+UMask=0077
+Environment=PYTHONDONTWRITEBYTECODE=1
+RuntimeDirectory=vivameda-crypto-runtime
+RuntimeDirectoryMode=0755
+StateDirectory=vivameda-crypto-runtime
+StateDirectoryMode=0700
+CPUQuota=100%
+CPUWeight=20
+MemoryHigh=192M
+MemoryMax=256M
+TasksMax=32
+NoNewPrivileges=yes
+CapabilityBoundingSet=
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+ProtectKernelLogs=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+RestrictAddressFamilies=AF_UNIX
+TemporaryFileSystem=/var:ro /opt:ro /mnt:ro /run:rw
+BindReadOnlyPaths=/opt/vivameda-crypto-runtime /var/lib/vivameda-crypto-learning /run/vivameda-crypto-model
+BindPaths=/var/lib/vivameda-crypto-runtime /run/vivameda-crypto-runtime
+ReadWritePaths=/var/lib/vivameda-crypto-runtime /run/vivameda-crypto-runtime
+StandardOutput=null
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
