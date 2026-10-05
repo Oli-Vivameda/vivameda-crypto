@@ -7,7 +7,7 @@
     ".gitignore": "be399efba81fec45218410e877c3d3935a920538dd15e3ea558a8d5a2bdf68ec",
     "SIGNALS.md": "e6912005df13615138935c45b77756b23dee636891cb85faed9d273723117cc8",
     "requirements.txt": "0d0d2938e5443f318fc97363f42cffe3309df1b718cc2bf713263a68cb7bbee5",
-    "README.md": "71a4ddbc61f03cf2e54133b995eec9b8bca77a4bd07516195b034594871b88da",
+    "README.md": "d9caa48969d096c1bb3f52eec88a9d168a45a394be25aea502757c1edbbcdc28",
     "SECURITY.md": "fe6ff00dd33525fee4c4fdeff8eea567ee5801705fcad953880bf9f1d58a7a8c",
     "scripts/export_monitor_sources.py": "0918f7a19ed5d2fda85d041c949eaeca0ea3f928940f597a8f577e4611c12922",
     "scripts/install_wallet_connector.py": "703fee1b3985d6afae524cc52c2427198050e8fbcb3140046deb3ab5fd543052",
@@ -126,7 +126,19 @@
     "agent/install_crypto_agent.py": "842796a41a0fb6575bd95444a8ece1e3dfa634c69ee35fadbfac9c1c8066158a",
     "agent/test_crypto_agent.py": "6f77025cbc4094cd37f19e68b71939533f9d50afefd3223f417e4376abd8fff9",
     "agent/CRYPTO_LAB.md": "3aa220271f2661e76485af9997f39d2bd6b779e487e06f6ef6ec38139220a05b",
-    "agent/CRYPTO_AGENT_ACTIVATION_20261005.md": "df73ac680c04a887ca10e6296afd08d9d68504d563274d448755024c0cc8ca73"
+    "agent/CRYPTO_AGENT_ACTIVATION_20261005.md": "df73ac680c04a887ca10e6296afd08d9d68504d563274d448755024c0cc8ca73",
+    "agent/runtime/integration_patch.py": "92d211a4685a550ce091e88d51af1fe03c5a56dd9c78749b29a2f60441afd5ef",
+    "agent/runtime/runtime_gateway.py": "245cf6843c80b77a311367984eda97981b494d3031a47991cb6af60799685709",
+    "agent/runtime/model_proxy.py": "de0f91bec72c0fc34397a772c76e42338c04a152d1c7bd8d9abe5fa68296484b",
+    "agent/runtime/test_crypto_runtime.py": "6a829ebf9efd0075bf38534c8661c09f24f5ea9c4def1a2e331bbff1ce40bae4",
+    "agent/runtime/crypto_agent.py": "9ff8c0bf056d7998a3c546a271e16fe2af1d4d3968ecc15f9f4b35eb14ced313",
+    "agent/runtime/crypto_runtime.py": "0cafd4642bfb39575d64b8d433ac0896f5171b5f996a4d01725c5ea0623b432f",
+    "agent/runtime/RUNTIME_SEPARATION.md": "e7ac1f0e3f0d639763dbabc6461d926672c0690e5566b60c426ff944a7d7251c",
+    "agent/runtime/vivameda-crypto-runtime.service": "c1c71721cfea1c323d975d06baffeec3991488c1f565e18b73a9a52ea7384cd7",
+    "agent/runtime/vivameda-crypto-model.service": "f37a712c2b9012c7ddf09f4efe41efdebf1d4399379908b72bdbd315be964eef",
+    "agent/runtime/install_runtime.py": "28ab1943192a2ab945c2dbcacc71703de5c6983a712dbedb9e435fa781d5e27a",
+    "agent/runtime/crypto_boundary.py": "e215b8d19c8fe7d828c3e2643a789eecc433bb9e3b1e4779ad0e7b4f8fe413b1",
+    "agent/runtime/README.md": "28647eed401b391f71671c0cf23e434aac5cfb4b33db3f3251127f0f1aba872c"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -295,7 +307,7 @@
     "live_execution": false
   },
   "crypto_agent": {
-    "status": "activated; connector crypto routing and boundaries verified",
+    "status": "earlier activation superseded by concurrent company dispatcher replacement; runtime activation pending",
     "bundle_sha256": "53701ea8ce3a1e9795fb05bc98bb5c958b98e0993b7791ff2848ef0dd8b12bbc",
     "tests_passed": 19,
     "independent_status_verified": true,
@@ -308,6 +320,19 @@
     "live_routing_sha256": "6d39a40679b2cbe35f28fc51a6987b82f2b166da6f5a257275082950924b4924",
     "connector_status_verified": true,
     "company_request_blocked": true,
-    "receipt": "agent/CRYPTO_AGENT_ACTIVATION_20261005.md"
+    "receipt": "agent/CRYPTO_AGENT_ACTIVATION_20261005.md",
+    "current_connector_boundary_verified": false
+  },
+  "crypto_runtime": {
+    "status": "built and tested; owner activation pending",
+    "bundle_sha256": "ffc7a1176509a54728862e17ea00893559b807330f0d086d4e3c13a6c290e98d",
+    "tests_passed": 18,
+    "source_preservation_verified": true,
+    "systemd_syntax_verified": true,
+    "shared_inference_engine": true,
+    "model_mode_diagnostic": "installed qwen3:4b is Thinking-2507; think=false unsupported",
+    "model_response_verified": false,
+    "live_execution": false,
+    "private_runtime_bundled": false
   }
 }
