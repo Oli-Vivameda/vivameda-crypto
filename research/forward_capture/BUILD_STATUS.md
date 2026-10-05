@@ -1,0 +1,3 @@
+# Forward crypto measurement build status
+
+2026-10-05: Private passive common-cycle capture core and fixed 14-day measurement-pilot candidate prepared. 23 synthetic tests pass locally and on Hetzner. No production integration, pilot activation, real candidate/control capture or performance test is complete. Zero paid calls; live execution disabled. Existing production source and frozen model test remain unchanged. Next gate: exact-input/cycle-health and symmetric passive-response adapters, resource and failure-isolation review, then reviewed activation. See [HANDOVER_20261005.md](HANDOVER_20261005.md).
