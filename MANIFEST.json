@@ -151,7 +151,14 @@
     "research/selection_audit/audit_selection.py": "68d8b98522192929607f9abd0d9efe9634697dbb7cc4d0044331ab37098fb769",
     "research/selection_audit/test_selection.py": "1ee8d47f1f30d5e6cf4cbe25089cea7b3a6a6d205d12b049baf67accfa3a9a57",
     "research/selection_audit/RESULTS_20261005.md": "375018c7afb7536d46e7c89d5d783ecc236f76211754a821c5c570f47b1ff5d3",
-    "research/selection_audit/HANDOVER_INDEX.md": "f46c93d6c48858fb16014aaa83005e28ac688ad723efcc394fef7c4234203d3b"
+    "research/selection_audit/HANDOVER_INDEX.md": "f46c93d6c48858fb16014aaa83005e28ac688ad723efcc394fef7c4234203d3b",
+    "research/forward_capture/HANDOVER_INDEX.md": "cca9cb6f0a1b4d2bee10ee92e872de811ecd31ce6e719fa8a8202a57c9d44a84",
+    "research/forward_capture/HANDOVER_20261005.md": "58535079baa3fc87bbd96db055016381845fefde7c22036bfde375d64441d70c",
+    "research/forward_capture/PROTOCOL.md": "f9940a3c2fc47de709891787ab302c5f5ea93e0220eb4eb1ac56b3347859987e",
+    "research/forward_capture/capture.py": "31b39138a2d8a98082a5e10f6cd33e54c868b30aba21a6c2523387c5340325f1",
+    "research/forward_capture/README.md": "744d4cc28bbcbbf98dd6264a445377d8d9769b046cebe92cc17964bf59a51e66",
+    "research/forward_capture/BUILD_STATUS.md": "bc74d3bcfb8cf715d5f042d4ed8ab0276994bb36770144df09304f12f8f1ca71",
+    "research/forward_capture/test_capture.py": "35053218a58207d371726a29946b404b29a3e4a8db14684ed29c95c6ffd74211"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -393,10 +400,22 @@
     "matched_controls": 0,
     "alert_60min_eligible": 71,
     "alert_60min_missing_or_incomplete": 61,
-    "median_prealert_h1_change_pct": 170.0,
+    "median_prealert_h1_change_pct": 170,
     "scanner_advantage_established": false,
     "results": "research/selection_audit/RESULTS_20261005.md",
     "private_export_sha256": "40f15e61a47a904c3505c47c2fb5cdcdb1deaddb22b585276323c1fc0adefd69",
     "next_gate": "separate frozen forward candidate/control protocol and reviewed capture instrumentation"
+  },
+  "crypto_forward_capture": {
+    "status": "engineering core tested; production integration and pilot activation pending",
+    "tests_passed": 23,
+    "pilot_days": 14,
+    "production_changed": false,
+    "live_execution": false,
+    "live_ledger_results_read": false,
+    "predictive_validation": false,
+    "source": "research/forward_capture/README.md",
+    "protocol": "research/forward_capture/PROTOCOL.md",
+    "next_gate": "complete exact-input/cycle-health adapters and symmetric passive-response review before activation"
   }
 }
