@@ -14,4 +14,6 @@ Next decision after the historical audit: prepare a separate dated forward candi
 
 The current model ledger retains its original specification and stop. At baseline 3/42, 200 eligible tokens gives 14.29 expected positives; requiring at least 20 positives and 20 decision days can yield inconclusive results. Merely increasing the sample to about 280 achieves an expectation of 20 positives, not adequate power. A revised protocol requires a separate dated rationale and disclosure of prior inspections, not retrospective alteration or an outcome-driven extension.
 
-Run tests: python3 -m unittest discover -s client_learning/crypto_selection_audit_20261005 -p 'test_*.py'. After owner export, run audit_selection.py against the fixed private history.json. Only aggregate conclusions and reviewed code may be considered for GitHub; never upload history.json. Public publication is deferred until the resulting audit and limitations are reviewed together.
+Run tests: python3 -m unittest discover -s client_learning/crypto_selection_audit_20261005 -p 'test_*.py'. After owner export, run audit_selection.py against the fixed private history.json. Only aggregate conclusions and reviewed code may be considered for GitHub; never upload history.json.
+
+The completed historical audit and its limitations are recorded in [RESULTS_20261005.md](RESULTS_20261005.md). No comparable controls were retained under the fixed matching rules; scanner advantage remains unestablished. See [HANDOVER_INDEX.md](HANDOVER_INDEX.md) for the research handover.
