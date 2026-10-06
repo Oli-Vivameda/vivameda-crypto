@@ -1,0 +1,29 @@
+[Unit]
+Description=Vivameda crypto count-only pilot health
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=@USER@
+Group=@GROUP@
+ExecStart=/usr/bin/python3 /opt/vivameda-crypto-pilot-health/health.py
+StateDirectory=vivameda-crypto-pilot-health
+StateDirectoryMode=0755
+UMask=0077
+TimeoutStartSec=45
+MemoryMax=192M
+CPUQuota=20%
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+LockPersonality=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadOnlyPaths=/opt/vivameda-crypto-early-scout
+ReadWritePaths=/var/lib/vivameda-crypto-pilot-health
+

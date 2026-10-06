@@ -1,0 +1,11 @@
+[Unit]
+Description=Check crypto pilot health every two minutes
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=2min
+AccuracySec=10s
+Unit=vivameda-crypto-pilot-health.service
+
+[Install]
+WantedBy=timers.target
