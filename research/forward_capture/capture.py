@@ -91,7 +91,7 @@ def matched_controls(alert, rows):
     return [r for _, _, r in sorted(possible)[:3]]
 
 
-def initialize(con, activation_ts, excluded_mints, protocol_sha256):
+def initialize(con, activation_ts, excluded_mints, protocol_sha256, runtime_binding=None):
     """Explicit initialization only. Runtime lives outside the git checkout."""
     if (not integer(activation_ts) or not isinstance(protocol_sha256, str)
             or len(protocol_sha256) != 64
@@ -99,22 +99,34 @@ def initialize(con, activation_ts, excluded_mints, protocol_sha256):
         raise ValueError('activation')
     con.executescript('''
     CREATE TABLE IF NOT EXISTS fc_activation(id INTEGER PRIMARY KEY CHECK(id=1), body TEXT NOT NULL);
+    CREATE TABLE IF NOT EXISTS fc_excluded(mint TEXT PRIMARY KEY);
     CREATE TABLE IF NOT EXISTS fc_events(seq INTEGER PRIMARY KEY, kind TEXT NOT NULL,
       event_key TEXT NOT NULL, body TEXT NOT NULL, previous_hash TEXT NOT NULL,
       hash TEXT NOT NULL, UNIQUE(kind,event_key));
     ''')
-    for table in ('fc_activation', 'fc_events'):
+    for table in ('fc_activation', 'fc_events', 'fc_excluded'):
         for op in ('UPDATE', 'DELETE'):
             con.execute(f"CREATE TRIGGER IF NOT EXISTS {table}_no_{op} BEFORE {op} ON {table} BEGIN SELECT RAISE(ABORT,'capture append only'); END")
     exclusions = sorted(set(excluded_mints))
     if any(not isinstance(m, str) or not m for m in exclusions):
         raise ValueError('exclusions')
-    body = canonical({'activation_ts': activation_ts, 'deadline': activation_ts + 14 * 86400, 'excluded_mints': exclusions,
-                      'protocol_sha256': protocol_sha256, 'schema': 1})
+    con.execute("CREATE TRIGGER IF NOT EXISTS fc_excluded_frozen BEFORE INSERT ON fc_excluded WHEN EXISTS(SELECT 1 FROM fc_activation) BEGIN SELECT RAISE(ABORT,'exclusions frozen'); END")
+    body_value = {'activation_ts': activation_ts, 'deadline': activation_ts + 14 * 86400,
+                  'excluded_count': len(exclusions), 'excluded_sha256': digest(exclusions),
+                  'protocol_sha256': protocol_sha256, 'schema': 1}
+    if runtime_binding is not None:
+        if set(runtime_binding) != {'scanner_sha256', 'tracker_sha256'}:
+            raise ValueError('runtime binding fields')
+        if any(not isinstance(v, str) or len(v) != 64 or any(ch not in '0123456789abcdef' for ch in v)
+               for v in runtime_binding.values()):
+            raise ValueError('runtime binding hashes')
+        body_value.update(runtime_binding)
+    body = canonical(body_value)
     existing = con.execute('SELECT body FROM fc_activation').fetchone()
     if existing and existing[0] != body:
         raise ValueError('activation cannot change')
     if not existing:
+        con.executemany('INSERT INTO fc_excluded VALUES(?)', [(m,) for m in exclusions])
         con.execute('INSERT INTO fc_activation VALUES(1,?)', (body,))
     con.commit()
 
@@ -150,7 +162,7 @@ def verify(con):
     return previous
 
 
-def record_cycle(con, cycle_id, cycle_ts, rows, scanner_sha256):
+def record_cycle(con, cycle_id, cycle_ts, rows, scanner_sha256, verifier=verify):
     """Atomic complete evaluated cycle; capture before screening/delivery.
 
     Input errors reject the whole cycle. Outcome fields are not accepted.
@@ -175,9 +187,9 @@ def record_cycle(con, cycle_id, cycle_ts, rows, scanner_sha256):
         raise ValueError('cycle exceeds current scanner cap')
     if any(eligible(r) and not r['signals']['liq25k'] for r in checked):
         raise ValueError('eligible row contradicts liquidity signal')
-    excluded = set(a['excluded_mints'])
+    excluded = {r['mint'] for r in checked if con.execute('SELECT 1 FROM fc_excluded WHERE mint=?', (r['mint'],)).fetchone()}
     with con:
-        verify(con)
+        verifier(con)
         key = str(cycle_id)
         payload = {'cycle_ts': cycle_ts, 'scanner_sha256': scanner_sha256, 'rows': checked}
         existing = con.execute("SELECT body FROM fc_events WHERE kind='cycle' AND event_key=?", (key,)).fetchone()
@@ -199,7 +211,7 @@ def record_cycle(con, cycle_id, cycle_ts, rows, scanner_sha256):
         return added
 
 
-def record_screening(con, mint, cycle_id, observed_ts, verdict, delivered):
+def record_screening(con, mint, cycle_id, observed_ts, verdict, delivered, verifier=verify):
     if verdict not in ('PASS', 'HOLD', 'REJECT', 'ERROR') or type(delivered) is not bool:
         raise ValueError('screening')
     if delivered and verdict != 'PASS':
@@ -211,12 +223,12 @@ def record_screening(con, mint, cycle_id, observed_ts, verdict, delivered):
     if cycle_id != cohort['cycle_id'] or not integer(observed_ts) or observed_ts < cohort['index_ts']:
         raise ValueError('screening timing')
     with con:
-        verify(con)
+        verifier(con)
         return append(con, 'screening', mint, {'observed_ts': observed_ts, 'verdict': verdict,
                                              'delivered': delivered})
 
 
-def record_observation(con, mint, pair, received_ts, mc):
+def record_observation(con, mint, pair, received_ts, mc, verifier=verify):
     if any(not isinstance(s, str) or not 1 <= len(s) <= 100 for s in (mint, pair)):
         raise ValueError('observation identity')
     if not integer(received_ts) or not number(mc, 0.000001):
@@ -227,7 +239,7 @@ def record_observation(con, mint, pair, received_ts, mc):
     if received_ts > a['deadline'] + 3780:
         raise ValueError('pilot follow-up stopped')
     with con:
-        verify(con)
+        verifier(con)
         return append(con, 'observation', canonical([mint, pair, received_ts]),
                       {'mint': mint, 'pair': pair, 'received_ts': received_ts, 'mc': mc})
 
