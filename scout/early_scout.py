@@ -1109,6 +1109,8 @@ separately reviewed activation creates the private database and binding.
 FC_DIRECTORY = BASE / 'data' / 'forward_capture'
 FC_PROTOCOL_SHA256 = '3baef84dc6f3dfddff9ea38c1139c4979b86af0d4dbb66e641ea00b44b7359ad'
 FC_SCORER_SHA256 = '4f5c0fd4c978b45b51368e2f364db83f50f557ca0788edc977947c93f3b90b78'
+FC_AMENDMENT_SHA256 = '20ceb6f4d9c9a2024ffb802f9c8642b5e7509af263245b3b6fea498383878fdd'
+FC_ORIGINAL_SCANNER_SHA256 = '3e73978a41e2e21e090a7eea92bbdc1a52dc190ce229ac262a3c6a2b0af6a043'
 FC_MAX_BYTES = 512 * 1024 * 1024
 FC_MIN_DISK_BYTES = 2 * 1024 * 1024 * 1024
 _fc_connection = None
@@ -1137,6 +1139,19 @@ def fc_guard(con):
     return previous
 
 
+def fc_safe_reason(error):
+    # Static allowlist only: exception text may contain identities or paths.
+    allowed = {'incomplete candidate accounting', 'provider or capture failure invalidates cycle',
+               'capture runtime binding', 'capture tracker binding', 'capture repair binding',
+               'capture immutability triggers missing', 'capture exclusion binding',
+               'capture integrity failed', 'capture anchor changed', 'capture append chain changed',
+               'capture storage cap', 'capture minimum free disk', 'exact score replay mismatch',
+               'future decision or creation', 'outside current scanner age universe',
+               'stale or future snapshot', 'cycle inputs not contemporaneous',
+               'exact emitted signal vector required'}
+    return str(error) if type(error) is ValueError and str(error) in allowed else 'other_capture_error'
+
+
 def fc_pause(error):
     global _fc_paused
     _fc_paused = True
@@ -1149,7 +1164,8 @@ def fc_pause(error):
             fd = os.open(p, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
             with os.fdopen(fd, 'w') as out:
                 out.write(json.dumps({'paused': True, 'reason': type(error).__name__,
-                                      'observed_ts': int(time.time())}))
+                                      'observed_ts': int(time.time()),
+                                      'code': fc_safe_reason(error)}))
     except OSError:
         logging.error('FORWARD_CAPTURE_PAUSE_MARKER_FAILED')
 
@@ -1172,7 +1188,19 @@ def fc_connection():
             con.execute('PRAGMA busy_timeout=100')
             con.execute('PRAGMA synchronous=FULL')
             a = fc_core_activation(con)
-            if a['protocol_sha256'] != FC_PROTOCOL_SHA256 or a['scanner_sha256'] != hashlib.sha256(Path(__file__).read_bytes()).hexdigest():
+            # Verify before trusting a hash-bound recovery event.
+            fc_core_verify(con)
+            repair = con.execute("SELECT body FROM fc_events WHERE kind='runtime_repair' ORDER BY seq DESC LIMIT 1").fetchone()
+            binding = a['scanner_sha256']
+            if repair:
+                r = json.loads(repair[0])
+                if (r.get('original_scanner_sha256') != FC_ORIGINAL_SCANNER_SHA256 or
+                    r.get('amendment_sha256') != FC_AMENDMENT_SHA256 or
+                    r.get('tracker_sha256') != a['tracker_sha256'] or
+                    r.get('activation_ts') != a['activation_ts'] or r.get('deadline') != a['deadline']):
+                    raise ValueError('capture repair binding')
+                binding = r['scanner_sha256']
+            if a['protocol_sha256'] != FC_PROTOCOL_SHA256 or binding != hashlib.sha256(Path(__file__).read_bytes()).hexdigest():
                 raise ValueError('capture runtime binding')
             if a['tracker_sha256'] != hashlib.sha256(Path(__file__).with_name('scout_learning_v2.py').read_bytes()).hexdigest():
                 raise ValueError('capture tracker binding')
@@ -1206,8 +1234,23 @@ def fc_emit_cycle(batch, failures, selected_count, cycle_id, cycle_ts):
             return {}
         if selected_count > 60 or len(batch) + len(failures) != selected_count:
             raise ValueError('incomplete candidate accounting')
-        if any(reason not in ('history', 'base_gate', 'price_history') for reason in failures):
+        if any(reason not in ('history', 'base_gate', 'price_history', 'pair_unavailable') for reason in failures):
             raise ValueError('provider or capture failure invalidates cycle')
+        if 'pair_unavailable' in failures:
+            # Reject the WHOLE cycle, with no input/cohort/endpoint substitution.
+            con.execute('BEGIN IMMEDIATE')
+            try:
+                fc_guard(con)
+                fc_core_append(con, 'rejected_cycle', cycle_id,
+                               {'cycle_ts': cycle_ts, 'selected': selected_count,
+                                'pair_unavailable': failures.count('pair_unavailable'),
+                                'scored_discarded': len(batch),
+                                'amendment_sha256': FC_AMENDMENT_SHA256})
+                con.commit()
+            except BaseException:
+                con.rollback()
+                raise
+            return {}
         rows = []
         for item in batch:
             row, pair, score, metrics, failed, prev, history_rows, captured_ns = item
@@ -1239,7 +1282,7 @@ def fc_emit_cycle(batch, failures, selected_count, cycle_id, cycle_ts):
             for record, exact in rows:
                 fc_core_append(con, 'inputs', record['input_sha256'], exact)
             cohorts = fc_core_record_cycle(con, cycle_id, cycle_ts, [r for r, _ in rows],
-                                         a['scanner_sha256'], verifier=fc_guard)
+                                         hashlib.sha256(Path(__file__).read_bytes()).hexdigest(), verifier=fc_guard)
             return {r['mint']: cycle_id for r in cohorts}
         except BaseException:
             con.rollback()
