@@ -1,0 +1,9 @@
+# Capture availability amendment — 6 October 2026
+
+Recorded before inspecting any model or forward outcome. Original protocol and activation remain immutable. The original attempt paused at 1791269470, before any event was recorded. Its ValueError message was discarded; the original cause is unknown. Current cached-input diagnosis is not a reconstruction of that cycle.
+
+The reviewed amendment changes only availability handling: a selected candidate with no provider pair invalidates the entire cycle. Append a count-only rejected-cycle receipt, enroll nothing from it, and try the next normally scheduled cycle. Never reuse its inputs or backfill its endpoints. History/base/price-history admission rules, matching, alert thresholds, exclusions, endpoint timing and the original October 20 deadline remain unchanged. Unknown failures, accounting errors, input validation errors and integrity failures still pause. Pause reports expose only whitelisted static reason codes.
+
+An owner-run recovery verifies original source and database integrity, preserves a consistent private backup and original pause marker, appends a hash-bound runtime repair event, then installs the reviewed scanner. Activation and exclusions are never edited. The new scanner verifies the full chain before accepting that repair binding. This is an explicitly disclosed operational deviation, not an assertion that missing provider pairs caused the original pause. No result is rescued by extending the deadline or changing the cohort.
+
+Rejected cycles must be reported alongside valid cycles; low availability can still fail the pilot. The health timer's successful-cycle stall alarm remains applicable. No added provider request, paid call, model training or live execution. The amendment cannot establish predictive advantage.
