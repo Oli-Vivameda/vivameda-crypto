@@ -60,7 +60,7 @@
     "scout/audit_crypto_readonly.py": "06ebe5e23b149be0dc5168ad547ecfa490567af9d222b2b937f3d9ea8f381f4d",
     "scout/install_wallet_intelligence.py": "008a748988fa6f3729c4aacb73769ea1bda5cfad2904846abd0452d3a4628f6c",
     "scout/test_full_screening.py": "4705e2effdea6a1359b8ca666d47353f6175df5d75a61fc3838402e6f3f2b876",
-    "scout/early_scout.py": "3e73978a41e2e21e090a7eea92bbdc1a52dc190ce229ac262a3c6a2b0af6a043",
+    "scout/early_scout.py": "765aba08982c3f0c562b52755ab9122cdaabfc396b78e7fed878089db87fa54e",
     "scout/test_live_ledger.py": "f2c5469fca1ba5955c3e804c34d2e835156cc88c270113a1e14fed3e95be0a29",
     "scout/test_protocol_screening.py": "26abcd877226f7297d8870e43c83f0b37d9ff5a024079216422f00b472a3fc8d",
     "scout/STRICT_SCREENING_RELEASE.md": "6a17959f857b7f6e06be11d15d77dc8ad070a561d467ad3d0c1912dcb864bf1f",
@@ -175,9 +175,9 @@
     "research/capture_recovery/test_recovery.py": "3c50ebe4c768e898d1ef63847055e00b86b7afcefa5dea0c1553bf53224859c7",
     "research/capture_recovery/early_scout.py": "765aba08982c3f0c562b52755ab9122cdaabfc396b78e7fed878089db87fa54e",
     "research/capture_recovery/AMENDMENT_20261006.md": "20ceb6f4d9c9a2024ffb802f9c8642b5e7509af263245b3b6fea498383878fdd",
-    "research/capture_recovery/BUILD_STATUS.md": "6138222520573c831d48002bfebf4e2d02f0881150ab42932612370e0354edfc",
-    "research/capture_recovery/HANDOVER_INDEX.md": "c8f04fed8f423881eb7a465d082ed71667b418abb0173fd3d517d952fc51c25f",
-    "research/capture_recovery/README.md": "9bdbe88bfb86f9a8bfe268486c258dcfdb89cf4bf5a4cc1dda881f0eb4554ec6",
+    "research/capture_recovery/BUILD_STATUS.md": "5470ad8a129d3fcb198e768ef3ac127733df64556d5b2a5c89ea896c6e176876",
+    "research/capture_recovery/HANDOVER_INDEX.md": "6dac9fbb04c172518a6b25296f6e8fa855d9b2d672f71a9018c5072178125186",
+    "research/capture_recovery/README.md": "7fd1b70177fb1916729026f78b92d544a9222c25f93f3c688760129663853c41",
     "research/pilot_health/health.py": "70f923c3b09dc258b1baaf45c17699d4fe87588dc7c32b186046fd31ce5f3717",
     "research/pilot_health/read_status.py": "a60a835469585ffcc0f2263f7ba327df83beb3272cea5bff265200e91623d632",
     "research/pilot_health/install_health.py": "4eb0c740b342bdab135cead710b7f03fdae428475c39032758d5a5b60c9bbd1d",
@@ -189,7 +189,8 @@
     "research/pilot_health/HANDOVER_20261006.md": "6b3b875d4ee17f54c6fa62cf7aa8ad7ea3d13a66bd7cf75774d303b4df3b8e12",
     "research/pilot_health/HANDOVER_INDEX.md": "fb4bb04000cd9fa5ea0c1fb129d778e2012e5ea81aa4822b1020b903ea3cc7d6",
     "research/pilot_health/diagnose_pause.py": "b1f3239c47488ba3db9c86609e702ed579206838b49749f9d5f1ded65b0c601c",
-    "research/pilot_health/test_diagnose_pause.py": "f40d23568287ba19edb0f2eed0e34810dcb4ab0db337434d19b1504b99cddaad"
+    "research/pilot_health/test_diagnose_pause.py": "f40d23568287ba19edb0f2eed0e34810dcb4ab0db337434d19b1504b99cddaad",
+    "research/capture_recovery/ACTIVATION_20261006.md": "a9e81f9229c5d5b55782ba06a317b7a8f6584aa3b7b00f58f307456c748f62e1"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -438,7 +439,7 @@
     "next_gate": "separate frozen forward candidate/control protocol and reviewed capture instrumentation"
   },
   "crypto_forward_capture": {
-    "status": "activated; first cycle paused; reviewed recovery owner installation pending",
+    "status": "activated and collecting after dated availability recovery; first usable cycle verified",
     "tests_passed": 43,
     "pilot_days": 14,
     "production_changed": true,
@@ -447,22 +448,28 @@
     "predictive_validation": false,
     "source": "research/forward_capture/README.md",
     "protocol": "research/forward_capture/PROTOCOL.md",
-    "next_gate": "reviewed owner recovery installation; first usable cycle and passive coverage",
+    "next_gate": "qualified/control events and identical closed-window endpoint coverage",
     "legacy_tests_passed": 222,
     "pilot_activated": true,
-    "deployed_sha256": "33ec95eaa3692320787ce7e5af93e2045830949ce46ce24076c1be17f4ecc594",
     "backup": "20261006T054928Z",
     "activation_bundle_sha256": "a9f03c89b60fea824117d6ed0e6980455a2da93d521cfa6219476893610bc5d9",
     "server_source_checkpoint": "54074e8",
     "activation_ts": 1791269439,
     "deadline": 1792479039,
     "excluded_count": 256201,
-    "recorded_cycles": 0,
+    "recorded_cycles": 1,
     "pause_ts": 1791269470,
-    "original_failure_cause_known": false
+    "original_failure_cause_known": false,
+    "runtime_recovery_bundle_sha256": "68dec2254b472c482ce59094bb6eef7b6039689c7fca2f9a50559c34fbcd48af",
+    "deployed_source_hashes": {
+      "early_scout": "765aba08982c3f0c562b52755ab9122cdaabfc396b78e7fed878089db87fa54e",
+      "tracker": "a519ad19680ba72f0d593c4627fe5faa2d8dfa93fcd112eaba21abcf5a6da9b6"
+    },
+    "previous_deployed_sha256": "33ec95eaa3692320787ce7e5af93e2045830949ce46ce24076c1be17f4ecc594",
+    "receipt": "research/capture_recovery/ACTIVATION_20261006.md"
   },
   "crypto_capture_recovery": {
-    "status": "reviewed_recovery_ready_owner_install_pending",
+    "status": "installed; collecting; first usable live cycle independently verified",
     "tests_passed": 15,
     "bundle_sha256": "68dec2254b472c482ce59094bb6eef7b6039689c7fca2f9a50559c34fbcd48af",
     "candidate_scanner_sha256": "765aba08982c3f0c562b52755ab9122cdaabfc396b78e7fed878089db87fa54e",
@@ -474,10 +481,35 @@
     "outcomes_inspected": false,
     "source": "research/capture_recovery/README.md",
     "server_source_checkpoint": "5d2d601",
-    "github_source_commit": "ab33d1a7f3c45531248642bc2cac1ef54e56a12f"
+    "github_source_commit": "ab33d1a7f3c45531248642bc2cac1ef54e56a12f",
+    "installed": true,
+    "usable_cycle_verified": true,
+    "backup": "/opt/vivameda-operations/crypto-capture-recovery-skwbqk3h",
+    "repair_head_sha256": "d8fbee6e012f75062041f211fe2ad6c13cc198f04b5702117f9b387ec249d9d7",
+    "health_checked_at": 1791274473,
+    "cycles_at_postflight": 1,
+    "qualified_events_at_postflight": 0,
+    "matched_events_at_postflight": 0,
+    "control_entries_at_postflight": 0,
+    "timed_observation_rows_at_postflight": 0,
+    "receipt": "research/capture_recovery/ACTIVATION_20261006.md",
+    "next_gate": "valid/rejected cycles and symmetric closed-window endpoint coverage; original deadline",
+    "activation_server_checkpoint": "549176e",
+    "activation_github_commit": "c1ca1056b1795d046aeb3cd97713918e4a7a65a4",
+    "sustained_health": {
+      "checked_at": 1791274834,
+      "status": "collecting",
+      "cycles": 2,
+      "last_successful_cycle_ts": 1791274533,
+      "seconds_since_last_cycle": 301,
+      "qualified_events": 0,
+      "matched_events": 0,
+      "control_entries": 0,
+      "timed_observation_rows": 0
+    }
   },
   "crypto_pilot_health": {
-    "status": "installed; timer active; fresh count-only report verified; pilot paused",
+    "status": "installed; active timer; fresh healthy collecting report independently verified",
     "installed": true,
     "bundle_sha256": "1622e3d9c95457e1515f39b8606edb3e954aa708d596ac14036211e189dd6d59",
     "tests_passed": 19,
@@ -489,6 +521,7 @@
     "backup": "/opt/vivameda-operations/crypto-health-backup-20261006T073739Z",
     "owner_receipt_checked_at": 1791272260,
     "diagnostic_checked_at": 1791273241,
-    "diagnostic_result": "original cause unavailable; three of six current candidates pass input validation; provider availability not verified"
+    "diagnostic_result": "original cause unavailable; three of six current candidates pass input validation; provider availability not verified",
+    "last_verified_checked_at": 1791274834
   }
 }
