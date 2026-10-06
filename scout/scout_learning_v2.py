@@ -116,7 +116,9 @@ def dex(mints):
  for batch in prod.chunks(mints,30):
   try:
    d=prod.get_json(prod.DEX_BATCH+','.join(batch),timeout=12)
-   if isinstance(d,list):out.extend(d)
+   if isinstance(d,list):
+    prod.fc_observe_pairs(d,int(time.time()))
+    out.extend(d)
   except Exception as e:logging.warning('dex %s',e)
   time.sleep(.2)
  by={}

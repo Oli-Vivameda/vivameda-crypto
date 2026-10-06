@@ -99,6 +99,7 @@ def dex_pairs(mints):
         try:
             d = get_json(DEX_BATCH + ",".join(batch), timeout=12)
             if isinstance(d, list):
+                fc_observe_pairs(d, int(time.time()))
                 out.extend(d)
         except Exception as e:
             logging.warning("dex batch failed: %s", e)
@@ -571,7 +572,7 @@ def telegram(text):
               "disable_web_page_preview":"true"}, timeout=12)
     r.raise_for_status()
 
-def alert(con, row, pair, score, m, level, ledger_rows=None, ledger_captured_ns=None):
+def alert(con, row, pair, score, m, level, ledger_rows=None, ledger_captured_ns=None, fc_cycle_id=None):
     mint, created, creator, _, _, _ = row
     age = (int(time.time()*1000)-created)/3600000
     sec = basic_security(mint, creator)
@@ -586,6 +587,7 @@ def alert(con, row, pair, score, m, level, ledger_rows=None, ledger_captured_ns=
     review["admission_policy"] = PREALERT_ADMISSION_POLICY
     persist_prealert_review(con, mint, level, review, verdict, reasons, now)
     if verdict != "PASS":
+        fc_emit_screening(mint, fc_cycle_id, verdict, False)
         logging.info("PREALERT_%s %s reasons=%s", verdict, mint, reasons)
         return
     tag = "🟡 PRE-BREAKOUT" if level == 2 else "🟠 EARLY SCOUT"
@@ -616,9 +618,11 @@ def alert(con, row, pair, score, m, level, ledger_rows=None, ledger_captured_ns=
     try:
         telegram(msg)
     except Exception:
+        fc_emit_screening(mint, fc_cycle_id, "PASS", False)
         try: ledger_delivery(con, ledger_seq, False)
         except Exception: ledger_fail(con, "delivery_record_failed")
         raise
+    fc_emit_screening(mint, fc_cycle_id, "PASS", True)
     try: ledger_delivery(con, ledger_seq, True)
     except Exception: ledger_fail(con, "delivery_record_failed")
     con.execute("UPDATE launches SET alert_level=?,last_alert_ts=? WHERE mint=?",
@@ -629,24 +633,36 @@ def alert(con, row, pair, score, m, level, ledger_rows=None, ledger_captured_ns=
 def enrich_and_score(con):
     cand = candidates(con)
     if not cand:
+        fc_emit_cycle([], [], 0, str(time.time_ns()), int(time.time()))
         return
     by_mint = {}
     for p in dex_pairs([r[0] for r in cand]):
         by_mint.setdefault(p.get("baseToken",{}).get("address"), []).append(p)
+    batch, failures = [], []
     for row in cand:
         mint, _, _, _, _, pinned = row
         pair = choose_pair(mint, by_mint.get(mint, []), pinned)
         if not pair:
+            failures.append("pair_unavailable")
             continue
         record_pair(con, mint, pair)
         decision_rows = history(con, mint)
         captured_ns = time.time_ns()
         score, metrics, failed = score_candidate(decision_rows)
         prev = con.execute("SELECT alert_level FROM launches WHERE mint=?",(mint,)).fetchone()[0]
+        if not metrics:
+            failures.extend(failed if len(failed)==1 else ["invalid_score_inputs"])
+            continue
+        batch.append((row, pair, score, metrics, failed, prev, decision_rows, captured_ns))
+    cycle_id, cycle_ts = str(time.time_ns()), int(time.time())
+    cohort_ids = fc_emit_cycle(batch, failures, len(cand), cycle_id, cycle_ts)
+    for row, pair, score, metrics, failed, prev, decision_rows, captured_ns in batch:
+        mint = row[0]
         level = 2 if score >= 10 else (1 if score >= 8 else 0)
         if level > prev:
             try:
-                alert(con, row, pair, score, metrics, level, decision_rows, captured_ns)
+                alert(con, row, pair, score, metrics, level, decision_rows, captured_ns,
+                      fc_cycle_id=cohort_ids.get(mint))
             except Exception as e:
                 logging.exception("alert failed %s: %s", mint, e)
 
@@ -871,6 +887,441 @@ def main():
         except Exception as e:
             logging.exception("loop error: %s", e)
         time.sleep(20)
+
+# Passive forward capture: reviewed embedded core + adapter.
+"""Private, passive candidate capture. No network, production imports or trading.
+
+Caller supplies exact scanner inputs and provider-response receipt times.
+This module is an engineering candidate; no runtime integration is activated.
+"""
+import hashlib
+import json
+import math
+import sqlite3
+FC_CORE_SIGNALS = ('liq25k', 'vol_mc25', 'buy52', 'h1_not_extended', 'm5_not_extended', 'band_compact', 'net_constructive', 'higher_low', 'liq_stable', 'volume_accel', 'txns100')
+FC_CORE_FIELDS = {'mint', 'pair', 'created_ts', 'captured_ts', 'snapshot_ts', 'points', 'history_seconds', 'mc', 'liq', 'vol1', 'score', 'signals', 'prior_alert_level', 'input_sha256'}
+
+def fc_core_canonical(value):
+    return json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False)
+
+def fc_core_digest(value):
+    return hashlib.sha256(fc_core_canonical(value).encode()).hexdigest()
+
+def fc_core_number(value, minimum=0):
+    return type(value) in (int, float) and math.isfinite(value) and (value >= minimum)
+
+def fc_core_integer(value, minimum=0):
+    return type(value) is int and value >= minimum
+
+def fc_core_validate(row, cycle_ts):
+    if set(row) != FC_CORE_FIELDS:
+        raise ValueError('unexpected or missing decision fields')
+    for key in ('mint', 'pair'):
+        if not isinstance(row[key], str) or not 1 <= len(row[key]) <= 100:
+            raise ValueError(key)
+    for key in ('created_ts', 'captured_ts', 'snapshot_ts', 'points', 'history_seconds', 'score', 'prior_alert_level'):
+        if not fc_core_integer(row[key]):
+            raise ValueError(key)
+    if not row['created_ts'] <= row['captured_ts'] <= cycle_ts:
+        raise ValueError('future decision or creation')
+    if not 1800 <= row['captured_ts'] - row['created_ts'] <= 21600:
+        raise ValueError('outside current scanner age universe')
+    if not 0 <= row['captured_ts'] - row['snapshot_ts'] <= 120:
+        raise ValueError('stale or future snapshot')
+    if cycle_ts - row['captured_ts'] > 120:
+        raise ValueError('cycle inputs not contemporaneous')
+    for key in ('mc', 'liq', 'vol1'):
+        if not fc_core_number(row[key]):
+            raise ValueError(key)
+    s = row['signals']
+    if not isinstance(s, dict) or set(s) != set(FC_CORE_SIGNALS) or any((type(v) is not bool for v in s.values())) or (row['score'] != sum(s.values())):
+        raise ValueError('exact emitted signal vector required')
+    h = row['input_sha256']
+    if not isinstance(h, str) or len(h) != 64 or any((c not in '0123456789abcdef' for c in h)):
+        raise ValueError('input hash')
+    return row
+
+def fc_core_eligible(row):
+    return row['points'] >= 4 and row['history_seconds'] >= 600 and (30000 <= row['mc'] <= 750000) and (row['liq'] >= 25000) and (row['vol1'] >= 20000)
+
+def fc_core_matched_controls(alert, rows):
+    """Same-cycle, outcome-blind controls; do not match score components."""
+    age = alert['captured_ts'] - alert['created_ts']
+    possible = []
+    for row in rows:
+        if row['mint'] == alert['mint'] or not fc_core_eligible(row) or row['score'] >= 8 or (row['prior_alert_level'] != 0):
+            continue
+        control_age = row['captured_ts'] - row['created_ts']
+        if abs(control_age - age) > 900:
+            continue
+        if not (0.5 <= row['mc'] / alert['mc'] <= 2 and 0.5 <= row['liq'] / alert['liq'] <= 2):
+            continue
+        distance = abs(control_age - age) / 900 + abs(math.log(row['mc'] / alert['mc'])) + abs(math.log(row['liq'] / alert['liq']))
+        possible.append((distance, row['mint'], row))
+    return [r for _, _, r in sorted(possible)[:3]]
+
+def fc_core_initialize(con, activation_ts, excluded_mints, protocol_sha256, runtime_binding=None):
+    """Explicit initialization only. Runtime lives outside the git checkout."""
+    if not fc_core_integer(activation_ts) or not isinstance(protocol_sha256, str) or len(protocol_sha256) != 64 or any((c not in '0123456789abcdef' for c in protocol_sha256)):
+        raise ValueError('activation')
+    con.executescript('\n    CREATE TABLE IF NOT EXISTS fc_activation(id INTEGER PRIMARY KEY CHECK(id=1), body TEXT NOT NULL);\n    CREATE TABLE IF NOT EXISTS fc_excluded(mint TEXT PRIMARY KEY);\n    CREATE TABLE IF NOT EXISTS fc_events(seq INTEGER PRIMARY KEY, kind TEXT NOT NULL,\n      event_key TEXT NOT NULL, body TEXT NOT NULL, previous_hash TEXT NOT NULL,\n      hash TEXT NOT NULL, UNIQUE(kind,event_key));\n    ')
+    for table in ('fc_activation', 'fc_events', 'fc_excluded'):
+        for op in ('UPDATE', 'DELETE'):
+            con.execute(f"CREATE TRIGGER IF NOT EXISTS {table}_no_{op} BEFORE {op} ON {table} BEGIN SELECT RAISE(ABORT,'capture append only'); END")
+    exclusions = sorted(set(excluded_mints))
+    if any((not isinstance(m, str) or not m for m in exclusions)):
+        raise ValueError('exclusions')
+    con.execute("CREATE TRIGGER IF NOT EXISTS fc_excluded_frozen BEFORE INSERT ON fc_excluded WHEN EXISTS(SELECT 1 FROM fc_activation) BEGIN SELECT RAISE(ABORT,'exclusions frozen'); END")
+    body_value = {'activation_ts': activation_ts, 'deadline': activation_ts + 14 * 86400, 'excluded_count': len(exclusions), 'excluded_sha256': fc_core_digest(exclusions), 'protocol_sha256': protocol_sha256, 'schema': 1}
+    if runtime_binding is not None:
+        if set(runtime_binding) != {'scanner_sha256', 'tracker_sha256'}:
+            raise ValueError('runtime binding fields')
+        if any((not isinstance(v, str) or len(v) != 64 or any((ch not in '0123456789abcdef' for ch in v)) for v in runtime_binding.values())):
+            raise ValueError('runtime binding hashes')
+        body_value.update(runtime_binding)
+    body = fc_core_canonical(body_value)
+    existing = con.execute('SELECT body FROM fc_activation').fetchone()
+    if existing and existing[0] != body:
+        raise ValueError('activation cannot change')
+    if not existing:
+        con.executemany('INSERT INTO fc_excluded VALUES(?)', [(m,) for m in exclusions])
+        con.execute('INSERT INTO fc_activation VALUES(1,?)', (body,))
+    con.commit()
+
+def fc_core_activation(con):
+    row = con.execute('SELECT body FROM fc_activation').fetchone()
+    if not row:
+        raise ValueError('not activated')
+    return json.loads(row[0])
+
+def fc_core_append(con, kind, key, payload):
+    body = fc_core_canonical(payload)
+    existing = con.execute('SELECT body,hash FROM fc_events WHERE kind=? AND event_key=?', (kind, key)).fetchone()
+    if existing:
+        if existing[0] != body:
+            raise ValueError('conflicting replay')
+        return existing[1]
+    last = con.execute('SELECT seq,hash FROM fc_events ORDER BY seq DESC LIMIT 1').fetchone()
+    seq, previous = (last[0] + 1, last[1]) if last else (1, '0' * 64)
+    h = fc_core_digest([seq, kind, key, body, previous])
+    con.execute('INSERT INTO fc_events VALUES(?,?,?,?,?,?)', (seq, kind, key, body, previous, h))
+    return h
+
+def fc_core_verify(con):
+    previous = '0' * 64
+    for expected, (seq, kind, key, body, prev, h) in enumerate(con.execute('SELECT * FROM fc_events ORDER BY seq'), 1):
+        if seq != expected or prev != previous or h != fc_core_digest([seq, kind, key, body, prev]):
+            raise ValueError('capture integrity failed')
+        previous = h
+    return previous
+
+def fc_core_record_cycle(con, cycle_id, cycle_ts, rows, scanner_sha256, verifier=fc_core_verify):
+    """Atomic complete evaluated cycle; capture before screening/delivery.
+
+    Input errors reject the whole cycle. Outcome fields are not accepted.
+    The adapter must pass EVERY successfully scored input, not a score subset.
+    """
+    if not fc_core_integer(cycle_ts) or not isinstance(cycle_id, str) or (not cycle_id):
+        raise ValueError('cycle')
+    if not isinstance(scanner_sha256, str) or len(scanner_sha256) != 64 or any((c not in '0123456789abcdef' for c in scanner_sha256)):
+        raise ValueError('scanner hash')
+    a = fc_core_activation(con)
+    if cycle_ts < a['activation_ts']:
+        raise ValueError('preactivation cycle')
+    if cycle_ts >= a['deadline']:
+        raise ValueError('pilot enrollment stopped')
+    checked = sorted([fc_core_validate(dict(r), cycle_ts) for r in rows], key=lambda r: r['mint'])
+    if len({r['mint'] for r in checked}) != len(checked):
+        raise ValueError('duplicate mint in cycle')
+    if any((r['captured_ts'] < a['activation_ts'] for r in checked)):
+        raise ValueError('preactivation input')
+    if len(checked) > 60:
+        raise ValueError('cycle exceeds current scanner cap')
+    if any((fc_core_eligible(r) and (not r['signals']['liq25k']) for r in checked)):
+        raise ValueError('eligible row contradicts liquidity signal')
+    excluded = {r['mint'] for r in checked if con.execute('SELECT 1 FROM fc_excluded WHERE mint=?', (r['mint'],)).fetchone()}
+    with con:
+        verifier(con)
+        key = str(cycle_id)
+        payload = {'cycle_ts': cycle_ts, 'scanner_sha256': scanner_sha256, 'rows': checked}
+        existing = con.execute("SELECT body FROM fc_events WHERE kind='cycle' AND event_key=?", (key,)).fetchone()
+        if existing:
+            fc_core_append(con, 'cycle', key, payload)
+            return []
+        fc_core_append(con, 'cycle', key, payload)
+        enrolled = {json.loads(r[0])['mint'] for r in con.execute("SELECT body FROM fc_events WHERE kind='cohort'")}
+        added = []
+        for row in checked:
+            if row['mint'] in excluded or row['mint'] in enrolled or (not fc_core_eligible(row)) or (row['score'] < 8) or (row['prior_alert_level'] != 0):
+                continue
+            controls = fc_core_matched_controls(row, [r for r in checked if r['mint'] not in excluded and r['mint'] not in enrolled])
+            cohort = {'mint': row['mint'], 'cycle_id': key, 'index_ts': cycle_ts, 'alert_input': row, 'controls': controls, 'screening': 'not_yet_observed'}
+            fc_core_append(con, 'cohort', row['mint'], cohort)
+            added.append(cohort)
+        return added
+
+def fc_core_record_screening(con, mint, cycle_id, observed_ts, verdict, delivered, verifier=fc_core_verify):
+    if verdict not in ('PASS', 'HOLD', 'REJECT', 'ERROR') or type(delivered) is not bool:
+        raise ValueError('screening')
+    if delivered and verdict != 'PASS':
+        raise ValueError('delivery without pass')
+    row = con.execute("SELECT body FROM fc_events WHERE kind='cohort' AND event_key=?", (mint,)).fetchone()
+    if not row:
+        raise ValueError('cohort missing')
+    cohort = json.loads(row[0])
+    if cycle_id != cohort['cycle_id'] or not fc_core_integer(observed_ts) or observed_ts < cohort['index_ts']:
+        raise ValueError('screening timing')
+    with con:
+        verifier(con)
+        return fc_core_append(con, 'screening', mint, {'observed_ts': observed_ts, 'verdict': verdict, 'delivered': delivered})
+
+def fc_core_record_observation(con, mint, pair, received_ts, mc, verifier=fc_core_verify):
+    if any((not isinstance(s, str) or not 1 <= len(s) <= 100 for s in (mint, pair))):
+        raise ValueError('observation identity')
+    if not fc_core_integer(received_ts) or not fc_core_number(mc, 1e-06):
+        raise ValueError('observation')
+    a = fc_core_activation(con)
+    if received_ts < a['activation_ts']:
+        raise ValueError('preactivation observation')
+    if received_ts > a['deadline'] + 3780:
+        raise ValueError('pilot follow-up stopped')
+    with con:
+        verifier(con)
+        return fc_core_append(con, 'observation', fc_core_canonical([mint, pair, received_ts]), {'mint': mint, 'pair': pair, 'received_ts': received_ts, 'mc': mc})
+
+def fc_core_endpoint(con, entry, index_ts, now):
+    """Pure read after window closes. Earliest valid same-pair local receipt."""
+    if not fc_core_integer(now) or now <= index_ts + 3780:
+        raise ValueError('endpoint window still open')
+    fc_core_verify(con)
+    observations = [json.loads(r[0]) for r in con.execute("SELECT body FROM fc_events WHERE kind='observation'")]
+    rows = sorted((r for r in observations if r['mint'] == entry['mint'] and r['pair'] == entry['pair'] and (index_ts + 3600 <= r['received_ts'] <= index_ts + 3780)), key=lambda r: r['received_ts'])
+    if not rows:
+        return {'eligible': False, 'reason': 'missing_timed_same_pair_endpoint', 'multiple': None}
+    r = rows[0]
+    return {'eligible': True, 'received_ts': r['received_ts'], 'lateness': r['received_ts'] - index_ts - 3600, 'multiple': r['mc'] / entry['mc']}
+
+"""Embedded into early_scout.py by build_integration.py; no extra imports/files.
+
+Core functions have fc_core_ names. Integration remains dormant unless a
+separately reviewed activation creates the private database and binding.
+"""
+FC_DIRECTORY = BASE / 'data' / 'forward_capture'
+FC_PROTOCOL_SHA256 = '3baef84dc6f3dfddff9ea38c1139c4979b86af0d4dbb66e641ea00b44b7359ad'
+FC_SCORER_SHA256 = '4f5c0fd4c978b45b51368e2f364db83f50f557ca0788edc977947c93f3b90b78'
+FC_MAX_BYTES = 512 * 1024 * 1024
+FC_MIN_DISK_BYTES = 2 * 1024 * 1024 * 1024
+_fc_connection = None
+_fc_verified = (0, '0' * 64)
+_fc_paused = False
+
+
+def fc_guard(con):
+    """Full verification on process open; then anchored append verification.
+
+    Old rows are protected by immutable triggers. Privileged rewrite of an
+    old prefix is detected at restart/full audit, not guaranteed each append.
+    """
+    global _fc_verified
+    seq, previous = _fc_verified
+    if seq:
+        anchor = con.execute('SELECT seq,kind,event_key,body,previous_hash,hash FROM fc_events WHERE seq=?', (seq,)).fetchone()
+        if not anchor or anchor[-1] != previous or anchor[-1] != fc_core_digest(list(anchor[:-1])):
+            raise ValueError('capture anchor changed')
+    for row in con.execute('SELECT * FROM fc_events WHERE seq>? ORDER BY seq', (seq,)):
+        n, kind, key, body, prev, h = row
+        if n != seq + 1 or prev != previous or h != fc_core_digest([n, kind, key, body, prev]):
+            raise ValueError('capture append chain changed')
+        seq, previous = n, h
+    _fc_verified = (seq, previous)
+    return previous
+
+
+def fc_pause(error):
+    global _fc_paused
+    _fc_paused = True
+    logging.error('FORWARD_CAPTURE_PAUSED reason=%s', type(error).__name__)
+    try:
+        # Count-only health artifact. No identities, endpoints or exception text.
+        if FC_DIRECTORY.is_dir():
+            p = FC_DIRECTORY / 'PAUSED.json'
+            import os
+            fd = os.open(p, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+            with os.fdopen(fd, 'w') as out:
+                out.write(json.dumps({'paused': True, 'reason': type(error).__name__,
+                                      'observed_ts': int(time.time())}))
+    except OSError:
+        logging.error('FORWARD_CAPTURE_PAUSE_MARKER_FAILED')
+
+
+def fc_connection():
+    global _fc_connection, _fc_verified
+    if _fc_paused or (FC_DIRECTORY / 'PAUSED.json').exists():
+        return None
+    database = FC_DIRECTORY / 'capture.sqlite'
+    if not database.exists():
+        return None  # No autoactivation, schema creation or private-file writes.
+    import shutil
+    if sum(p.stat().st_size for p in FC_DIRECTORY.glob('capture.sqlite*')) >= FC_MAX_BYTES:
+        raise ValueError('capture storage cap')
+    if shutil.disk_usage(FC_DIRECTORY).free < FC_MIN_DISK_BYTES:
+        raise ValueError('capture minimum free disk')
+    if _fc_connection is None:
+        con = sqlite3.connect('file:' + str(database) + '?mode=rw', uri=True, timeout=0.1)
+        try:
+            con.execute('PRAGMA busy_timeout=100')
+            con.execute('PRAGMA synchronous=FULL')
+            a = fc_core_activation(con)
+            if a['protocol_sha256'] != FC_PROTOCOL_SHA256 or a['scanner_sha256'] != hashlib.sha256(Path(__file__).read_bytes()).hexdigest():
+                raise ValueError('capture runtime binding')
+            if a['tracker_sha256'] != hashlib.sha256(Path(__file__).with_name('scout_learning_v2.py').read_bytes()).hexdigest():
+                raise ValueError('capture tracker binding')
+            # No runtime trigger installation: reviewed activation owns schema.
+            names = {r[0] for r in con.execute("SELECT name FROM sqlite_master WHERE type='trigger'")}
+            if not {'fc_activation_no_UPDATE', 'fc_activation_no_DELETE',
+                    'fc_events_no_UPDATE', 'fc_events_no_DELETE',
+                    'fc_excluded_no_UPDATE', 'fc_excluded_no_DELETE', 'fc_excluded_frozen'} <= names:
+                raise ValueError('capture immutability triggers missing')
+            exclusions = [r[0] for r in con.execute('SELECT mint FROM fc_excluded ORDER BY mint')]
+            if len(exclusions) != a['excluded_count'] or fc_core_digest(exclusions) != a['excluded_sha256']:
+                raise ValueError('capture exclusion binding')
+            fc_core_verify(con)
+            head = con.execute('SELECT seq,hash FROM fc_events ORDER BY seq DESC LIMIT 1').fetchone()
+            _fc_verified = tuple(head) if head else (0, '0'*64)
+            _fc_connection = con
+        except BaseException:
+            con.close()
+            raise
+    return _fc_connection
+
+
+def fc_emit_cycle(batch, failures, selected_count, cycle_id, cycle_ts):
+    """Persist raw exact rows and the admitted common cycle atomically."""
+    try:
+        con = fc_connection()
+        if con is None:
+            return {}
+        a = fc_core_activation(con)
+        if cycle_ts >= a['deadline']:
+            return {}
+        if selected_count > 60 or len(batch) + len(failures) != selected_count:
+            raise ValueError('incomplete candidate accounting')
+        if any(reason not in ('history', 'base_gate', 'price_history') for reason in failures):
+            raise ValueError('provider or capture failure invalidates cycle')
+        rows = []
+        for item in batch:
+            row, pair, score, metrics, failed, prev, history_rows, captured_ns = item
+            mint, created_ms, _, _, _, _ = row
+            captured_ts = captured_ns // 1000000000
+            if not metrics:
+                continue
+            exact = [list(r) for r in history_rows]
+            signals = {k: k not in failed for k in FC_CORE_SIGNALS}
+            record = {'mint': mint, 'pair': pair['pairAddress'], 'created_ts': int(created_ms // 1000),
+                      'captured_ts': captured_ts, 'snapshot_ts': int(history_rows[-1][0]),
+                      'points': len(history_rows), 'history_seconds': int(history_rows[-1][0]-history_rows[0][0]),
+                      'mc': metrics['mc'], 'liq': metrics['liq'], 'vol1': metrics['vol1'],
+                      'score': score, 'signals': signals, 'prior_alert_level': prev,
+                      'input_sha256': fc_core_digest(exact)}
+            fc_core_validate(record, cycle_ts)
+            # Validate exact vector against unchanged production scorer.
+            actual_score, actual_metrics, actual_failed = score_candidate(exact)
+            if actual_score != score or actual_metrics != metrics or actual_failed != failed:
+                raise ValueError('exact score replay mismatch')
+            rows.append((record, exact))
+        con.execute('BEGIN IMMEDIATE')
+        try:
+            fc_guard(con)
+            fc_core_append(con, 'cycle_health', cycle_id, {'cycle_ts': cycle_ts,
+                           'selected': selected_count, 'scored': len(rows),
+                           'admission_failures': sorted(failures)})
+            # Keep immutable raw input evidence private, once per content hash.
+            for record, exact in rows:
+                fc_core_append(con, 'inputs', record['input_sha256'], exact)
+            cohorts = fc_core_record_cycle(con, cycle_id, cycle_ts, [r for r, _ in rows],
+                                         a['scanner_sha256'], verifier=fc_guard)
+            return {r['mint']: cycle_id for r in cohorts}
+        except BaseException:
+            con.rollback()
+            raise
+    except Exception as error:
+        fc_pause(error)
+        return {}
+
+
+def fc_emit_screening(mint, cycle_id, verdict, delivered):
+    if cycle_id is None:
+        return
+    try:
+        con = fc_connection()
+        if con is None:
+            return
+        con.execute('BEGIN IMMEDIATE')
+        fc_core_record_screening(con, mint, cycle_id, int(time.time()), verdict, delivered, verifier=fc_guard)
+    except Exception as error:
+        if _fc_connection is not None:
+            _fc_connection.rollback()
+        fc_pause(error)
+
+
+def fc_count_status():
+    """Operational counts only; never probabilities, multiples or identities."""
+    try:
+        con = fc_connection()
+        if con is None:
+            return {'status': 'paused' if _fc_paused or (FC_DIRECTORY/'PAUSED.json').exists() else 'not_activated'}
+        a = fc_core_activation(con)
+        cohorts = [json.loads(r[0]) for r in con.execute("SELECT body FROM fc_events WHERE kind='cohort'")]
+        return {'status': 'enrollment_stopped' if int(time.time()) >= a['deadline'] else 'collecting',
+                'activation_ts': a['activation_ts'], 'deadline': a['deadline'],
+                'cycles': con.execute("SELECT count(*) FROM fc_events WHERE kind='cycle'").fetchone()[0],
+                'qualified_events': len(cohorts),
+                'matched_events': sum(bool(r['controls']) for r in cohorts),
+                'control_entries': sum(len(r['controls']) for r in cohorts),
+                'screening_events': con.execute("SELECT count(*) FROM fc_events WHERE kind='screening'").fetchone()[0],
+                'timed_observation_rows': con.execute("SELECT count(*) FROM fc_events WHERE kind='observation'").fetchone()[0]}
+    except Exception as error:
+        fc_pause(error)
+        return {'status':'paused'}
+
+
+def fc_observe_pairs(pairs, received_ts):
+    """Accept only already fetched pairs; no new request or polling selection."""
+    try:
+        con = fc_connection()
+        if con is None:
+            return
+        a = fc_core_activation(con)
+        if received_ts > a['deadline'] + 3780:
+            return
+        # Only store endpoint-window observations relevant to frozen cohorts.
+        wanted = set()
+        for (body,) in con.execute("SELECT body FROM fc_events WHERE kind='cohort'"):
+            cohort = json.loads(body)
+            if cohort['index_ts'] + 3600 <= received_ts <= cohort['index_ts'] + 3780:
+                for entry in [cohort['alert_input']] + cohort['controls']:
+                    wanted.add((entry['mint'], entry['pair']))
+        if not wanted:
+            return
+        con.execute('BEGIN IMMEDIATE')
+        try:
+            fc_guard(con)
+            for pair in pairs:
+                mint = (pair.get('baseToken') or {}).get('address')
+                identity = (mint, pair.get('pairAddress'))
+                mc = pair.get('marketCap')
+                # Invalid/unavailable evidence remains missing, never zero.
+                if identity not in wanted or not fc_core_number(mc, 0.000001):
+                    continue
+                fc_core_append(con, 'observation', fc_core_canonical([*identity, received_ts]),
+                               {'mint': mint, 'pair': identity[1], 'received_ts': received_ts, 'mc': mc})
+            con.commit()
+        except BaseException:
+            con.rollback()
+            raise
+    except Exception as error:
+        fc_pause(error)
+
 
 if __name__ == "__main__":
     main()
