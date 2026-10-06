@@ -167,7 +167,8 @@
     "research/forward_capture/integration/runtime_adapter.py": "0d0007dfaa6e0ef050eaf7d9ab7cedc7a8c148910cfc6d40d384a5725508c280",
     "research/forward_capture/integration/build_integration.py": "ed0589c9ad1078deb15b512aebf65770bb073de2a06f5accbdd5943e387e6c2b",
     "research/forward_capture/integration/scout_learning_v2.py": "a519ad19680ba72f0d593c4627fe5faa2d8dfa93fcd112eaba21abcf5a6da9b6",
-    "research/forward_capture/integration/test_integration.py": "2625bacc14106204da49078946d1ae09cf1e0cbd6618058368754239b4d55ea0"
+    "research/forward_capture/integration/test_integration.py": "2625bacc14106204da49078946d1ae09cf1e0cbd6618058368754239b4d55ea0",
+    "CRYPTO_LEARNING_REVIEW_20261006.md": "a9703c5ff9c13e74234f195b85d73bb04731774753d27d7a00dbaaa918b0e625"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
