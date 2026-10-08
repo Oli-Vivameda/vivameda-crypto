@@ -45,3 +45,18 @@ python3 /var/lib/vivameda-engineering/repo/client_learning/crypto_daily_learning
 Next gate: record the returned per-day and per-gate aggregate counts here; identify the actual zero-decision cause. If a fix is warranted, freeze unchanged policy hashes, test it, present the reviewed bundle/SHA, create backup during owner install and verify the first non-zero recorded action aggregate after installation. Do not backfill missed decisions or endpoints. **Task 2 is not complete. Its preliminary receipt was published before subsequent tasks began; the owner-count gate remains open.** No non-zero activation receipt is claimed.
 
 Receipt sequencing correction: this preliminary receipt was published before Task 3 began. Owner gate-count output is still pending; no journal fix or first non-zero aggregate has been verified.
+
+## Owner aggregate receipt — 8 October, 12:21:13 UTC
+
+| UTC day | ALERT source cases | SHADOW source cases | Missing launch join | Holdout excluded ALERT | ALERT remaining |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 2026-10-05 (partial) | 9 | 97 | 0 | 9 | 0 |
+| 2026-10-06 | 10 | 173 | 0 | 10 | 0 |
+| 2026-10-07 | 21 | 163 | 0 | 21 | 0 |
+| 2026-10-08 (partial) | 7 | 67 | 0 | 7 | 0 |
+
+All 47 retained ALERT cases are excluded by opaque holdout membership before classification. No eligible population reaches the writer. This establishes a population-design conflict; no WATCH/SKIP writer defect is established. The current 180-second query has zero candidates; selected/new inputs, fresh snapshots, valid features, fresh reviews, bound identities and seven-PASS counts are all zero. Recorded and would-record ENTER_REVIEW/WATCH/SKIP counts are all zero. Historical actual poll inputs and timing losses were not retained and cannot be reconstructed exactly. No prediction values, probabilities, labels or endpoints were read.
+
+Options, neither implemented: (1) keep the frozen population: observed post-exclusion volume is zero per day; future volume is unknown. (2) separately review an amendment adding scanner-scored candidates while preserving holdout exclusion and policy definitions. Retained SHADOW source cases averaged 168/day over the two complete UTC days, versus 15.5 ALERT cases/day before exclusion. Thus 168/day is a candidate-input planning ceiling for that observed SHADOW population, not an expected decision rate: its holdout, duplicate and timing losses are unmeasured. A defensible post-gate daily decision forecast needs those aggregates. These retained cases do not enumerate every scanner-scored candidate. No amendment, backfill or policy change is activated.
+
+Receipt: installed source/policy hashes matched; aggregate exporter succeeded; all-source eligibility is not measured. Next gate: owner choice on population design.
