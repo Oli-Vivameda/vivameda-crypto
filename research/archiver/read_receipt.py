@@ -3,7 +3,7 @@ import json,pathlib,sys
 ROOT=pathlib.Path('/var/lib/vivameda-snapshot-archive')
 def receipt(root=ROOT):
     out={}
-    for name in ('activation','postflight','two_hour_postflight','timer_disabled','STOP'):
+    for name in ('activation','first_copy_receipt','postflight','two_hour_postflight','timer_disabled','STOP'):
         p=root/(name+'.json')
         if p.exists():out[name]=json.loads(p.read_text())
     p=root/'runs.jsonl'

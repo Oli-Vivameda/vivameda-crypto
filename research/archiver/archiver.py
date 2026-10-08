@@ -113,7 +113,7 @@ def copy(root=ROOT,source=SOURCE,health_reader=status,alarm_reader=health_alarm_
             if before['checked_at']-initial['checked_at']<7200:
                 report['state']='baseline_collecting';atomic(root/'postflight.json',{'baseline_start':initial,'latest':before,'wal_bytes':wal_bytes(source),'first_copy_pending':True});return report
             bp=root/'baseline.json'
-            if not bp.exists():atomic(bp,{'start':initial,'end':before,'delta':count_delta(initial,before)})
+            if not bp.exists():atomic(bp,{'start':initial,'end':before,'wal_end_bytes':wal_bytes(source),'delta':count_delta(initial,before)})
             baseline=json.loads(bp.read_text())
             baseline_counts=baseline['delta']
             active=root/'activation.json'
@@ -121,7 +121,7 @@ def copy(root=ROOT,source=SOURCE,health_reader=status,alarm_reader=health_alarm_
                 if baseline_counts['total']<20:raise ValueError('baseline_sample_insufficient')
                 # Recorded before any snapshot access; never reset on later failure.
                 fd=os.open(active,os.O_WRONLY|os.O_CREAT|os.O_EXCL,0o600)
-                with os.fdopen(fd,'w') as out:json.dump({'activation_ts':now,'development_end':now+21*86400,'holdout_end':now+28*86400,'first_copy_status':before},out,sort_keys=True);out.flush();os.fsync(out.fileno())
+                with os.fdopen(fd,'w') as out:json.dump({'activation_ts':now,'development_end':now+21*86400,'holdout_end':now+28*86400,'first_copy_status':before,'wal_bytes':wal_bytes(source)},out,sort_keys=True);out.flush();os.fsync(out.fileno())
             activation=json.loads(active.read_text())
             if now>=activation['holdout_end']:raise ValueError('collection_window_closed')
             if alarm_reader(now):raise ValueError('health_incident_during_run')
@@ -162,7 +162,7 @@ def copy(root=ROOT,source=SOURCE,health_reader=status,alarm_reader=health_alarm_
             if alarm_reader(now):raise ValueError('health_incident_during_run')
             if previous and post_wal>previous['bytes']:raise ValueError('wal_grew_run_over_run')
             atomic(root/'last_copy_wal.json',{'bytes':post_wal,'time':int(time.time())})
-            postflight={'baseline':baseline,'latest':after,'since_first_copy':observed,'after_start':activation['first_copy_status'],'after_seconds':after['checked_at']-activation['first_copy_status']['checked_at'],'wal_before':pre_wal,'wal_after':post_wal,'two_hour_after_available':after['checked_at']-activation['first_copy_status']['checked_at']>=7200,'first_copy_pending':False}
+            postflight={'baseline':baseline,'latest':after,'since_first_copy':observed,'after_start':activation['first_copy_status'],'after_start_wal_bytes':activation['wal_bytes'],'after_seconds':after['checked_at']-activation['first_copy_status']['checked_at'],'wal_before':pre_wal,'wal_after':post_wal,'two_hour_after_available':after['checked_at']-activation['first_copy_status']['checked_at']>=7200,'first_copy_pending':False}
             atomic(root/'postflight.json',postflight)
             if postflight['two_hour_after_available'] and not (root/'two_hour_postflight.json').exists():atomic(root/'two_hour_postflight.json',postflight)
         except Exception as exc:
@@ -170,7 +170,9 @@ def copy(root=ROOT,source=SOURCE,health_reader=status,alarm_reader=health_alarm_
             reason=str(exc) if str(exc) in reasons else 'archiver_guard_or_io_failed'
             stop(root,reason);report.update(state='stop_requested',reason=reason)
         finally:
-            report['runtime_seconds']=round(time.monotonic()-started,6);log(root,report)
+            report['runtime_seconds']=round(time.monotonic()-started,6)
+            if (root/'activation.json').exists() and not (root/'first_copy_receipt.json').exists():atomic(root/'first_copy_receipt.json',report)
+            log(root,report)
     return report
 if __name__=='__main__':
     if sys.version_info[:2]!=(3,12):raise SystemExit('Python 3.12 required')

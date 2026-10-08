@@ -27,6 +27,7 @@ def install(expected,use_existing_health_user,apply=False):
     import time
     if observed['status']!='collecting' or not 0<=int(time.time())-observed['checked_at']<=300:raise ValueError('fresh collecting health baseline required')
     baseline={k:observed[k] for k in ('checked_at','cycles','rejected_cycles','seconds_since_last_cycle')}
+    baseline['wal_bytes']=archiver.wal_bytes(archiver.SOURCE)
     frozen=[base/n for n in ('early_scout.py','scout_learning_v2.py')]
     frozen += [pathlib.Path('/etc/systemd/system')/n for n in ('vivameda-early-scout.service','vivameda-scout-learning-v2.service','vivameda-crypto-pilot-health.service','vivameda-crypto-pilot-health.timer')]
     before={str(p):sha(p) for p in frozen}
