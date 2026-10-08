@@ -25,7 +25,12 @@ class RecoveryTests(unittest.TestCase):
         def amended(*args):
             scanner,tracker=original(*args)
             return build.build(scanner,AMENDMENT),tracker
-        with patch.object(fixtures.build,'build',side_effect=amended):self.f.setUp()
+        # Bind the repaired fixture inside this test folder; never use scout/early_scout.py.
+        frozen=build.HERE/'early_scout.py'
+        expected='765aba08982c3f0c562b52755ab9122cdaabfc396b78e7fed878089db87fa54e'
+        with patch.object(fixtures.build,'build',side_effect=amended), \
+             patch.object(fixtures,'FROZEN_SCANNER_PATH',frozen), \
+             patch.object(fixtures,'FROZEN_SCANNER_SHA256',expected):self.f.setUp()
         self.g=self.f.g
     def tearDown(self):self.f.tearDown()
 

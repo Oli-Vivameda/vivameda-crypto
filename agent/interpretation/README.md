@@ -12,3 +12,7 @@ Run the nine repair tests with `python3 -m unittest discover -s agent/interpreta
 
 Private runtime data and company source are excluded. The real answer took 130 seconds; the response timeout is five minutes. Interpretation is a bounded evidence summary, not validated trading performance. Live execution remains disabled.
 
+
+## Factual acceptance correction — 8 October
+
+The 5 October activation verified completion, routing and isolation. The 6 October factual check failed; generation completion is not factual acceptance. The reviewed [8 October guard and activation gate](INTERPRETATION_ACTIVATION_20261008.md) passed 10/10 fixed synthetic facts with zero invented explanations in 29.845 seconds, plus 17 tests. This is constrained evidence selection; unrestricted prose remains unverified. Owner activation and gateway postflight are pending. Installed production source has not been replaced by this review.
