@@ -145,3 +145,20 @@ Telegram: the labelled synthetic test was sent. A real threshold-triggered alarm
 Authorization refresh surviving 24 hours is **not verified**. Today's post-restart sync proves current authorization only. Earliest conservative 24-hour post-install check: **2026-10-09T10:20:00Z**; require a newly completed sync, not cached inventory, plus evidence of actual refresh before calling refresh itself verified.
 
 Next gate: owner aggregate class/reason export and private unavailable-list review; then the first genuine alarm receipt with measured latency, and the 24-hour refresh check. These remain explicit pending checks; the collector, scanner, pilot, permissions, adapters and thresholds were unchanged.
+
+## Directive 2 owner aggregate addendum — 12:20:26 UTC
+
+| Class | Complete guarded 15-minute window status | Count |
+| --- | --- | ---: |
+| BTC spot | measuring: verified by installed cadence-guard evaluator | 1 |
+| SOL | absent from this export; not verified by this receipt | 0 |
+| Other spot | measuring: verified by installed cadence-guard evaluator | 35 |
+| Perpetual | measuring: verified by installed cadence-guard evaluator | 1 |
+| Crypto unavailable | unavailable | 16 |
+| Non-crypto | not monitored | 8 |
+
+Unavailable reasons: unsupported venue 11; stale trade 3; pair not listed 1; unsupported instrument 1. No adapters were added. Unsupported venue requires private exact-identity review and a separately approved exact adapter; stale trade and pair-not-listed need diagnosis of existing feeds; unsupported instruments remain unavailable unless separately reviewed. The private symbol list remains private.
+
+Two real-alarm delivery records have status sent, separate from the synthetic labelled test. This is retained per-instrument state, not a complete alarm history or recipient-delivery verification. No observation-to-API-acknowledgement delay was retained, so measured latency remains unverified. This export does not establish a newly completed watchlist sync or OAuth refresh. The scheduled 9 October check is 10:25 UTC / 13:25 Cyprus; timing instrumentation still requires its reviewed bundle and owner installation.
+
+Receipt: 37 instruments measuring, 16 crypto unavailable, 8 non-crypto, 2 retained real sent records. Pending: SOL in this export, live ten-question agent acceptance, alarm latency, refreshed authorization and private adapter decisions. No thresholds, cadence, scanner or pilot change.
