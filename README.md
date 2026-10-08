@@ -14,7 +14,7 @@ A continuously running Solana small-cap observation and research system on Hetzn
 | Forward learning | ALERT/SHADOW cases, timed outcomes, regimes and horizon statistics | Live V2 tracker |
 | Prediction ledger | Freeze shadow predictions and later eligible labels for a prospective baseline comparison | Activated; no completed validation claim |
 | Numerical model | Seven-feature logistic baseline, published coefficients and evaluation | Experimental; underperformed baseline; does not drive alerts |
-| Daily case learning | Matched first-call reviews, fresh agent memory and prospective paper journal | Live daily review and paper journal; daily supervision scheduled; decision-time endpoint extension activated |
+| Daily case learning | Matched first-call reviews, fresh agent memory and prospective paper journal | Daily review live; journal dormant by design until the prediction ledger closes (200 eligible or 2026-11-03T06:45:43Z); population frozen |
 | Dedicated Crypto Lab agent | Separate conversations, crypto-only read tools and local evidence interpretation | Isolated runtime active; generation completes, factual acceptance failed on 6 October; constrained guard installed 8 October; evidence-table postflight verified; new live 10-question acceptance pending; separate queue, storage and permissions |
 | Agent context | Select dated crypto knowledge and limitations for an agent session | Public extraction; private conversational runtime excluded |
 | Trading-agent layer | Paper proposal records, owner feedback and versioned playbook | Scaffold; no continuous agent or live execution |
@@ -68,7 +68,7 @@ python3 -m venv .venv
 .venv/bin/python -m unittest discover -s agent -p 'test_*.py'
 .venv/bin/python -m unittest discover -s agent_trader -p 'test_*.py'
 python3 -m unittest discover -s learning -p 'test_*.py'
-python3 scripts/verify_release.py
+python3.12 scripts/verify_release.py
 ```
 
 A score is not a probability. Activity age is a lower bound, not a creation date. Transfer links do not establish common ownership. Peak multiples are not realized profit. Missing evidence remains missing.
@@ -77,3 +77,7 @@ The experimental model used 42 training and 18 test tokens: Brier 0.11047 versus
 
 Credentials, private live configuration, databases, messages, client material and the separate workforce stack remain server-side. Source templates do not reproduce private runtime state. Fresh-host installation remains unverified. No license grant has yet been selected.
 
+
+Owner decision, Directive 2 continuation: keep the frozen journal population. The journal is **dormant by design until the prediction ledger closes (200 eligible or 2026-11-03T06:45:43Z)**. No amendment is authorized. After closure, re-check ALERT-to-writer admission under the frozen rules and publish the first non-zero aggregate; future non-zero volume is not guaranteed.
+
+Release interpreter: Python 3.12. Other versions are explicitly refused before the release check; frozen AST scorer hashes and pilot bindings are unchanged. Directive 2 availability analysis and next protocol: [control availability](research/forward_capture/CONTROL_AVAILABILITY_20261008.md), [V2 draft](research/forward_capture/PROTOCOL_V2_DRAFT.md). Incident/alarm logging is reviewed but awaits owner installation; live acceptance and private aggregate diagnostics remain pending.
