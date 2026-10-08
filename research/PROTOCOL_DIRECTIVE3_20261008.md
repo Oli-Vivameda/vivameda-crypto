@@ -579,3 +579,28 @@ remains pending. The archiver observes incident states regardless of send result
    Do not enlarge the nine-choice S grid, iterate holdout or extend collection.
 6. Keep A inactive; keep B pending post-stop live-source re-audit. Publish aggregates
    only, bind changed files by SHA-256 and verify those hashes on the public remote.
+
+
+### 2026-10-08T19:25Z — owner archiver installation refused
+
+The owner ran the reviewed 012afbd8d1fd635c89edafe11cbb895d899e0c539bb0f2230b5b438493cdd73b
+installer and received its generic refusal. The failed stage and whether new
+component files were partially created are NOT established by that message.
+Do not claim installed, unchanged production, or an inactive timer without the
+read-only diagnostic. No reinstall, permission expansion or cleanup is authorised
+by the refusal. Engineering cannot inspect the protected production source paths.
+
+A separate owner-only check_install_preflight.py diagnoses fixed installer stages
+without opening production databases or installing/restarting any component. It
+reports sanitized stage flags, hash checks, fresh-status metadata and the NEW
+timer's ActiveState/UnitFileState. Exceptions expose category only. Its synthetic
+tests use temporary fixture databases; four diagnostic tests passed on Python 3.12
+locally and on the engineering server. The original eight-file install bundle is
+unchanged; this diagnostic has its own source SHA-256. No providers or Telegram.
+
+Next gate for Astra: obtain the diagnostic aggregate and identify the actual failed
+stage. If there is a partial install, preserve all archive state and activation dates.
+Repair only reviewed new-component code or installation assumptions, without
+relaxing the owner's read-only, health, disk or frozen-source gates. Any revised
+installer requires a new bundle hash, owner install and postflight. Holdout remains
+closed and g remains null. Append the diagnosis and subsequent receipt here only.
