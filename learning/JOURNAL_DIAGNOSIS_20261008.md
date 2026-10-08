@@ -42,6 +42,6 @@ Owner command in the existing root server terminal:
 python3 /var/lib/vivameda-engineering/repo/client_learning/crypto_daily_learning_v1/diagnose_journal_counts.py --expected-sha256 bf80b0818fb0e648fffe4f13dc30f9dcd380d246ac1bca3a144b7a462a695f3e
 ```
 
-Next gate: record the returned per-day and per-gate aggregate counts here; identify the actual zero-decision cause. If a fix is warranted, freeze unchanged policy hashes, test it, present the reviewed bundle/SHA, create backup during owner install and verify the first non-zero recorded action aggregate after installation. Do not backfill missed decisions or endpoints. **Task 2 is not complete, and Tasks 3–5 remain unstarted under the owner's ordering rule.** No non-zero activation receipt is claimed.
+Next gate: record the returned per-day and per-gate aggregate counts here; identify the actual zero-decision cause. If a fix is warranted, freeze unchanged policy hashes, test it, present the reviewed bundle/SHA, create backup during owner install and verify the first non-zero recorded action aggregate after installation. Do not backfill missed decisions or endpoints. **Task 2 is not complete. Its preliminary receipt was published before subsequent tasks began; the owner-count gate remains open.** No non-zero activation receipt is claimed.
 
 Receipt sequencing correction: this preliminary receipt was published before Task 3 began. Owner gate-count output is still pending; no journal fix or first non-zero aggregate has been verified.
