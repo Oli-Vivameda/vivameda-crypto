@@ -214,7 +214,7 @@
     "agent/interpretation/model_proxy.py": "6893358dc8ce3a57dfd6d2c63fa977871f24b3f677e2f3093e9bfbe25fd2f615",
     "agent/interpretation/crypto_agent.py": "ddd57fea740ce087122482a89ad1ea65d18516f2a077264d0bc6f593b8dd2423",
     "agent/interpretation/test_factual_guard.py": "fef228bb346ef35f2032084a225d973bf81b695d53b489bc59c598c4c6a5717d",
-    "research/PROTOCOL_DIRECTIVE3_20261008.md": "70de2405af09e99e58c77676338f7685994f0186a16b0dbffc8a39be493d22fe",
+    "research/PROTOCOL_DIRECTIVE3_20261008.md": "37ad16c6b3219a5b277095045e61a408f9ba7ca8e1223afa07ea386c6228ac04",
     "research/build_launch_patch.py": "ae51a57b87d83f9df8fcbfe7136b6faae5d1d8f47bc2c198494ccddf182c00ca",
     "research/candidate_early_scout.txt": "0f178cac4b45bf972aa8dd5c6f1b399b4dbc1b5211123ca384bb5109fd6adba6",
     "research/earlier_entry.py": "8a8a7e54d3807e583fb07a1eefbfe0ec3378daf803ee8100c3c4c1dfc49ce60c",
@@ -227,7 +227,7 @@
     "research/test_directive3.py": "b02add017ecb98f1d01e6cdbcda63ce8af957f9eaf8f9fc1372811c747970c6d",
     "research/vivameda-earlier-entry-shadow.service": "3794398f027cdbd191cde1b863555e450590bbf93baea6406a38928f1ce6700b",
     "research/vivameda-earlier-entry-shadow.timer": "db8000a0874c3755f760bd1a7272e6fa3a5bb89b1f26c2195eb936eabd61c261",
-    "research/bundle_manifest.json": "0ac0cd1eeb37fbadcd2b606a4b9cbbfbf3664c9ee15ee321dd8260ad94396238",
+    "research/bundle_manifest.json": "973d257007db55715cd166deecc2b1187c4b45f65e606d888eb0dcdcdbd9fecf",
     "research/archiver/read_receipt.py": "f11fef37b01dc69765816bc4d03370b3aa3924c126c8c9c1901895801b514d87",
     "research/archiver/vivameda-snapshot-archive.service": "ad573eb1dda2f596166336b9113f2e9ca0614fc8e719cd7867e9b17b9f8e9539",
     "research/archiver/second_leg_grid.json": "4413b7417321fb114b4ad7c79432da2a80d38e7e44b3511049c8e887789f61b9",
@@ -793,7 +793,7 @@
     "status": "archiver_owner_installed_two_hour_baseline_collection_activation_pending",
     "protocol": "research/PROTOCOL_DIRECTIVE3_20261008.md",
     "review_bundle": "research/bundle_manifest.json",
-    "review_bundle_sha256": "0ac0cd1eeb37fbadcd2b606a4b9cbbfbf3664c9ee15ee321dd8260ad94396238",
+    "review_bundle_sha256": "973d257007db55715cd166deecc2b1187c4b45f65e606d888eb0dcdcdbd9fecf",
     "python": "3.12",
     "synthetic_tests_passed": 49,
     "holdout_opened": false,
@@ -838,7 +838,7 @@
     "g": null
   },
   "health_incident_notification_preference": {
-    "status": "reviewed_bundle_owner_install_pending",
+    "status": "owner_installed_normal_cycle_receipt_pending",
     "incident_notifications_active_after_install": false,
     "recovery_notifications_active_after_install": false,
     "monitoring_active": true,
@@ -847,7 +847,13 @@
     "bundle_sha256": "f1013c5f7a060a7b11eff03f26f45f7aea56025779f7a884588b0c62195df914",
     "tests_passed": 5,
     "python": "3.12.3",
-    "installed": false,
-    "pilot_modified": false
+    "installed": true,
+    "pilot_modified": false,
+    "incident_notifications_active": false,
+    "recovery_notifications_active": false,
+    "backup": "/opt/vivameda-operations/crypto-health-incident-inactive-kremccaq",
+    "source_sha256": "3a5005d2a5e68421d1aea4680d1059f7c07874c03659b4d3313435de59569c18",
+    "normal_cycle_suppression_verified": false,
+    "service_restarted": false
   }
 }
