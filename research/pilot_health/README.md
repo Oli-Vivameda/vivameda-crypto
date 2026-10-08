@@ -14,12 +14,20 @@ Installed by the owner on 6 October 2026 at 07:37 UTC; backup `/opt/vivameda-ope
 
 Run `python3 -m unittest discover -s client_learning/crypto_pilot_health_20261006 -p 'test_*.py'` on Hetzner. Tests use temporary synthetic data and mocked sends, never production endpoints or credentials.
 
-## E1 incident/send audit — reviewed, not installed
+## E1 append-only incident/send audit
 
-Candidate logging bundle `b29c87e37c6f112a6703e3d5a5c0e38dd4689c566af0a014c4aa7515eef4c97d` appends sanitised state, reason code, UTC epoch time and send result to `incident_send_log.jsonl` in the existing health state directory. Pending-check and final results preserve crash/failed-send ambiguity; they are not proof of recipient delivery. It changes no health/dedup/retry rules, pilot files, units, permissions or timer cadence. Logging failures are visible as `audit_log=unavailable`. Previous incident history cannot be backfilled. Eight logging/installer regressions plus 41 existing movement/exchange regressions passed: **49 tests total**.
+The installed logging update appends sanitised state, reason code, UTC epoch time and send result to incident_send_log.jsonl. Pending and final results preserve crash/failed-send ambiguity; neither proves recipient delivery. Health/dedup/retry rules and the pilot remain unchanged. Logging failures appear as audit_log=unavailable. Historical incident history cannot be backfilled.
 
-```bash
-python3 /var/lib/vivameda-engineering/repo/client_learning/crypto_directive2_20261008/evidence_logs/install_evidence_logs.py --component health --install --expected-sha256 b29c87e37c6f112a6703e3d5a5c0e38dd4689c566af0a014c4aa7515eef4c97d
-```
+## Corrected E logging review and owner installation — 8 October
 
-Owner installer requires the original health hash, a quiet oneshot, creates source backup and atomically replaces only health.py. It does not invoke a health run or emit a message; the existing timer loads it next. Postflight checks installed hashes, active timer and frozen pilot/config/unit bytes; next fresh audit status is still required. No pilot restart or permission change. Next gate: owner install receipt, then verify next normal timer run writes the sanitised log.
+Both components were installed by the owner using reviewed bundle `7afa8275f9d2d8c2ffce2eaa0bac99cffb359e69a2a41c62060caf044282ae5a`. Nine focused tests passed. Health backup: `/opt/vivameda-operations/crypto-evidence-logs-health-2ptrb4db`; movement backup: `/opt/vivameda-operations/crypto-evidence-logs-movement-jg4encuv`.
+
+| Installed source | SHA-256 |
+| --- | --- |
+| health.py | f5684d83e4912bc02325ec653c0c5271c742b112823f64f72fa78568c0683f86 |
+| monitor.py | 152978ece511b3c0d2974f1867deec80996017bdfb788c0b49ab1f35417fa613 |
+| exchange.py | 852e2cd1b5441482f2ccca83c06e2dea7e6af04bb50ec3f6a6fe956ff185f78b |
+
+Owner postflights verified source hashes and existing service/timer. Installer sent no alarm; cadence, units, permissions, policy and pilot were unchanged. Read-only public health status at **2026-10-08T16:25:31Z** reports `audit_log=available`, `status=stalled`, `reason=no_successful_cycle_for_10_minutes`, `notification=idle`. This verifies a normal timer logging path completed; private log rows and any new incident send were not independently inspected. A real alarm observation-to-Telegram-API acknowledgement delay remains unverified. No synthetic alarm or backfill is authorized.
+
+The old `b29c87e37c6f112a6703e3d5a5c0e38dd4689c566af0a014c4aa7515eef4c97d` bundle was refused because deployed health.py was `408fdcdbc731f5c35faa034300c9711a87beb00a80da8bf19b889e8d1896c47b`, not the older engineering base `70f923c3b09dc258b1baaf45c17699d4fe87588dc7c32b186046fd31ce5f3717`. The corrected candidate preserves all deployed rejected-cycle diagnostics and adds a synthetic regression for them. Unchanged-function AST checks passed. Earlier 49-test validation belongs to the original candidate; the corrected candidate has nine focused tests verified. A fresh broad system-Python run lacked httpx; no fresh full-suite pass is claimed. Do not reinstall either successful component. The corrected public files are reviewed source records, not an instruction to activate another pilot or change its binding.

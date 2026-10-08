@@ -1,7 +1,7 @@
 """Hash-bound owner update of evidence logging only; no pilot/units/config changes."""
 import argparse,hashlib,json,os,pathlib,shutil,subprocess,tempfile,time
 HERE=pathlib.Path(__file__).resolve().parent
-TARGETS={'health':(('health.py','/opt/vivameda-crypto-pilot-health/health.py','70f923c3b09dc258b1baaf45c17699d4fe87588dc7c32b186046fd31ce5f3717'),),
+TARGETS={'health':(('health.py','/opt/vivameda-crypto-pilot-health/health.py','408fdcdbc731f5c35faa034300c9711a87beb00a80da8bf19b889e8d1896c47b'),),
  'movement':(('monitor.py','/opt/vivameda-market-moves/monitor.py','273d7afb31c0162c70e64aaf6f1fb0ba431bc04a5948a61180f27f0a26c447d4'),('exchange.py','/opt/vivameda-tradingview/exchange.py','88de1f4ecedf32bdeffe241d6b34506fa4359958c598512037c5d5fac319830d'))}
 FILES=('health.py','monitor.py','exchange.py','test_evidence_logs.py','install_evidence_logs.py')
 def sha(p):return hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()
@@ -45,7 +45,7 @@ def run(component,expected,apply=False):
   if restart:command(['/usr/bin/systemctl','is-active','vivameda-tradingview.service'])
   else:command(['/usr/bin/systemctl','is-active','vivameda-crypto-pilot-health.timer'])
   # No synthetic or real alarm is emitted by this installer.
-  out.update(installed=True,backup=str(backup),source_hashes={f:sha(path) for f,path,_ in targets},tests_passed=8,postflight='source hashes and existing service/timer verified; next timer audit and first real alarm acknowledgement pending',alarm_sent_by_installer=False)
+  out.update(installed=True,backup=str(backup),source_hashes={f:sha(path) for f,path,_ in targets},tests_passed=9,postflight='source hashes and existing service/timer verified; next timer audit and first real alarm acknowledgement pending',alarm_sent_by_installer=False)
  except Exception:
   for f,path,_ in targets:replace(backup/f,pathlib.Path(path))
   if restart:subprocess.run(['/usr/bin/systemctl','start','vivameda-tradingview.service'],capture_output=True,timeout=60)

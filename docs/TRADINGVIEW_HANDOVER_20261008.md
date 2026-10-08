@@ -173,12 +173,23 @@ Three stale-trade entries were reported at 12:20:26 UTC. `exchange.tick_payload`
 /opt/vivameda-connect-venv/bin/python /var/lib/vivameda-engineering/repo/client_learning/crypto_directive2_20261008/diagnose_alarm_coverage.py --expected-sha256 be1c1dc806e17b9c8af9663e5a30a4d7f61db028983b422bcaf707febf688223
 ```
 
-### E2 receipt — awaiting owner install
 
-Reviewed bundle `b29c87e37c6f112a6703e3d5a5c0e38dd4689c566af0a014c4aa7515eef4c97d` stages `monitor.py` and `exchange.py` only. Sender returns the local receipt time after parsing Telegram `ok:true`; each real alarm appends a sanitised attempt followed by sent/failed result. Logs contain opaque attempt ID, observation time, API acknowledgement time and delay; no instrument, price, message, recipient or credential. Missing acknowledgement stays null. Synthetic tests/setup notices are excluded. Append failures are visible without disabling the existing alarm. Existing thresholds, cadence, cooldown and configurations remain frozen. Historical latency stays unavailable. Tests: **49 candidate/regression tests passed** on the server, including eight append/redaction/refusal tests.
+## Owner existing-feed diagnosis receipt
 
-```bash
-python3 /var/lib/vivameda-engineering/repo/client_learning/crypto_directive2_20261008/evidence_logs/install_evidence_logs.py --component movement --install --expected-sha256 b29c87e37c6f112a6703e3d5a5c0e38dd4689c566af0a014c4aa7515eef4c97d
-```
+Hash-bound helper `be1c1dc806e17b9c8af9663e5a30a4d7f61db028983b422bcaf707febf688223` diagnosed three currently stale instruments using three existing-feed requests. Trade ages were **505.243, 156.483 and 200.877 seconds**, all beyond the frozen 120-second limit. Results: stale_trade=3; no alarm, state change or private instrument export. Historical identity continuity with the earlier three is unverified; trade ages do not establish a transport outage. Snapshot epoch 1791470846, watchlist observation epoch 1791470557.
 
-Installer requires old source hashes, backs up the two sources, atomically replaces them with file permissions preserved, restarts only TradingView, checks service and frozen source/config/unit hashes and restores source on failure. It neither sends a test alarm nor changes the pilot. Source/service postflight is separate from next forward measuring window and first real acknowledgement. Installation and real latency are pending. F remains 2026-10-09T10:25Z; use a newly completed sync, not cached inventory, and verify actual refresh evidence separately.
+SOL stablecoin spot inventory count=1 and status count=1. Source-verified Coinbase alarm delegation remains intended, but does not suppress exchange status rows. Current presence does not explain the earlier export absence or establish a new complete 15-minute window. Keep unavailable instruments unavailable until existing-feed evidence meets unchanged rules; no new provider or relaxed freshness. The scheduled F check remains **2026-10-09T10:25Z**, requiring a newly completed sync and actual authorization-refresh evidence, with real alarm latency only if a genuine alarm exists.
+
+## Corrected E logging review and owner installation — 8 October
+
+Both components were installed by the owner using reviewed bundle `7afa8275f9d2d8c2ffce2eaa0bac99cffb359e69a2a41c62060caf044282ae5a`. Nine focused tests passed. Health backup: `/opt/vivameda-operations/crypto-evidence-logs-health-2ptrb4db`; movement backup: `/opt/vivameda-operations/crypto-evidence-logs-movement-jg4encuv`.
+
+| Installed source | SHA-256 |
+| --- | --- |
+| health.py | f5684d83e4912bc02325ec653c0c5271c742b112823f64f72fa78568c0683f86 |
+| monitor.py | 152978ece511b3c0d2974f1867deec80996017bdfb788c0b49ab1f35417fa613 |
+| exchange.py | 852e2cd1b5441482f2ccca83c06e2dea7e6af04bb50ec3f6a6fe956ff185f78b |
+
+Owner postflights verified source hashes and existing service/timer. Installer sent no alarm; cadence, units, permissions, policy and pilot were unchanged. Read-only public health status at **2026-10-08T16:25:31Z** reports `audit_log=available`, `status=stalled`, `reason=no_successful_cycle_for_10_minutes`, `notification=idle`. This verifies a normal timer logging path completed; private log rows and any new incident send were not independently inspected. A real alarm observation-to-Telegram-API acknowledgement delay remains unverified. No synthetic alarm or backfill is authorized.
+
+The old `b29c87e37c6f112a6703e3d5a5c0e38dd4689c566af0a014c4aa7515eef4c97d` bundle was refused because deployed health.py was `408fdcdbc731f5c35faa034300c9711a87beb00a80da8bf19b889e8d1896c47b`, not the older engineering base `70f923c3b09dc258b1baaf45c17699d4fe87588dc7c32b186046fd31ce5f3717`. The corrected candidate preserves all deployed rejected-cycle diagnostics and adds a synthetic regression for them. Unchanged-function AST checks passed. Earlier 49-test validation belongs to the original candidate; the corrected candidate has nine focused tests verified. A fresh broad system-Python run lacked httpx; no fresh full-suite pass is claimed. Do not reinstall either successful component. The corrected public files are reviewed source records, not an instruction to activate another pilot or change its binding.

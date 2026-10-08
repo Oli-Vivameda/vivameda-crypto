@@ -4,7 +4,7 @@
   "missing": [],
   "sha256": {
     ".gitignore": "be399efba81fec45218410e877c3d3935a920538dd15e3ea558a8d5a2bdf68ec",
-    "README.md": "1876244bc67ea0c4a9e820c279b7a2c001cccdea9738400f7d20b317e6bbed37",
+    "README.md": "b5db7ef8ed143e94f349e15fe6f497193705122eef29e82cfd35f00fa4ab0ffb",
     "credentials.example.json": "c58950f6be306e8860e318b8d3bfdadd2c8f4142c92149a83ac52530be0f0ab5",
     "SIGNALS.md": "e6912005df13615138935c45b77756b23dee636891cb85faed9d273723117cc8",
     "CRYPTO_LEARNING_REVIEW_20261006.md": "a9703c5ff9c13e74234f195b85d73bb04731774753d27d7a00dbaaa918b0e625",
@@ -13,7 +13,7 @@
     "docs/DFLOW_DECODER_20261004.md": "637e5f3483506fad526aa963de39f8c3439ef584ac7b3d032f4e3d3e7cf7e6a0",
     "docs/COMPLETENESS.md": "0568f3e2e3f6604e1a447261ae39ed7c4d5d25a9e493231d69798e17c5229e8e",
     "docs/FULL_SETUP.md": "b5cc9809c9a70bbd8afdc45a30f8fc62ef7456531ddfeeee9633e6f3a0991efa",
-    "docs/TRADINGVIEW_HANDOVER_20261008.md": "dd0fc6123082b68b9965029a8ac5b081ae1a4168cf16fcc69702819efc7c68bc",
+    "docs/TRADINGVIEW_HANDOVER_20261008.md": "35d705a80fc3080114540a30c5b794a68452d92ccd70f2a9f769cb1bc546e75f",
     "docs/VALIDATION.md": "3c3f948d1459d6c6213eb7378af43f9519d72d66687cfbcdaa9c44c5ed2e782a",
     "docs/COVERAGE_20261004.md": "b5b089412561c9f0b627966ee3a1ef5b577493707ccaa0f6c4b62c1b58bd123e",
     "docs/SETUP.md": "0c5ba2e5780db52d942178616d9acee83a2b317625859c1f020a72a6854857b0",
@@ -145,7 +145,7 @@
     "research/forward_capture/HANDOVER_20261005.md": "58535079baa3fc87bbd96db055016381845fefde7c22036bfde375d64441d70c",
     "research/forward_capture/HANDOVER_20261006.md": "8f123179bd5a10b767ce8ee6ed6b344959f75a36362893bb3cb31e6b19debed0",
     "research/forward_capture/README.md": "215d76743d7337955158ddacd697d31fdd9b682220234ce5df94d7e4a2c96ac3",
-    "research/forward_capture/STATUS_20261008.md": "c7cf6b434b784b246b7f5a710eb780f0ba501bacb420fd935e1fb13cd6e82a3a",
+    "research/forward_capture/STATUS_20261008.md": "c486141f303fcc469c93a5b55c594af6280bd066056abb30b05e7de08a62b0e9",
     "research/forward_capture/PROTOCOL_V2_DRAFT.md": "7030c44c96c0294967c67228624e3bbf83c5e6a553df1e78f61111303726f1a8",
     "research/forward_capture/test_capture.py": "35053218a58207d371726a29946b404b29a3e4a8db14684ed29c95c6ffd74211",
     "research/forward_capture/BUILD_STATUS.md": "79c4efcd388222bcb7f8cf08d1ad042a4a3c64f687559e24cbae482b4607b4d8",
@@ -158,7 +158,7 @@
     "research/pilot_health/vivameda-crypto-pilot-health.timer": "084200427b97a7c7e3f4cda7eb125ff4c1f4546aa91e902276c4a62cb2186dd5",
     "research/pilot_health/HANDOVER_20261006.md": "6b3b875d4ee17f54c6fa62cf7aa8ad7ea3d13a66bd7cf75774d303b4df3b8e12",
     "research/pilot_health/health.py": "70f923c3b09dc258b1baaf45c17699d4fe87588dc7c32b186046fd31ce5f3717",
-    "research/pilot_health/README.md": "f0e64603b73fe0b97f45d71aa2a80d91b11532bcb0f330ea958fe4368a054777",
+    "research/pilot_health/README.md": "d4575968ebe198ae44a0cf2279adabbe8ed92eb8c9286727fd0db2fe94b69c6b",
     "research/pilot_health/test_health.py": "1823710df3ff9bf07cede65eb190440e98b236fd54f957a90bd4f349ec2555e3",
     "research/pilot_health/diagnose_pause.py": "b1f3239c47488ba3db9c86609e702ed579206838b49749f9d5f1ded65b0c601c",
     "research/pilot_health/vivameda-crypto-pilot-health.service": "b4d99ba649b7ec043423032be0dfaedbd5d7e7f86685bda6fd06289551e68dd3",
@@ -177,10 +177,10 @@
     "research/forward_capture/integration/early_scout.py": "3e73978a41e2e21e090a7eea92bbdc1a52dc190ce229ac262a3c6a2b0af6a043",
     "research/forward_capture/integration/runtime_adapter.py": "0d0007dfaa6e0ef050eaf7d9ab7cedc7a8c148910cfc6d40d384a5725508c280",
     "monitors/evidence_logs/monitor.py": "152978ece511b3c0d2974f1867deec80996017bdfb788c0b49ab1f35417fa613",
-    "monitors/evidence_logs/health.py": "a372b071619284acc69bb629c293daf165d7d3a93eb6a64ffc7f1eddce1b94e2",
-    "monitors/evidence_logs/test_evidence_logs.py": "0148e2cad74f9ee3dd133fe204ad6f7fa50d63cf9c4672c14e3a2f3b920bd5a7",
+    "monitors/evidence_logs/health.py": "f5684d83e4912bc02325ec653c0c5271c742b112823f64f72fa78568c0683f86",
+    "monitors/evidence_logs/test_evidence_logs.py": "a2357ffb27fe1a2407b683d363147c686b8215ae3e4ba1bfc0d90c1b3516609a",
     "monitors/evidence_logs/exchange.py": "852e2cd1b5441482f2ccca83c06e2dea7e6af04bb50ec3f6a6fe956ff185f78b",
-    "monitors/evidence_logs/install_evidence_logs.py": "2670b7511a1d57231e237ce3853f9799641fec738fe6d4f735d2f80426a4d0ec",
+    "monitors/evidence_logs/install_evidence_logs.py": "1a694414820ed40d3fe4924f7b8b01edcc54f71ba572f7405af34ce678d1e9e1",
     "monitors/evidence_logs/diagnose_alarm_coverage.py": "be1c1dc806e17b9c8af9663e5a30a4d7f61db028983b422bcaf707febf688223",
     "monitors/pool-monitor/monitor.py": "07307805bfce8838f41a9b472f4346b6761369f15eb7ee7079bb4224555c8835",
     "monitors/pool-monitor/developer_checks.py": "18f721f724136c70ec4a568cf53c65b01945f785713d05f893330db160c7f3eb",
@@ -382,7 +382,7 @@
     "live_execution": false
   },
   "crypto_agent": {
-    "status": "constrained guard installed 2026-10-08; evidence-table live postflight verified; new 10-question live acceptance pending",
+    "status": "constrained guard installed; owner live acceptance 10/10 in 3.24s; evidence_table_only; free-text interpretation and selection quality unverified",
     "bundle_sha256": "53701ea8ce3a1e9795fb05bc98bb5c958b98e0993b7791ff2848ef0dd8b12bbc",
     "tests_passed": 19,
     "independent_status_verified": true,
@@ -724,7 +724,7 @@
     }
   },
   "crypto_directive2_20261008": {
-    "task_a": "live factual acceptance passed; frozen journal dormant; SOL absence/stale diagnostics pending",
+    "task_a": "live factual acceptance passed; frozen journal dormant; current stale trades diagnosed; earlier SOL absence unresolved",
     "journal_alert_cases": 47,
     "journal_alert_holdout_excluded": 47,
     "journal_after_holdout": 0,
@@ -735,7 +735,7 @@
     "real_alarm_latency_verified": false,
     "pilot_modified": false,
     "policy_changed": false,
-    "tasks_b_to_e": "B verified; C owner aggregates recorded with counterfactual limitation; E reviewed awaiting owner install; D draft only",
+    "tasks_b_to_e": "C aggregates recorded with counterfactual limitation; B interpreter refusal verified; E both owner installs validated; D draft only",
     "task_f_scheduled_utc": "2026-10-09T10:25:00Z",
     "journal_owner_decision": "Option 1: keep frozen population; do not amend",
     "journal_status": "dormant by design until the prediction ledger closes (200 eligible or 2026-11-03T06:45:43Z)",
@@ -743,12 +743,23 @@
     "control_availability": "owner 14:09:27 UTC verified hour/day/funnel/reuse aggregates; 23 qualified/3 matched/5 control entries; exact discarded-cycle yield not identifiable",
     "release_gate": "Python 3.12 supported; 450 tests/14 suites passed; other versions explicitly refused",
     "evidence_logs": {
-      "bundle_sha256": "b29c87e37c6f112a6703e3d5a5c0e38dd4689c566af0a014c4aa7515eef4c97d",
-      "owner_installed": false
+      "bundle_sha256": "7afa8275f9d2d8c2ffce2eaa0bac99cffb359e69a2a41c62060caf044282ae5a",
+      "health_installed": true,
+      "movement_installed": true,
+      "focused_tests_passed": 9,
+      "normal_health_audit_status": "available",
+      "health_checked_at_utc": "2026-10-08T16:25:31Z",
+      "real_alarm_latency_verified": false,
+      "private_log_rows_independently_verified": false,
+      "pilot_modified": false,
+      "policy_changed": false,
+      "owner_installed": true,
+      "health_backup": "/opt/vivameda-operations/crypto-evidence-logs-health-2ptrb4db",
+      "movement_backup": "/opt/vivameda-operations/crypto-evidence-logs-movement-jg4encuv"
     },
     "protocol_v2": "draft only; owner approval after 20 October stop; no pilot outcomes used",
     "live_gateway_acceptance": "owner live: 10/10 facts; zero failed/unassessable/unsupported; 3.24s; evidence_table_only for all 10; interpretation and selection quality unverified",
-    "sol_alarm_handoff": "intended in source; absence from inventory not verified",
-    "stale_trade_diagnosis": "historical payloads not retained; owner current-feed aggregate probe pending"
+    "sol_alarm_handoff": "intended in source; current SOL stablecoin spot inventory/status 1/1; earlier export absence unverified",
+    "stale_trade_diagnosis": "3 current stale trades: ages 505.243/156.483/200.877 seconds; 3 existing-feed requests; historical identity continuity unverified"
   }
 }
