@@ -1,6 +1,6 @@
 # Full crypto setup showcase
 
-Status reference: 5 October 2026. Maintained alongside crypto changes. For an introduction, read the repository README; for exact thresholds, follow the linked source guides. This is the Crypto Lab lane, separate from Vivameda's workforce intelligence and client delivery stack.
+Base status reference: 5 October 2026. TradingView/market-monitoring addendum: 8 October 2026; see the dated handover below. Maintained alongside crypto changes. For an introduction, read the repository README; for exact thresholds, follow the linked source guides. This is the Crypto Lab lane, separate from Vivameda's workforce intelligence and client delivery stack.
 
 ## Purpose and scope
 
@@ -93,3 +93,9 @@ Every crypto code, rule, model, configuration behavior or deployment change must
 Every frozen-ledger mint is excluded before development outcomes are queried. Matching uses eligible 60-minute endpoints and fixed regime/score/cap/liquidity/age/time calipers. Historical reconstructed features remain exploratory. New paper recommendations save contemporaneous snapshots and screening references; all seven fresh checks must PASS for ENTER_REVIEW. This stricter paper filter does not alter scanner admission. Case memory does not imply newly trained weights, a demonstrated trading edge or live execution. Public daily updates contain aggregates and deployment receipts, not private runtime records.
 
 The decision-time endpoint extension was activated at 12:29:55 UTC on 5 October. Its first run exited successfully; initial aggregate counts were zero in every action group. See [endpoint evaluation](../learning/PAPER_EVALUATION.md) and [activation receipt](../learning/ENDPOINT_ACTIVATION_20261005.md). No training or execution was enabled.
+
+## TradingView and BTC/SOL movement monitoring (8 October)
+
+[TradingView handover](TRADINGVIEW_HANDOVER_20261008.md) records authenticated server access and retrieval of three watchlists: 63 unique monitored symbols, including 55 recognized crypto symbols and core BTC/SOL pairs. This inventory does not establish fresh market-data coverage. A focused quote request returned HTTP 429; a candle request returned a WebSocket handshake failure. The underlying provider cause is unverified.
+
+The independent Coinbase BTC/SOL movement monitor remains operational. TradingView-based added-coin alarms remain unverified. The owner agreed to keep TradingView for watchlist synchronization and use direct exchange feeds for movement alerts. That full-watchlist exchange adapter is planned, not implemented. The latest installed restart correction passed 38 engineering tests; long-duration refresh and end-to-end full-watchlist Telegram delivery remain unverified. Live trading is disabled.
