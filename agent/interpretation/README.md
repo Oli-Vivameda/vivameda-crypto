@@ -16,3 +16,7 @@ Private runtime data and company source are excluded. The real answer took 130 s
 ## Factual acceptance correction — 8 October
 
 The 5 October activation verified completion, routing and isolation. The 6 October factual check failed; generation completion is not factual acceptance. The reviewed [8 October guard and activation gate](INTERPRETATION_ACTIVATION_20261008.md) passed 10/10 fixed synthetic facts with zero invented explanations in 29.845 seconds, plus 17 tests. This is constrained evidence selection; unrestricted prose remains unverified. Owner activation and gateway postflight are pending. Installed production source has not been replaced by this review.
+
+## Installed answer contract — 8 October
+
+The factual guard was owner-installed at 12:26:48 UTC. **Crypto explain now returns constrained evidence selection, not free-text interpretation**, falling back to the evidence table when validation or evidence availability fails. Production postflight returned 111 evidence rows in 0.278 seconds. Installed hashes were independently verified. The earlier 10/10 synthetic candidate score is not a new live-gateway ten-question score; that check remains pending. See the existing activation receipt for hashes and backup.
