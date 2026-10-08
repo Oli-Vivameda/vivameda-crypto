@@ -43,3 +43,5 @@ python3 /var/lib/vivameda-engineering/repo/client_learning/crypto_daily_learning
 ```
 
 Next gate: record the returned per-day and per-gate aggregate counts here; identify the actual zero-decision cause. If a fix is warranted, freeze unchanged policy hashes, test it, present the reviewed bundle/SHA, create backup during owner install and verify the first non-zero recorded action aggregate after installation. Do not backfill missed decisions or endpoints. **Task 2 is not complete, and Tasks 3–5 remain unstarted under the owner's ordering rule.** No non-zero activation receipt is claimed.
+
+Receipt sequencing correction: this preliminary receipt was published before Task 3 began. Owner gate-count output is still pending; no journal fix or first non-zero aggregate has been verified.
