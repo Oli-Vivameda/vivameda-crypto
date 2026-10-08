@@ -1,0 +1,90 @@
+{
+  "model": "qwen3:4b-instruct-2507-q4_K_M",
+  "question_count": 10,
+  "facts_correct": 10,
+  "invented_explanations": 0,
+  "response_time_seconds": 29.845,
+  "response_time_scope": "one batch of ten fixed synthetic questions",
+  "passed": true,
+  "failure": null,
+  "results": [
+    {
+      "question_id": "date",
+      "question": "What is the memory generation date in ISO UTC?",
+      "expected_field": "memory.data.generated_at",
+      "expected_value": "2026-10-06T06:50:39Z",
+      "correct": true
+    },
+    {
+      "question_id": "last",
+      "question": "What is the last sampled multiple?",
+      "expected_field": "memory.data.cases.0.last_multiple",
+      "expected_value": "0.55x",
+      "correct": true
+    },
+    {
+      "question_id": "peak",
+      "question": "What is the maximum tracked sampled multiple?",
+      "expected_field": "memory.data.cases.0.tracked_peak_multiple",
+      "expected_value": "2.5x",
+      "correct": true
+    },
+    {
+      "question_id": "failure",
+      "question": "What is the matched failure endpoint threshold?",
+      "expected_field": "thresholds.matched_failure_endpoint",
+      "expected_value": "0.55x",
+      "correct": true
+    },
+    {
+      "question_id": "winner",
+      "question": "What is the matched winner endpoint threshold?",
+      "expected_field": "thresholds.matched_winner_endpoint",
+      "expected_value": "2.00x",
+      "correct": true
+    },
+    {
+      "question_id": "eligible",
+      "question": "How many eligible 60-minute endpoints are supplied?",
+      "expected_field": "memory.data.summary.eligible_60m_endpoints",
+      "expected_value": "12",
+      "correct": true
+    },
+    {
+      "question_id": "missing",
+      "question": "How many missing or incomplete endpoints are supplied?",
+      "expected_field": "memory.data.summary.missing_or_incomplete",
+      "expected_value": "3",
+      "correct": true
+    },
+    {
+      "question_id": "watch",
+      "question": "How many WATCH decisions are recorded in the paper summary?",
+      "expected_field": "paper_summary.data.groups.WATCH.recorded",
+      "expected_value": "0",
+      "correct": true
+    },
+    {
+      "question_id": "validation",
+      "question": "Does predictive validation require live execution?",
+      "expected_field": "validation.live_execution_required",
+      "expected_value": "false",
+      "correct": true
+    },
+    {
+      "question_id": "cause",
+      "question": "What caused the gaps? Is a specific cause established?",
+      "expected_field": "missingness.cause",
+      "expected_value": "not established unless explicitly supplied",
+      "correct": true
+    }
+  ],
+  "fixture_only": true,
+  "free_text_interpretation_verified": false,
+  "mode": "constrained_evidence_selection",
+  "candidate_agent_sha256": "ddd57fea740ce087122482a89ad1ea65d18516f2a077264d0bc6f593b8dd2423",
+  "guard_sha256": "352e9369fd986df447d172b40e3de08f6b4c4fd9bcf9d3d05adbf83cc8d7db74",
+  "provider_requests": 0,
+  "local_model_requests": 1,
+  "production_changed": false
+}
