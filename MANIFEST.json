@@ -192,7 +192,10 @@
     "research/pilot_health/test_diagnose_pause.py": "f40d23568287ba19edb0f2eed0e34810dcb4ab0db337434d19b1504b99cddaad",
     "research/capture_recovery/ACTIVATION_20261006.md": "a9e81f9229c5d5b55782ba06a317b7a8f6584aa3b7b00f58f307456c748f62e1",
     "docs/TRADINGVIEW_HANDOVER_20261008.md": "4ad8c55e89f486956605e85ab983a5ce2cf5bcd2fb55e82967bb48970f8b0319",
-    "research/forward_capture/STATUS_20261008.md": "9b8cec0878b246e628508d1571c905d373f67e404356e047d2f6069ab8e4c75c"
+    "research/forward_capture/STATUS_20261008.md": "9b8cec0878b246e628508d1571c905d373f67e404356e047d2f6069ab8e4c75c",
+    "learning/JOURNAL_DIAGNOSIS_20261008.md": "0b7efdda8446ed736215d9fc6683c77101949594be411faef911f2dedff85a41",
+    "learning/diagnose_journal_counts.py": "9110b375109f61e6bde5bf131891a118c7a8b427dbf4ae1717118c03d17a4382",
+    "learning/test_diagnose_journal_counts.py": "652ede2064e547eefcebd365893877cb89f46f2b6f072c3892bd930073ee1d44"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -588,6 +591,18 @@
       "complete_incident_send_history_verified": false,
       "outcomes_read": false,
       "pilot_modified": false
+    },
+    "task_2": {
+      "receipt": "learning/JOURNAL_DIAGNOSIS_20261008.md",
+      "state": "read_only_diagnosis_pending_owner_counts",
+      "recorded_enter_review": 0,
+      "recorded_watch": 0,
+      "recorded_skip": 0,
+      "exporter_bundle_sha256": "bf80b0818fb0e648fffe4f13dc30f9dcd380d246ac1bca3a144b7a462a695f3e",
+      "exporter_tests_passed": 6,
+      "fix_installed": false,
+      "live_gate_counts_verified": false,
+      "learning_regression_tests_passed": 24
     }
   }
 }
