@@ -7,7 +7,7 @@
     ".gitignore": "be399efba81fec45218410e877c3d3935a920538dd15e3ea558a8d5a2bdf68ec",
     "SIGNALS.md": "e6912005df13615138935c45b77756b23dee636891cb85faed9d273723117cc8",
     "requirements.txt": "0d0d2938e5443f318fc97363f42cffe3309df1b718cc2bf713263a68cb7bbee5",
-    "README.md": "fe8bfb8010cbf486d12148bb2be11e3ab378d17c3af5547ed69163e47addb608",
+    "README.md": "49064468012c0b3d10bf3d8ffa20e6d47cf34fa3631a39b3b2c45b16e3e8f47d",
     "SECURITY.md": "fe6ff00dd33525fee4c4fdeff8eea567ee5801705fcad953880bf9f1d58a7a8c",
     "scripts/export_monitor_sources.py": "0918f7a19ed5d2fda85d041c949eaeca0ea3f928940f597a8f577e4611c12922",
     "scripts/install_wallet_connector.py": "703fee1b3985d6afae524cc52c2427198050e8fbcb3140046deb3ab5fd543052",
@@ -104,7 +104,7 @@
     "scripts/freeze_wallet_replay.py": "4a24925f60565f5f9a81292c3c5d4a32f670264639e6a837a91960913e3a1ea2",
     "scripts/test_freeze_wallet_replay.py": "4a2691ddf12b6c5c8167f9e5a7ab7cfa04de3790ed057a985c8170a6a1c0995f",
     "scout/EVIDENCE_CAPACITY_20261005.md": "d99aa23ecb6c7b2d461d1023420c997cc54fff0ce4f17377ea3fea484ac2ac6e",
-    "docs/FULL_SETUP.md": "d93d0f75f90a60e9ad038f4903e45678dd29d6a743b2b6d9f120873611463680",
+    "docs/FULL_SETUP.md": "9802413a2d36d5347bd251a6eb5bcbb175d1d774dd2e56f968cc2f4ce7140c58",
     "docs/REPOSITORY_POLICY.md": "937df3adcdce8dde1722f0931c10580a48a3a93592755a925f643eb1245ff4f3",
     "agent_trader/README.md": "d3ed749204c25ec6466e67d862eff85d7eaba67f423e13455475c2320853efbe",
     "agent_trader/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -191,7 +191,7 @@
     "research/pilot_health/diagnose_pause.py": "b1f3239c47488ba3db9c86609e702ed579206838b49749f9d5f1ded65b0c601c",
     "research/pilot_health/test_diagnose_pause.py": "f40d23568287ba19edb0f2eed0e34810dcb4ab0db337434d19b1504b99cddaad",
     "research/capture_recovery/ACTIVATION_20261006.md": "a9e81f9229c5d5b55782ba06a317b7a8f6584aa3b7b00f58f307456c748f62e1",
-    "docs/TRADINGVIEW_HANDOVER_20261008.md": "f7da4a978d3d3f47a4b454284e83dd49b14dad37086fdcc8d1fb6851e12bdc76"
+    "docs/TRADINGVIEW_HANDOVER_20261008.md": "4ad8c55e89f486956605e85ab983a5ce2cf5bcd2fb55e82967bb48970f8b0319"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -533,21 +533,42 @@
     "quote_failure": "HTTP 429",
     "candle_failure": "WebSocket bad handshake",
     "existing_btc_sol_provider": "coinbase_spot",
-    "full_watchlist_exchange_adapter": "implemented_validated_pending_installation",
-    "engineering_tests_passed": 38,
+    "full_watchlist_exchange_adapter": "installed_partial_coverage_warming",
+    "engineering_tests_passed": 62,
     "source_publication": "operational_documentation_only",
-    "installed_application_sha256": "1d1f638eb74a9ef263f03d3881e813711b13721da7d979448d0845949b37b5db",
+    "installed_application_sha256": "c156e5d3a51ed072ec931887236a9df6f52ee48bdd66219edb98dd2c667666c8",
     "live_execution": false,
     "exchange_candidate": {
       "server_commit": "621b226",
       "tests_passed": 62,
       "live_public_eth_probes_passed": 5,
-      "installed": false,
-      "actual_watchlist_coverage_verified": false,
-      "telegram_delivery_verified": false,
+      "installed": true,
+      "actual_watchlist_coverage_verified": true,
+      "telegram_delivery_verified": true,
       "bundle_sha256": "e25bed8577d75afdd66a8bfd991fd61f2fc4e90424155d2a93978deaccd324b4",
       "app_sha256": "c156e5d3a51ed072ec931887236a9df6f52ee48bdd66219edb98dd2c667666c8",
       "health_postflight_corrected": true
+    },
+    "exchange_deployment": {
+      "installed": true,
+      "watchlists": 3,
+      "account_symbols": 61,
+      "crypto_symbols": 53,
+      "non_crypto_symbols": 8,
+      "installation_fresh_prices": 40,
+      "installation_unavailable_crypto": 13,
+      "installation_unavailable_reasons": {
+        "unsupported_venue": 11,
+        "unsupported_instrument": 1,
+        "pair_not_listed": 1
+      },
+      "followup_fresh_prices": 39,
+      "followup_unavailable_crypto": 14,
+      "synthetic_telegram_test": "sent",
+      "real_movement_alert_verified": false,
+      "first_15minute_window_verified": false,
+      "postrestart_watchlist_sync_verified": false,
+      "full_watchlist_available": false
     }
   }
 }

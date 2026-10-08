@@ -19,7 +19,7 @@ A continuously running Solana small-cap observation and research system on Hetzn
 | Agent context | Select dated crypto knowledge and limitations for an agent session | Public extraction; private conversational runtime excluded |
 | Trading-agent layer | Paper proposal records, owner feedback and versioned playbook | Scaffold; no continuous agent or live execution |
 | Transaction-decoder experiments | Offline DFlow/Pump endpoint reconciliation | Not promoted into production |
-| TradingView and market movements | Account/watchlist sync plus independent BTC/SOL measurements | Watchlists verified; TradingView quotes/candles blocked; exchange adapter built and tested; installation pending ([handover](docs/TRADINGVIEW_HANDOVER_20261008.md)) |
+| TradingView and market movements | Account/watchlist sync plus independent BTC/SOL measurements | Watchlists verified; TradingView quotes/candles blocked; exchange adapter installed; partial fresh-price coverage; 15-minute validation pending ([handover](docs/TRADINGVIEW_HANDOVER_20261008.md)) |
 | Broad survivor discovery / live trading | Universe-wide survivor discovery and broker/wallet execution | Not implemented |
 
 ## How it fits together
