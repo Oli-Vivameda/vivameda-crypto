@@ -213,7 +213,21 @@
     "agent/interpretation/FACTUAL_ACCEPTANCE.json": "34c333fd082a5816f8cb5c38a40ff0be0a009b0cf4a8d276057bd03f00ce97e1",
     "agent/interpretation/model_proxy.py": "6893358dc8ce3a57dfd6d2c63fa977871f24b3f677e2f3093e9bfbe25fd2f615",
     "agent/interpretation/crypto_agent.py": "ddd57fea740ce087122482a89ad1ea65d18516f2a077264d0bc6f593b8dd2423",
-    "agent/interpretation/test_factual_guard.py": "fef228bb346ef35f2032084a225d973bf81b695d53b489bc59c598c4c6a5717d"
+    "agent/interpretation/test_factual_guard.py": "fef228bb346ef35f2032084a225d973bf81b695d53b489bc59c598c4c6a5717d",
+    "research/PROTOCOL_DIRECTIVE3_20261008.md": "ef5ce88f961ca4a2795faf5052987b852a3b02d028b5d2546c33a5aefc75a91e",
+    "research/build_launch_patch.py": "ae51a57b87d83f9df8fcbfe7136b6faae5d1d8f47bc2c198494ccddf182c00ca",
+    "research/candidate_early_scout.txt": "0f178cac4b45bf972aa8dd5c6f1b399b4dbc1b5211123ca384bb5109fd6adba6",
+    "research/earlier_entry.py": "8a8a7e54d3807e583fb07a1eefbfe0ec3378daf803ee8100c3c4c1dfc49ce60c",
+    "research/frozen_scorer_source.txt": "3e73978a41e2e21e090a7eea92bbdc1a52dc190ce229ac262a3c6a2b0af6a043",
+    "research/install_launch_path.py": "05790afc51779652d32defaf1af7196f3b89863df9d849a959e5017831ffebbd",
+    "research/install_shadow.py": "ee64cd2d0bcc9c6d358aa00cc5c3eee9dcbe83f690f5f06a30047fa57368b463",
+    "research/launch_path.py": "0bfdfadc1b67fc0f3708339f7ce4f6e2da67e6f2e225cff01198bb483aa53262",
+    "research/shadow_policy.DRAFT.json": "50db7deaf5057f085555bf73c32ae08b76f3161f203b77fc76dcb0bf62aeb4ef",
+    "research/shadow_scorer.py": "c39b4a82530d98b69b3669036ad47843bd007ae5f0c04c16c4349249026262f4",
+    "research/test_directive3.py": "b02add017ecb98f1d01e6cdbcda63ce8af957f9eaf8f9fc1372811c747970c6d",
+    "research/vivameda-earlier-entry-shadow.service": "3794398f027cdbd191cde1b863555e450590bbf93baea6406a38928f1ce6700b",
+    "research/vivameda-earlier-entry-shadow.timer": "db8000a0874c3755f760bd1a7272e6fa3a5bb89b1f26c2195eb936eabd61c261",
+    "research/bundle_manifest.json": "9c4774019e7976f90e2e7b4573a178854e587da542e2676d1f80a410a9a8fcbe"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -761,5 +775,15 @@
     "live_gateway_acceptance": "owner live: 10/10 facts; zero failed/unassessable/unsupported; 3.24s; evidence_table_only for all 10; interpretation and selection quality unverified",
     "sol_alarm_handoff": "intended in source; current SOL stablecoin spot inventory/status 1/1; earlier export absence unverified",
     "stale_trade_diagnosis": "3 current stale trades: ages 505.243/156.483/200.877 seconds; 3 existing-feed requests; historical identity continuity unverified"
+  },
+  "directive3": {
+    "status": "inactive_candidates_development_export_pending",
+    "protocol": "research/PROTOCOL_DIRECTIVE3_20261008.md",
+    "review_bundle": "research/bundle_manifest.json",
+    "review_bundle_sha256": "9c4774019e7976f90e2e7b4573a178854e587da542e2676d1f80a410a9a8fcbe",
+    "python": "3.12",
+    "synthetic_tests_passed": 49,
+    "holdout_opened": false,
+    "production_installed": false
   }
 }
