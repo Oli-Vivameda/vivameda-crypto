@@ -191,7 +191,8 @@
     "research/pilot_health/diagnose_pause.py": "b1f3239c47488ba3db9c86609e702ed579206838b49749f9d5f1ded65b0c601c",
     "research/pilot_health/test_diagnose_pause.py": "f40d23568287ba19edb0f2eed0e34810dcb4ab0db337434d19b1504b99cddaad",
     "research/capture_recovery/ACTIVATION_20261006.md": "a9e81f9229c5d5b55782ba06a317b7a8f6584aa3b7b00f58f307456c748f62e1",
-    "docs/TRADINGVIEW_HANDOVER_20261008.md": "4ad8c55e89f486956605e85ab983a5ce2cf5bcd2fb55e82967bb48970f8b0319"
+    "docs/TRADINGVIEW_HANDOVER_20261008.md": "4ad8c55e89f486956605e85ab983a5ce2cf5bcd2fb55e82967bb48970f8b0319",
+    "research/forward_capture/STATUS_20261008.md": "9b8cec0878b246e628508d1571c905d373f67e404356e047d2f6069ab8e4c75c"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -569,6 +570,24 @@
       "first_15minute_window_verified": false,
       "postrestart_watchlist_sync_verified": false,
       "full_watchlist_available": false
+    }
+  },
+  "crypto_directive_20261008": {
+    "task_1": {
+      "receipt": "research/forward_capture/STATUS_20261008.md",
+      "state": "collecting",
+      "snapshot_utc": "2026-10-08T10:32:27Z",
+      "valid_cycles": 315,
+      "rejected_cycles": 2613,
+      "qualified_events": 21,
+      "matched_events": 3,
+      "control_entries": 5,
+      "qualified_closed_covered": 20,
+      "control_closed_covered": 5,
+      "constant_rate_projected_qualified_total": 136,
+      "complete_incident_send_history_verified": false,
+      "outcomes_read": false,
+      "pilot_modified": false
     }
   }
 }
