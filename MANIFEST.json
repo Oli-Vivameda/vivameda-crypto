@@ -214,7 +214,7 @@
     "agent/interpretation/model_proxy.py": "6893358dc8ce3a57dfd6d2c63fa977871f24b3f677e2f3093e9bfbe25fd2f615",
     "agent/interpretation/crypto_agent.py": "ddd57fea740ce087122482a89ad1ea65d18516f2a077264d0bc6f593b8dd2423",
     "agent/interpretation/test_factual_guard.py": "fef228bb346ef35f2032084a225d973bf81b695d53b489bc59c598c4c6a5717d",
-    "research/PROTOCOL_DIRECTIVE3_20261008.md": "deead2c89cadfc6248c7be230a1806d1ef739212ee490d482889698ab5b691db",
+    "research/PROTOCOL_DIRECTIVE3_20261008.md": "8a91f01434b315cb3d7207853eace5b730c07de40df8bc7d7b46e4748cf3837d",
     "research/build_launch_patch.py": "ae51a57b87d83f9df8fcbfe7136b6faae5d1d8f47bc2c198494ccddf182c00ca",
     "research/candidate_early_scout.txt": "0f178cac4b45bf972aa8dd5c6f1b399b4dbc1b5211123ca384bb5109fd6adba6",
     "research/earlier_entry.py": "8a8a7e54d3807e583fb07a1eefbfe0ec3378daf803ee8100c3c4c1dfc49ce60c",
@@ -227,7 +227,15 @@
     "research/test_directive3.py": "b02add017ecb98f1d01e6cdbcda63ce8af957f9eaf8f9fc1372811c747970c6d",
     "research/vivameda-earlier-entry-shadow.service": "3794398f027cdbd191cde1b863555e450590bbf93baea6406a38928f1ce6700b",
     "research/vivameda-earlier-entry-shadow.timer": "db8000a0874c3755f760bd1a7272e6fa3a5bb89b1f26c2195eb936eabd61c261",
-    "research/bundle_manifest.json": "88be4e8ac82c52f272a4bd2d93adc728a99b6cdf7e0d47403a77a724e5fb1ef5"
+    "research/bundle_manifest.json": "513dc7048bd939cf37e63f18389edc60b1cfc087dc6cc5d54b0994fad19aa530",
+    "research/archiver/read_receipt.py": "f11fef37b01dc69765816bc4d03370b3aa3924c126c8c9c1901895801b514d87",
+    "research/archiver/vivameda-snapshot-archive.service": "ad573eb1dda2f596166336b9113f2e9ca0614fc8e719cd7867e9b17b9f8e9539",
+    "research/archiver/second_leg_grid.json": "4413b7417321fb114b4ad7c79432da2a80d38e7e44b3511049c8e887789f61b9",
+    "research/archiver/vivameda-snapshot-archive.timer": "b1d7268152eb8b41f1da3040f944ff437358434e3596ac6fc45f3eab97e71fb7",
+    "research/archiver/test_archiver.py": "7dc8033969a788e97eec7a812fceb90bd6288a943a8fefac73c4110fdfeae28e",
+    "research/archiver/install_archiver.py": "47e5aa934ccc7573ac428eee7bac7700e8f52045bff8f5349c4b2b35078a6fb7",
+    "research/archiver/kill_switch.py": "60807c7a027161313c334c21ce0db0700f845b35be7c1517787a8aa8bff9b895",
+    "research/archiver/archiver.py": "d8167b3b33db6d25438425f374aa71cec23588a5a6fd08637cdd70235019ad44"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -777,10 +785,10 @@
     "stale_trade_diagnosis": "3 current stale trades: ages 505.243/156.483/200.877 seconds; 3 existing-feed requests; historical identity continuity unverified"
   },
   "directive3": {
-    "status": "development_insufficient_holdout_closed_shadow_inactive",
+    "status": "amendment1_archiver_reviewed_owner_install_pending_holdout_closed",
     "protocol": "research/PROTOCOL_DIRECTIVE3_20261008.md",
     "review_bundle": "research/bundle_manifest.json",
-    "review_bundle_sha256": "88be4e8ac82c52f272a4bd2d93adc728a99b6cdf7e0d47403a77a724e5fb1ef5",
+    "review_bundle_sha256": "513dc7048bd939cf37e63f18389edc60b1cfc087dc6cc5d54b0994fad19aa530",
     "python": "3.12",
     "synthetic_tests_passed": 49,
     "holdout_opened": false,
@@ -789,6 +797,25 @@
     "eligible_candidate_minutes": 276,
     "run_minutes": 76,
     "nonoverlapping_run_episodes": 6,
-    "rule_freeze_ready": false
+    "rule_freeze_ready": false,
+    "archiver": {
+      "installed": false,
+      "bundle_sha256": "012afbd8d1fd635c89edafe11cbb895d899e0c539bb0f2230b5b438493cdd73b",
+      "synthetic_tests_passed": 20,
+      "existing_regression_tests_passed": 49,
+      "systemd_syntax_verified": true,
+      "development_days": 21,
+      "holdout_days": 7,
+      "baseline_hours": 2,
+      "after_postflight_hours": 2,
+      "service_user": "owner-approved existing health user; no engineering permission changes",
+      "provider_requests": 0,
+      "telegram_sends": 0,
+      "pilot_modified": false,
+      "first_copy_rows": null,
+      "live_postflight_verified": false
+    },
+    "second_leg_grid": "research/archiver/second_leg_grid.json",
+    "g": null
   }
 }
