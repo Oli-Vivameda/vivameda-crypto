@@ -195,14 +195,14 @@
     "agent/interpretation/README.md": "6c2d044ddfbd0e01d497a322e01b637e4f70347349f4f2e6a960ee6dd8387d7e",
     "agent/interpretation/acceptance_facts.py": "16ab28558f30a6f838f83b9717b6f9491517fc7b14eab04e886e876bee0b97ad",
     "agent/interpretation/factual_guard.py": "352e9369fd986df447d172b40e3de08f6b4c4fd9bcf9d3d05adbf83cc8d7db74",
-    "agent/interpretation/install_factual_guard.py": "4ed707a2e8d1456d29367cd0eac31bb62cc4e5a27c00aff960ffdcfad62e27bf",
+    "agent/interpretation/install_factual_guard.py": "20228dbd72ec0f581075afdc63b6b488153d18d44a446c7b1db3e5d389be6bac",
     "agent/interpretation/INTERPRETATION_ACTIVATION_20261005.md": "10b0234aa7c9f24d9ad5ff8c13d54860ec818c7d463a2c806079254a64ed6505",
     "agent/interpretation/INTERPRETATION_ACTIVATION_20261008.md": "44dd11f1a105b7947e1046d000b7f1d3070a030ec94a6f9263583f88d5ce136a",
     "agent/interpretation/FACTUAL_ACCEPTANCE.json": "34c333fd082a5816f8cb5c38a40ff0be0a009b0cf4a8d276057bd03f00ce97e1",
     "agent/interpretation/model_proxy.py": "6893358dc8ce3a57dfd6d2c63fa977871f24b3f677e2f3093e9bfbe25fd2f615",
     "agent/interpretation/crypto_agent.py": "ddd57fea740ce087122482a89ad1ea65d18516f2a077264d0bc6f593b8dd2423",
     "agent/interpretation/test_factual_guard.py": "fef228bb346ef35f2032084a225d973bf81b695d53b489bc59c598c4c6a5717d",
-    "agent/interpretation/test_install_factual_guard.py": "1218b3e2bb69cc1494067d327e6a2653f94229400faed786e2bcdcae6de6854c"
+    "agent/interpretation/test_install_factual_guard.py": "7dbf60bb0ac3313e4b6ca065f49a12669dd11fbf2e96095fc2285a2e15b26062"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
