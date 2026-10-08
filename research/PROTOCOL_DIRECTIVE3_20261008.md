@@ -604,3 +604,53 @@ Repair only reviewed new-component code or installation assumptions, without
 relaxing the owner's read-only, health, disk or frozen-source gates. Any revised
 installer requires a new bundle hash, owner install and postflight. Holdout remains
 closed and g remains null. Append the diagnosis and subsequent receipt here only.
+
+
+### 2026-10-08T19:45Z — owner archiver installed; baseline only
+
+Owner diagnostic: all 11 preflight stages passed. Scanner/status-route hashes
+matched, existing service user vivameda-scout had the required path readability,
+health report was collecting and five seconds old, all six frozen source/unit
+files were readable, and all four new-component existence flags were false.
+The new timer was inactive. The earlier generic refusal was not reproduced; its
+actual cause remains unknown. No source changes or new bundle were needed.
+
+Owner installation then succeeded and validated the same reviewed bundle:
+012afbd8d1fd635c89edafe11cbb895d899e0c539bb0f2230b5b438493cdd73b.
+Backup: /opt/vivameda-operations/snapshot-archiver-source-backup-g2i7g2s2.
+The installer verified unchanged frozen scanner/learning source and existing unit
+hashes, installed only the separate component, and enabled/checked its new timer.
+This is owner-reported install postflight, not an independent live filesystem audit.
+
+| Baseline field | Owner-reported value |
+|---|---:|
+| Health checked_at (Unix seconds UTC) | 1791488646 |
+| Health checked_at UTC | 2026-10-08T19:44:06Z |
+| Accepted cycles, cumulative | 414 |
+| Rejected cycles, cumulative | 3047 |
+| Last successful cycle age, seconds | 521 |
+| Scanner WAL bytes | 18313432 |
+| First-run copied rows | 0 |
+
+First-run copied timestamp range is null. These cumulative cycle counters are the
+starting baseline, NOT two-hour deltas or a post-install rejection rate comparison.
+No first copy has been verified. collection_activation_pending=true: the development
+and holdout dates are not yet assigned; T must come from the durable activation
+record at the first copy attempt after the baseline, not the install timestamp.
+Engineering permissions unchanged; scanner_changed=false; pilot_modified=false;
+provider_requests=0; telegram_sends=0. Holdout remains closed and g remains null.
+
+Next gate: obtain the owner metadata receipt after the first copy and again once
+the two-hour after-window report is available. Record actual activation date,
+first copied row count/time range, batch runtimes, accepted/rejected deltas, last
+successful-cycle ages, WAL measurements and any scoped timer stop. No outcomes,
+archive identities, database queries or production restarts are needed.
+
+```bash
+python3 /opt/vivameda-snapshot-archive/read_receipt.py
+```
+
+Astra: the installed baseline receipt supersedes the previous pending-install
+gate. Do not reinstall, reset activation or delete archive state. Honour the
+existing immediate timer kill conditions. Keep A inactive, B pending post-stop
+source re-audit, and all downstream layers frozen. Append future receipts here only.
