@@ -142,7 +142,7 @@
     "agent/runtime/RUNTIME_ACTIVATION_20261005.md": "262e70438ef3ed9eff44b619aea459efed33e47bf3a0c0dd214e9f3c075484ad",
     "agent/interpretation/test_interpretation.py": "90f2e9522ce8d7e2b6882d5ce351001e2515273e30f58385a932491dfb09c930",
     "agent/interpretation/model_proxy.py": "6893358dc8ce3a57dfd6d2c63fa977871f24b3f677e2f3093e9bfbe25fd2f615",
-    "agent/interpretation/crypto_agent.py": "75b58cf48ae1ec4d3bdf7cbfa800a8979331fadad2b450672a0a5648e9853a3a",
+    "agent/interpretation/crypto_agent.py": "ddd57fea740ce087122482a89ad1ea65d18516f2a077264d0bc6f593b8dd2423",
     "agent/interpretation/INTERPRETATION_ACTIVATION_20261005.md": "10b0234aa7c9f24d9ad5ff8c13d54860ec818c7d463a2c806079254a64ed6505",
     "agent/interpretation/README.md": "e09061fe01d784ae73f0d6a0076ed3c8bec7b054effc0efad6a5868e98add981",
     "agent/interpretation/install_interpretation.py": "1acc31aa2938efe3f2b38b9e2ed30efe56ace22a7fa1b0a883f648c6914a752b",
@@ -195,7 +195,13 @@
     "research/forward_capture/STATUS_20261008.md": "9b8cec0878b246e628508d1571c905d373f67e404356e047d2f6069ab8e4c75c",
     "learning/JOURNAL_DIAGNOSIS_20261008.md": "0b7efdda8446ed736215d9fc6683c77101949594be411faef911f2dedff85a41",
     "learning/diagnose_journal_counts.py": "9110b375109f61e6bde5bf131891a118c7a8b427dbf4ae1717118c03d17a4382",
-    "learning/test_diagnose_journal_counts.py": "652ede2064e547eefcebd365893877cb89f46f2b6f072c3892bd930073ee1d44"
+    "learning/test_diagnose_journal_counts.py": "652ede2064e547eefcebd365893877cb89f46f2b6f072c3892bd930073ee1d44",
+    "agent/interpretation/factual_guard.py": "352e9369fd986df447d172b40e3de08f6b4c4fd9bcf9d3d05adbf83cc8d7db74",
+    "agent/interpretation/acceptance_facts.py": "16ab28558f30a6f838f83b9717b6f9491517fc7b14eab04e886e876bee0b97ad",
+    "agent/interpretation/test_factual_guard.py": "fef228bb346ef35f2032084a225d973bf81b695d53b489bc59c598c4c6a5717d",
+    "agent/interpretation/install_factual_guard.py": "28ec14f29991a27c8f314d77cedd6a626de04759a7fde4633a9268c60e2d2aad",
+    "agent/interpretation/FACTUAL_ACCEPTANCE.json": "34c333fd082a5816f8cb5c38a40ff0be0a009b0cf4a8d276057bd03f00ce97e1",
+    "agent/interpretation/INTERPRETATION_ACTIVATION_20261008.md": "125c58cfd895e46223d0f60d92c5c2d4c36c65b2b2aec042520781110c1c5ad9"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -603,6 +609,18 @@
       "fix_installed": false,
       "live_gate_counts_verified": false,
       "learning_regression_tests_passed": 24
+    },
+    "task_3": {
+      "status": "reviewed_candidate_owner_activation_pending",
+      "receipt": "agent/interpretation/INTERPRETATION_ACTIVATION_20261008.md",
+      "facts_correct": 10,
+      "questions": 10,
+      "invented_explanations": 0,
+      "response_time_seconds": 29.845,
+      "tests_passed": 17,
+      "activated": false,
+      "bundle_sha256": "de9d4a24f43f38f2f5f7793f2365c612f3ace98b6b7843910003f07b2f154ba0",
+      "next_gate": "owner_install_and_gateway_postflight"
     }
   }
 }
