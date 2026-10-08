@@ -1,5 +1,5 @@
 """Passive snapshot custody only. No analysis, providers, ledger or capture access."""
-import argparse, fcntl, hashlib, json, os, pathlib, shutil, sqlite3, subprocess, sys, time
+import argparse, fcntl, hashlib, json, os, pathlib, shutil, sqlite3, subprocess, sys, time, tempfile
 ROOT=pathlib.Path('/var/lib/vivameda-snapshot-archive')
 SOURCE=pathlib.Path('/opt/vivameda-crypto-early-scout/data/early_scout.sqlite')
 STATUS=pathlib.Path('/opt/vivameda-crypto-pilot-health/read_status.py')
@@ -12,9 +12,14 @@ BATCH=5000
 COLS=('mint','ts','pair','price','mc','liq','vol_m5','vol_h1','buys_m5','sells_m5','buys_h1','sells_h1','pc_m5','pc_h1')
 INCIDENTS={'paused','stalled','unhealthy','unavailable'}
 def atomic(path,value):
-    tmp=path.with_name('.'+path.name+'.tmp')
-    with tmp.open('w') as out:json.dump(value,out,sort_keys=True,allow_nan=False);out.write('\n');out.flush();os.fsync(out.fileno())
-    os.replace(tmp,path)
+    fd,name=tempfile.mkstemp(prefix='.'+path.name+'-',dir=path.parent)
+    tmp=pathlib.Path(name)
+    try:
+        with os.fdopen(fd,'w') as out:json.dump(value,out,sort_keys=True,allow_nan=False);out.write('\n');out.flush();os.fsync(out.fileno())
+        os.replace(tmp,path)
+    finally:
+        if tmp.exists():tmp.unlink()
+
 def log(root,record):
     fd=os.open(root/'runs.jsonl',os.O_WRONLY|os.O_APPEND|os.O_CREAT|os.O_NOFOLLOW,0o600)
     with os.fdopen(fd,'a') as out:out.write(json.dumps(record,sort_keys=True,allow_nan=False)+'\n');out.flush();os.fsync(out.fileno())
@@ -35,7 +40,7 @@ def wal_bytes(source):
     except FileNotFoundError:return 0
 def health_alarm_since(start):
     # Existing sanitized audit only; no capture DB or endpoint reads.
-    with AUDIT.open('rb') as stream:
+    with os.fdopen(os.open(AUDIT,os.O_RDONLY|os.O_NOFOLLOW),'rb') as stream:
         stream.seek(0,2);size=stream.tell();stream.seek(max(0,size-65536))
         if size>65536:stream.readline()
         for line in stream:

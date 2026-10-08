@@ -112,6 +112,11 @@ class ArchiveTests(unittest.TestCase):
         import read_receipt
         with patch.object(sqlite3,'connect',side_effect=AssertionError('DB read')):
             self.assertEqual(read_receipt.receipt(self.state),{})
+    def test_atomic_output_does_not_follow_destination_symlink(self):
+        victim=self.root/'untouched';victim.write_text('unchanged')
+        target=self.state/'STOP.json';target.symlink_to(victim)
+        a.stop(self.state,'safe')
+        self.assertEqual(victim.read_text(),'unchanged');self.assertFalse(target.is_symlink())
     def test_grid_two_parameters_nine_choices(self):
         g=json.loads((pathlib.Path(__file__).parent/'second_leg_grid.json').read_text())
         self.assertEqual(len(g['second_leg']['parameters']),2);self.assertEqual(g['second_leg']['grid_size'],9);self.assertIsNone(g['g'])
