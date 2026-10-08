@@ -63,3 +63,5 @@ python3 learning/install_daily_learning.py --expected-sha256 d63bc98534fa81af735
 Daily GitHub updates should publish dates, aggregate evidence coverage, service/test receipts and any reviewed source changes. They must distinguish case-memory updates from trained weights and pending installation from verified operation.
 
 The paper endpoint extension was activated at 12:29:55 UTC. See [paper evaluation](PAPER_EVALUATION.md) and [activation receipt](ENDPOINT_ACTIVATION_20261005.md). Its first aggregate counts were zero; prospective observations must accumulate.
+
+Current owner decision (8 October): journal **dormant by design until the prediction ledger closes (200 eligible or 2026-11-03T06:45:43Z)**. Keep the frozen population; do not amend. After closure, verify ALERT-to-writer admission and publish the first non-zero aggregate.

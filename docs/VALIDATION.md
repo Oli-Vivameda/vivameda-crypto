@@ -19,3 +19,11 @@ This showcase update: three paper-scaffold tests passed; local relative document
 ## Daily learning, 5 October 2026
 
 12 learning tests passed locally and in the engineering-server checkout: exact endpoint coverage, matched controls, frozen policy, append-only/hash-chain records, read-only production access, holdout exclusion, memory staleness/relevance, additive crypto agent patch, nonfinite data and current prospective journalling. The hash-locked installer passed non-install validation. Synthetic fixture results are not real-market performance evidence. Production base activation was verified around 12:12 UTC: successful review/journal runs; 139 development tokens, 78 eligible 60-minute endpoints and 61 missing/incomplete, with six exploratory matched pairs and eight frozen-ledger identifiers excluded. Endpoint extension activation was verified at 12:29:55 UTC; first run successful with zero initial aggregate counts. 18 base/endpoint tests passed locally and on the engineering server. No performance or training claim follows from activation; see [learning](../learning/README.md).
+
+## Directive 2 Task B — interpreter gate
+
+The release check now explicitly supports Python 3.12 and refuses every other major/minor before reading the manifest or starting tests. This is the owner-permitted version-refusal option, not a scorer regeneration or pilot-binding change. Server run: 442 tests, 13 isolated suites and 202 file hashes passed on Python 3.12. Two refusal regressions cover Python 3.13 and 3.14 before file/process access. The displayed Python 3.13 refusal was exercised by substituting version_info in a 3.12 test process; an actual 3.13 interpreter was not available/run. Individual frozen-builder tests may still fail under an unsupported interpreter; no cross-version full-suite claim is made.
+
+Message: `Release blocked: supported interpreter is Python 3.12; Python 3.13 is unsupported because frozen scorer AST hashes are version-bound. Use Python 3.12; deployed source and pilot binding must not be regenerated.`
+
+Next gate: use Python 3.12 for release. No deployed scanner, tracker, scoring policy, frozen fixture or capture activation bytes changed.

@@ -60,3 +60,7 @@ All 47 retained ALERT cases are excluded by opaque holdout membership before cla
 Options, neither implemented: (1) keep the frozen population: observed post-exclusion volume is zero per day; future volume is unknown. (2) separately review an amendment adding scanner-scored candidates while preserving holdout exclusion and policy definitions. Retained SHADOW source cases averaged 168/day over the two complete UTC days, versus 15.5 ALERT cases/day before exclusion. Thus 168/day is a candidate-input planning ceiling for that observed SHADOW population, not an expected decision rate: its holdout, duplicate and timing losses are unmeasured. A defensible post-gate daily decision forecast needs those aggregates. These retained cases do not enumerate every scanner-scored candidate. No amendment, backfill or policy change is activated.
 
 Receipt: installed source/policy hashes matched; aggregate exporter succeeded; all-source eligibility is not measured. Next gate: owner choice on population design.
+
+## Owner decision — Directive 2 continuation
+
+Option 1 selected: keep the frozen population and do not amend. Status: **dormant by design until the prediction ledger closes (200 eligible or 2026-11-03T06:45:43Z)**. The 47 excluded ALERT cases and zero decisions are consistent with this design. After closure, verify new ALERT cases reach the writer under unchanged rules and publish the first non-zero aggregate. No historical backfill, threshold change or population expansion. This future check is pending.

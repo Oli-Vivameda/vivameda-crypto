@@ -6,6 +6,8 @@ def included(p):
     parts=p.relative_to(ROOT).parts
     return not any(x in {'.git','.venv','__pycache__','data','logs','numerical_training_v1'} for x in parts) and p.suffix!='.pyc' and p.name!='MANIFEST.json'
 def main():
+    if sys.version_info[:2] != (3,12):
+        raise SystemExit('Release blocked: supported interpreter is Python 3.12; Python '+str(sys.version_info[0])+'.'+str(sys.version_info[1])+' is unsupported because frozen scorer AST hashes are version-bound. Use Python 3.12; deployed source and pilot binding must not be regenerated.')
     data=json.loads((ROOT/'MANIFEST.json').read_text())
     actual={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in ROOT.rglob('*') if p.is_file() and included(p)}
     if actual!=data['sha256']:

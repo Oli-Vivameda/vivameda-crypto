@@ -162,3 +162,23 @@ Unavailable reasons: unsupported venue 11; stale trade 3; pair not listed 1; uns
 Two real-alarm delivery records have status sent, separate from the synthetic labelled test. This is retained per-instrument state, not a complete alarm history or recipient-delivery verification. No observation-to-API-acknowledgement delay was retained, so measured latency remains unverified. This export does not establish a newly completed watchlist sync or OAuth refresh. The scheduled 9 October check is 10:25 UTC / 13:25 Cyprus; timing instrumentation still requires its reviewed bundle and owner installation.
 
 Receipt: 37 instruments measuring, 16 crypto unavailable, 8 non-crypto, 2 retained real sent records. Pending: SOL in this export, live ten-question agent acceptance, alarm latency, refreshed authorization and private adapter decisions. No thresholds, cadence, scanner or pilot change.
+
+## Directive 2 continuation — SOL and stale trades
+
+Source confirmation: `tradingview_server_20261008/exchange.py:delegated` delegates BTC/SOL USD/USDT/USDC **spot alarms**; `_collect.one` first writes symbol measuring/warming status, then sets `notification=existing_btc_sol_monitor` and returns before alarm transmission. `app.py:Worker.scan` now uses actual watchlist inventory, without injecting CORE symbols; `_legacy_scan` did inject them but is not the active scan. `crypto_market_moves_20261008/config.json` contains BTC-USD (±1%) and SOL-USD (±2%), 900-second window/1,800-second cooldown; `monitor.fetch` uses the existing Coinbase ticker. This proves intended alarm handoff, **not that SOL absence is a delegation-induced omission**. A SOL instrument in the current watchlist would still get a status entry. Private inventory must establish whether it is absent from the watchlists or unavailable without mapping (the exporter classifies those as unavailable). Exact current cause remains unverified.
+
+Three stale-trade entries were reported at 12:20:26 UTC. `exchange.tick_payload` refuses source trade ages outside −5 to +120 seconds, using Binance `T`, Coinbase timezone-aware `time` or Bybit trade `time`; unavailable entries lose mapping in status, while prior accepted samples/mapping may survive in private state. Historical rejected payloads are not retained, so their exact ages cannot be reconstructed. No threshold relaxations, zero fills, different venue, catalog invention or new provider. Reviewed owner diagnosis reports inventory/status SOL counts and probes at most three **currently** stale instruments on their existing exact feed, aggregates only. This cannot certify identity continuity with the historical three.
+
+```bash
+/opt/vivameda-connect-venv/bin/python /var/lib/vivameda-engineering/repo/client_learning/crypto_directive2_20261008/diagnose_alarm_coverage.py --expected-sha256 be1c1dc806e17b9c8af9663e5a30a4d7f61db028983b422bcaf707febf688223
+```
+
+### E2 receipt — awaiting owner install
+
+Reviewed bundle `b29c87e37c6f112a6703e3d5a5c0e38dd4689c566af0a014c4aa7515eef4c97d` stages `monitor.py` and `exchange.py` only. Sender returns the local receipt time after parsing Telegram `ok:true`; each real alarm appends a sanitised attempt followed by sent/failed result. Logs contain opaque attempt ID, observation time, API acknowledgement time and delay; no instrument, price, message, recipient or credential. Missing acknowledgement stays null. Synthetic tests/setup notices are excluded. Append failures are visible without disabling the existing alarm. Existing thresholds, cadence, cooldown and configurations remain frozen. Historical latency stays unavailable. Tests: **49 candidate/regression tests passed** on the server, including eight append/redaction/refusal tests.
+
+```bash
+python3 /var/lib/vivameda-engineering/repo/client_learning/crypto_directive2_20261008/evidence_logs/install_evidence_logs.py --component movement --install --expected-sha256 b29c87e37c6f112a6703e3d5a5c0e38dd4689c566af0a014c4aa7515eef4c97d
+```
+
+Installer requires old source hashes, backs up the two sources, atomically replaces them with file permissions preserved, restarts only TradingView, checks service and frozen source/config/unit hashes and restores source on failure. It neither sends a test alarm nor changes the pilot. Source/service postflight is separate from next forward measuring window and first real acknowledgement. Installation and real latency are pending. F remains 2026-10-09T10:25Z; use a newly completed sync, not cached inventory, and verify actual refresh evidence separately.
