@@ -1,0 +1,25 @@
+{
+  "schema": "directive3-amendment1-second-leg-v1",
+  "frozen_before_new_outcomes": true,
+  "comparison_arm": "A1",
+  "g": null,
+  "second_leg": {
+    "fixed": {
+      "unchanged_candidate_and_coverage_gates": true,
+      "minimum_anchor_multiple": 2.0,
+      "minimum_mc_over_prior_30m_peak": 0.5,
+      "minimum_5m_buy_ratio": 0.55,
+      "minimum_5m_transactions": 100,
+      "score_threshold_required": false
+    },
+    "parameters": {
+      "maximum_mc_over_prior_30m_peak": [0.75, 0.9, 1.0],
+      "minimum_hour_volume_over_mc": [0.25, 1.0, 2.0]
+    },
+    "grid_size": 9,
+    "selection": "development_run_precision; require >=20 run, >=20 non-run, >=2 UTC dates; ties smaller maximum_peak_ratio then larger minimum_volume_mc",
+    "anchor": "first archived same-pair MC; not launch MC",
+    "peak": "max same-pair MC strictly before t0 over preceding 30 minutes"
+  },
+  "outcome_freeze": "At most two rules: one qualified A2 and one qualified second-leg choice; A1 comparison only; no qualified choice means no holdout access"
+}

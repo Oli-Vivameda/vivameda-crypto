@@ -1,0 +1,24 @@
+[Unit]
+Description=Vivameda read-only snapshot archive custody
+[Service]
+Type=oneshot
+User=@USER@
+Group=@GROUP@
+Nice=19
+IOSchedulingClass=idle
+ExecStart=/usr/bin/python3 /opt/vivameda-snapshot-archive/archiver.py
+ExecStopPost=+/usr/bin/python3 /opt/vivameda-snapshot-archive/kill_switch.py
+TimeoutStartSec=45
+TimeoutStopSec=15
+UMask=0077
+NoNewPrivileges=yes
+PrivateNetwork=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ReadOnlyPaths=/opt/vivameda-crypto-early-scout /var/lib/vivameda-crypto-pilot-health
+InaccessiblePaths=/opt/vivameda-crypto-early-scout/data/forward_capture
+ReadWritePaths=/var/lib/vivameda-snapshot-archive
+MemoryMax=192M
+[Install]
+WantedBy=multi-user.target
