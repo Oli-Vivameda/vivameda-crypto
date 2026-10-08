@@ -7,7 +7,7 @@
     ".gitignore": "be399efba81fec45218410e877c3d3935a920538dd15e3ea558a8d5a2bdf68ec",
     "SIGNALS.md": "e6912005df13615138935c45b77756b23dee636891cb85faed9d273723117cc8",
     "requirements.txt": "0d0d2938e5443f318fc97363f42cffe3309df1b718cc2bf713263a68cb7bbee5",
-    "README.md": "c4a98aa20243e92876935d0f64403010e087763c036eccc0f9d940340616f927",
+    "README.md": "3267978f3d084dd36fac91480e75c23a1a73eb2263339824eb0246ca17e68600",
     "SECURITY.md": "fe6ff00dd33525fee4c4fdeff8eea567ee5801705fcad953880bf9f1d58a7a8c",
     "scripts/export_monitor_sources.py": "0918f7a19ed5d2fda85d041c949eaeca0ea3f928940f597a8f577e4611c12922",
     "scripts/install_wallet_connector.py": "703fee1b3985d6afae524cc52c2427198050e8fbcb3140046deb3ab5fd543052",
@@ -104,7 +104,7 @@
     "scripts/freeze_wallet_replay.py": "4a24925f60565f5f9a81292c3c5d4a32f670264639e6a837a91960913e3a1ea2",
     "scripts/test_freeze_wallet_replay.py": "4a2691ddf12b6c5c8167f9e5a7ab7cfa04de3790ed057a985c8170a6a1c0995f",
     "scout/EVIDENCE_CAPACITY_20261005.md": "d99aa23ecb6c7b2d461d1023420c997cc54fff0ce4f17377ea3fea484ac2ac6e",
-    "docs/FULL_SETUP.md": "9d5af4954ff412c86a7f7d2966159f00b953571783b8449642c974cd5e72b2ff",
+    "docs/FULL_SETUP.md": "ac57b177d83e45eaaffeac237c0c08318cd3b604c68c991260e4b79de3965b9c",
     "docs/REPOSITORY_POLICY.md": "937df3adcdce8dde1722f0931c10580a48a3a93592755a925f643eb1245ff4f3",
     "agent_trader/README.md": "d3ed749204c25ec6466e67d862eff85d7eaba67f423e13455475c2320853efbe",
     "agent_trader/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -190,7 +190,8 @@
     "research/pilot_health/HANDOVER_INDEX.md": "fb4bb04000cd9fa5ea0c1fb129d778e2012e5ea81aa4822b1020b903ea3cc7d6",
     "research/pilot_health/diagnose_pause.py": "b1f3239c47488ba3db9c86609e702ed579206838b49749f9d5f1ded65b0c601c",
     "research/pilot_health/test_diagnose_pause.py": "f40d23568287ba19edb0f2eed0e34810dcb4ab0db337434d19b1504b99cddaad",
-    "research/capture_recovery/ACTIVATION_20261006.md": "a9e81f9229c5d5b55782ba06a317b7a8f6584aa3b7b00f58f307456c748f62e1"
+    "research/capture_recovery/ACTIVATION_20261006.md": "a9e81f9229c5d5b55782ba06a317b7a8f6584aa3b7b00f58f307456c748f62e1",
+    "docs/TRADINGVIEW_HANDOVER_20261008.md": "1a1dcdf816b723fb7894bfe26942a02fe46c24c4d61c48ed6f7ca6210d5729e7"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -523,5 +524,19 @@
     "diagnostic_checked_at": 1791273241,
     "diagnostic_result": "original cause unavailable; three of six current candidates pass input validation; provider availability not verified",
     "last_verified_checked_at": 1791274834
+  },
+  "tradingview_market_monitoring": {
+    "evidence_date": "2026-10-08",
+    "handover": "docs/TRADINGVIEW_HANDOVER_20261008.md",
+    "watchlist_access_verified": true,
+    "market_data_verified": false,
+    "quote_failure": "HTTP 429",
+    "candle_failure": "WebSocket bad handshake",
+    "existing_btc_sol_provider": "coinbase_spot",
+    "full_watchlist_exchange_adapter": "planned_not_deployed",
+    "engineering_tests_passed": 38,
+    "source_publication": "operational_documentation_only",
+    "installed_application_sha256": "1d1f638eb74a9ef263f03d3881e813711b13721da7d979448d0845949b37b5db",
+    "live_execution": false
   }
 }

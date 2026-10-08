@@ -19,6 +19,7 @@ A continuously running Solana small-cap observation and research system on Hetzn
 | Agent context | Select dated crypto knowledge and limitations for an agent session | Public extraction; private conversational runtime excluded |
 | Trading-agent layer | Paper proposal records, owner feedback and versioned playbook | Scaffold; no continuous agent or live execution |
 | Transaction-decoder experiments | Offline DFlow/Pump endpoint reconciliation | Not promoted into production |
+| TradingView and market movements | Account/watchlist sync plus independent BTC/SOL measurements | Watchlists verified; TradingView quotes/candles blocked; direct exchange adapter planned ([handover](docs/TRADINGVIEW_HANDOVER_20261008.md)) |
 | Broad survivor discovery / live trading | Universe-wide survivor discovery and broker/wallet execution | Not implemented |
 
 ## How it fits together
@@ -53,6 +54,7 @@ The watchlist and pool monitor run separate observation rules; their messages do
 | [Trading scaffold](agent_trader/README.md) | Paper proposals, feedback and execution integration requirements |
 | [Setup](docs/SETUP.md) | Dependencies, installation, health checks and rollback |
 | [Coverage](docs/COMPLETENESS.md) / [Validation](docs/VALIDATION.md) | Included source, tests and unresolved gaps |
+| [TradingView handover](docs/TRADINGVIEW_HANDOVER_20261008.md) | Verified watchlist inventory, market-data errors, BTC/SOL status and agreed exchange-feed next step |
 | [Update policy](docs/REPOSITORY_POLICY.md) | Required GitHub synchronization for crypto changes |
 | [Security](SECURITY.md) | Public/private boundary |
 
