@@ -1,3 +1,3 @@
-# Build status — 2026-10-06
+# Build and installation status — 2026-10-08
 
-Read-only health monitor built; owner installation pending. Nineteen synthetic tests passed locally and on Hetzner. Unit syntax validation passed on Hetzner. Public source synchronization is required before the installation command is handed over. Existing deployed scanner/tracker source stays unchanged; pilot activation receipt supplied by owner confirms activation epoch1791269439 and deadline1792479039 (6–20 October2026,09:50:39 Cyprus time). No first-cycle or operational coverage claim is made yet.
+Installed by the owner on 2026-10-06 at 07:37 UTC. Backup: `/opt/vivameda-operations/crypto-health-backup-20261006T073739Z`. The 19 synthetic tests and unit syntax checks passed; a subsequent collecting report was independently verified. Today's read-only status is in `../forward_capture/STATUS_20261008.md`. This health sidecar does not modify the scanner, tracker, pilot activation, deadline or protocol. Complete incident-send history is not retained by the current sidecar; no complete history is claimed.
