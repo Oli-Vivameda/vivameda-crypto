@@ -191,7 +191,7 @@
     "research/pilot_health/diagnose_pause.py": "b1f3239c47488ba3db9c86609e702ed579206838b49749f9d5f1ded65b0c601c",
     "research/pilot_health/test_diagnose_pause.py": "f40d23568287ba19edb0f2eed0e34810dcb4ab0db337434d19b1504b99cddaad",
     "research/capture_recovery/ACTIVATION_20261006.md": "a9e81f9229c5d5b55782ba06a317b7a8f6584aa3b7b00f58f307456c748f62e1",
-    "docs/TRADINGVIEW_HANDOVER_20261008.md": "b034c547ef78e15d552fe962d6cdfc9391d4f9df6541de5be413920f470fd21a"
+    "docs/TRADINGVIEW_HANDOVER_20261008.md": "f7da4a978d3d3f47a4b454284e83dd49b14dad37086fdcc8d1fb6851e12bdc76"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -539,14 +539,15 @@
     "installed_application_sha256": "1d1f638eb74a9ef263f03d3881e813711b13721da7d979448d0845949b37b5db",
     "live_execution": false,
     "exchange_candidate": {
-      "server_commit": "372070b",
-      "tests_passed": 61,
+      "server_commit": "621b226",
+      "tests_passed": 62,
       "live_public_eth_probes_passed": 5,
       "installed": false,
       "actual_watchlist_coverage_verified": false,
       "telegram_delivery_verified": false,
-      "bundle_sha256": "456fced63a661485b39320eff8b1740c0009128fccf4d1f88a365c1f81e5ef1f",
-      "app_sha256": "67c7725a705bb2e2a051baa135a7b86eb02205428e200f8131dc367e2fba5a3a"
+      "bundle_sha256": "e25bed8577d75afdd66a8bfd991fd61f2fc4e90424155d2a93978deaccd324b4",
+      "app_sha256": "c156e5d3a51ed072ec931887236a9df6f52ee48bdd66219edb98dd2c667666c8",
+      "health_postflight_corrected": true
     }
   }
 }
