@@ -654,3 +654,12 @@ Astra: the installed baseline receipt supersedes the previous pending-install
 gate. Do not reinstall, reset activation or delete archive state. Honour the
 existing immediate timer kill conditions. Keep A inactive, B pending post-stop
 source re-audit, and all downstream layers frozen. Append future receipts here only.
+
+
+### 2026-10-08T19:56Z — owner preference: health incident Telegram inactive, reviewed bundle awaiting install
+
+Owner requested deactivation of the `Crypto pilot health incident` Telegram message. The separate reviewed notification bundle retains the message code but sets incident notifications inactive; recovery notifications remain inactive. Monitoring, health states, cadence, append-only incident/send log, frozen scanner/pilot bytes and archiver remain unchanged. Suppressed incident transitions retain their state/reason/time with `send_result=incident_suppressed`; failed pending incident deliveries are cleared without network retries. The archiver `health_alarm_since()` checks incident **state**, independent of send result, so the incident kill switch remains effective even without Telegram delivery.
+
+Five synthetic tests passed on server Python 3.12: all four incident states produce zero sends, pending incident retry suppression, recovery remains suppressed, ordinary status stays idle, and sanitized incident log preserves state for the kill switch. No provider requests, Telegram sends or production install were performed by engineering. Reviewed bundle SHA-256: `f1013c5f7a060a7b11eff03f26f45f7aea56025779f7a884588b0c62195df914`; candidate health.py SHA-256: `3a5005d2a5e68421d1aea4680d1059f7c07874c03659b4d3313435de59569c18`. Installer pins the owner-reported live source `611bb7f873f985af55b76bc29efe11a1ac88a56bf3048336be17ab736a089ddf`, requires idle oneshot, backs up source, verifies unchanged frozen sources and health units, and verifies the existing timer without restart. Automatic rollback restores the source on install postflight failure.
+
+Next gate: owner install from `client_learning/crypto_health_incident_inactive_20261008/install_inactive.py`, then record source hash, backup and normal-cycle `incident_suppressed` receipt when a real incident occurs. Installation and normal-cycle no-send are not yet verified. Astra: retain this notification preference; do not disable the health service or archiver kill switch; continue the existing archiver baseline/postflight gates, holdout closed and g null.

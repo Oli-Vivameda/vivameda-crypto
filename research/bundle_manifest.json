@@ -3,7 +3,7 @@
   "archiver_collection_activation_pending": true,
   "archiver_installed": true,
   "files": {
-    "PROTOCOL_DIRECTIVE3_20261008.md": "2cd76d84a42c619998c690ae5802b7c8b23350583786deccb17896d6603daace",
+    "PROTOCOL_DIRECTIVE3_20261008.md": "70de2405af09e99e58c77676338f7685994f0186a16b0dbffc8a39be493d22fe",
     "archiver/archiver.py": "d8167b3b33db6d25438425f374aa71cec23588a5a6fd08637cdd70235019ad44",
     "archiver/check_install_preflight.py": "6f7e028c78639e9ff366d1df44a14291f6cd9a1a613204333d24f255e99a5f67",
     "archiver/install_archiver.py": "47e5aa934ccc7573ac428eee7bac7700e8f52045bff8f5349c4b2b35078a6fb7",
