@@ -214,7 +214,7 @@
     "agent/interpretation/model_proxy.py": "6893358dc8ce3a57dfd6d2c63fa977871f24b3f677e2f3093e9bfbe25fd2f615",
     "agent/interpretation/crypto_agent.py": "ddd57fea740ce087122482a89ad1ea65d18516f2a077264d0bc6f593b8dd2423",
     "agent/interpretation/test_factual_guard.py": "fef228bb346ef35f2032084a225d973bf81b695d53b489bc59c598c4c6a5717d",
-    "research/PROTOCOL_DIRECTIVE3_20261008.md": "ef5ce88f961ca4a2795faf5052987b852a3b02d028b5d2546c33a5aefc75a91e",
+    "research/PROTOCOL_DIRECTIVE3_20261008.md": "deead2c89cadfc6248c7be230a1806d1ef739212ee490d482889698ab5b691db",
     "research/build_launch_patch.py": "ae51a57b87d83f9df8fcbfe7136b6faae5d1d8f47bc2c198494ccddf182c00ca",
     "research/candidate_early_scout.txt": "0f178cac4b45bf972aa8dd5c6f1b399b4dbc1b5211123ca384bb5109fd6adba6",
     "research/earlier_entry.py": "8a8a7e54d3807e583fb07a1eefbfe0ec3378daf803ee8100c3c4c1dfc49ce60c",
@@ -227,7 +227,7 @@
     "research/test_directive3.py": "b02add017ecb98f1d01e6cdbcda63ce8af957f9eaf8f9fc1372811c747970c6d",
     "research/vivameda-earlier-entry-shadow.service": "3794398f027cdbd191cde1b863555e450590bbf93baea6406a38928f1ce6700b",
     "research/vivameda-earlier-entry-shadow.timer": "db8000a0874c3755f760bd1a7272e6fa3a5bb89b1f26c2195eb936eabd61c261",
-    "research/bundle_manifest.json": "9c4774019e7976f90e2e7b4573a178854e587da542e2676d1f80a410a9a8fcbe"
+    "research/bundle_manifest.json": "88be4e8ac82c52f272a4bd2d93adc728a99b6cdf7e0d47403a77a724e5fb1ef5"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -777,13 +777,18 @@
     "stale_trade_diagnosis": "3 current stale trades: ages 505.243/156.483/200.877 seconds; 3 existing-feed requests; historical identity continuity unverified"
   },
   "directive3": {
-    "status": "inactive_candidates_development_export_pending",
+    "status": "development_insufficient_holdout_closed_shadow_inactive",
     "protocol": "research/PROTOCOL_DIRECTIVE3_20261008.md",
     "review_bundle": "research/bundle_manifest.json",
-    "review_bundle_sha256": "9c4774019e7976f90e2e7b4573a178854e587da542e2676d1f80a410a9a8fcbe",
+    "review_bundle_sha256": "88be4e8ac82c52f272a4bd2d93adc728a99b6cdf7e0d47403a77a724e5fb1ef5",
     "python": "3.12",
     "synthetic_tests_passed": 49,
     "holdout_opened": false,
-    "production_installed": false
+    "production_installed": false,
+    "development_input_sha256": "28e1a8169a7128dad3b4bd160de9663a7a42c9260b4b7c38326e843a1a331fa4",
+    "eligible_candidate_minutes": 276,
+    "run_minutes": 76,
+    "nonoverlapping_run_episodes": 6,
+    "rule_freeze_ready": false
   }
 }
