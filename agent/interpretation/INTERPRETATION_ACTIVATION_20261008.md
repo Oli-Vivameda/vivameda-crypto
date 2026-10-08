@@ -25,3 +25,13 @@ Installed application SHA-256: `ddd57fea740ce087122482a89ad1ea65d18516f2a077264d
 Live gateway postflight: evidence_table_only, 111 evidence rows, 0.278 seconds. Scanner, policy, pilot and live-execution settings unchanged. The installed answer contract is constrained evidence selection, with evidence-table fallback and no free-text interpretation. The receipt includes the earlier synthetic candidate acceptance: 10/10 facts, zero invented explanations, 29.845 seconds. This is NOT a new ten-question live-gateway acceptance run; that remains pending. Engineering gateway access was rejected; no permissions were widened.
 
 Next gate: the ten-question acceptance set through an authorised live-gateway access path. Activation is verified; full Task A2 acceptance is not yet closed.
+
+## Live gateway acceptance — owner route prepared
+
+The transport authenticates Unix peer credentials against `vivameda-agent` (`crypto_runtime.Handler.handle`, `main`). Engineering UID rejection is intentional. The reviewed owner-run helper uses `/usr/sbin/runuser -u vivameda-agent` for ten fixed, idempotent live gateway submissions, compares evidence privately against retained daily memory, and publishes only aggregate score/modes/timing/hash counts. It never opens the pilot database or prediction ledger, changes no permissions, and uses no paid provider. Questions without a supplied expected field are unassessable, not passed. Evidence-table fallback and validated selection are counted separately. Existing synthetic 10/10 is still not a live score.
+
+```bash
+python3 /var/lib/vivameda-engineering/repo/client_learning/crypto_directive2_20261008/live_gateway_acceptance.py --expected-sha256 ae347fc146330a80e6309bc0a744c402f5a3ef67957b8d7a9790ba6dbcdf640f
+```
+
+The helper caches the aggregate receipt and reuses fixed request IDs. Owner run/score pending; no permission widening is proposed.
