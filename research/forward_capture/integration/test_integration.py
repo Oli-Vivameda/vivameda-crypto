@@ -13,6 +13,10 @@ from pathlib import Path
 from unittest.mock import patch
 import build_integration as build
 
+# Historical installation tests are bound to this frozen fixture, not live scout source.
+FROZEN_SCANNER_PATH = build.HERE/'early_scout.py'
+FROZEN_SCANNER_SHA256 = '3e73978a41e2e21e090a7eea92bbdc1a52dc190ce229ac262a3c6a2b0af6a043'
+
 
 def functions(source):
     return {n.name: ast.dump(n,include_attributes=False) for n in ast.parse(source).body if isinstance(n,ast.FunctionDef)}
@@ -22,7 +26,10 @@ class IntegrationTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
         self.base = Path(self.temp.name)
-        self.scanner, self.tracker = build.build((build.HERE/'base_early_scout.py').read_text(),(build.HERE/'base_scout_learning_v2.py').read_text())
+        generated, self.tracker = build.build((build.HERE/'base_early_scout.py').read_text(),(build.HERE/'base_scout_learning_v2.py').read_text())
+        self.scanner = FROZEN_SCANNER_PATH.read_text()
+        self.assertEqual(hashlib.sha256(self.scanner.encode()).hexdigest(), FROZEN_SCANNER_SHA256)
+        self.assertEqual(generated, self.scanner)
         scanner_path=self.base/'early_scout.py';scanner_path.write_text(self.scanner)
         (self.base/'scout_learning_v2.py').write_text(self.tracker)
         tree=ast.parse(self.scanner)
