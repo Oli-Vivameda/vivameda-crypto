@@ -38,4 +38,24 @@ class AuditTests(unittest.TestCase):
   with patch.object(health.os,'open',side_effect=OSError):health.append_audit(r,'sent')
   self.assertEqual(r['audit_log'],'unavailable');self.assertEqual(r['status'],'paused')
 
+class ExistingDiagnosticsTests(unittest.TestCase):
+ def test_rejected_cycle_diagnostics_survive_logging_update(self):
+  import sqlite3
+  with tempfile.TemporaryDirectory() as d:
+   base=pathlib.Path(d); directory=base/'data'/'forward_capture';directory.mkdir(parents=True)
+   con=sqlite3.connect(directory/'capture.sqlite')
+   con.execute('CREATE TABLE fc_activation (id INTEGER, body TEXT)')
+   con.execute('CREATE TABLE fc_events (kind TEXT, body TEXT)')
+   con.execute('INSERT INTO fc_activation VALUES (1,?)',(json.dumps(dict(activation_ts=100,deadline=10000)),))
+   for kind,stamp in [('cycle',3990),('rejected_cycle',1000),('rejected_cycle',3900),('rejected_cycle',3995)]:
+    con.execute('INSERT INTO fc_events VALUES (?,?)',(kind,json.dumps(dict(cycle_ts=stamp))))
+   con.commit();con.close()
+   report=health.collect(base=base,now=4000,services={u:True for u in health.UNITS})
+   self.assertEqual(report['rejected_cycles'],3)
+   self.assertEqual(report['last_rejected_cycle_ts'],3995)
+   self.assertEqual(report['rejected_cycles_last_30m'],2)
+   self.assertEqual(report['availability_diagnosis'],'provider_pair_rejections_observed')
+   self.assertEqual(report['status'],'collecting')
+   self.assertFalse((directory/'PAUSED.json').exists())
+
 if __name__=='__main__':unittest.main()

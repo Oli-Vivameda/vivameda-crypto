@@ -57,6 +57,10 @@ def collect(base=BASE, now=None, services=None):
             activation, deadline = con.execute("SELECT json_extract(body,'$.activation_ts'),json_extract(body,'$.deadline') FROM fc_activation WHERE id=1").fetchone()
             report.update(activation_ts=activation, deadline=deadline)
             counts = dict(con.execute('SELECT kind,count(*) FROM fc_events GROUP BY kind'))
+            report['rejected_cycles'] = counts.get('rejected_cycle',0)
+            rejected = con.execute("SELECT max(json_extract(body,'$.cycle_ts')) FROM fc_events WHERE kind='rejected_cycle'").fetchone()[0]
+            report['last_rejected_cycle_ts'] = rejected
+            report['rejected_cycles_last_30m'] = con.execute("SELECT count(*) FROM fc_events WHERE kind='rejected_cycle' AND json_extract(body,'$.cycle_ts') >= ?", (now-1800,)).fetchone()[0]
             report.update(cycles=counts.get('cycle',0), qualified_events=counts.get('cohort',0),
                           screening_events=counts.get('screening',0), timed_observation_rows=counts.get('observation',0))
             last = con.execute("SELECT max(json_extract(body,'$.cycle_ts')) FROM fc_events WHERE kind='cycle'").fetchone()[0]
@@ -83,6 +87,7 @@ def collect(base=BASE, now=None, services=None):
             report.update(status='unhealthy', reason='production_service_inactive')
         elif now < deadline and report['seconds_since_last_cycle'] > STALE_SECONDS:
             report.update(status='stalled', reason='no_successful_cycle_for_10_minutes')
+        report['availability_diagnosis'] = ('provider_pair_rejections_observed' if report.get('rejected_cycles_last_30m',0) else 'no_recent_pair_rejection_evidence')
     except Exception:
         # Never publish exception text, private paths, rows or credentials.
         report.update(status='unavailable', reason='health_read_failed')
