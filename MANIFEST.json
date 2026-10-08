@@ -4,7 +4,7 @@
   "missing": [],
   "sha256": {
     ".gitignore": "be399efba81fec45218410e877c3d3935a920538dd15e3ea558a8d5a2bdf68ec",
-    "README.md": "a24c53d08f7e8b4ffebe6ce4ea76d832206ea4d906ac257771c162af3837be61",
+    "README.md": "fae435e63bf596b5573615250e9951b00d649844db1634560f6a6c56d2043f57",
     "credentials.example.json": "c58950f6be306e8860e318b8d3bfdadd2c8f4142c92149a83ac52530be0f0ab5",
     "SIGNALS.md": "e6912005df13615138935c45b77756b23dee636891cb85faed9d273723117cc8",
     "CRYPTO_LEARNING_REVIEW_20261006.md": "a9703c5ff9c13e74234f195b85d73bb04731774753d27d7a00dbaaa918b0e625",
@@ -13,7 +13,7 @@
     "docs/DFLOW_DECODER_20261004.md": "637e5f3483506fad526aa963de39f8c3439ef584ac7b3d032f4e3d3e7cf7e6a0",
     "docs/COMPLETENESS.md": "0568f3e2e3f6604e1a447261ae39ed7c4d5d25a9e493231d69798e17c5229e8e",
     "docs/FULL_SETUP.md": "b5cc9809c9a70bbd8afdc45a30f8fc62ef7456531ddfeeee9633e6f3a0991efa",
-    "docs/TRADINGVIEW_HANDOVER_20261008.md": "2efbe6259adb43d5d211cdc794360fea3369ecc65a1fb3ce14ec922426be8c1a",
+    "docs/TRADINGVIEW_HANDOVER_20261008.md": "952f379bb9a7b4ccf5dbf8f9417fd2571e8d520bb741f18514fb06193a5e2816",
     "docs/VALIDATION.md": "1712bad00c4fd09ebb716fbddf153ad337970309ccafcff0397591ebea173976",
     "docs/COVERAGE_20261004.md": "b5b089412561c9f0b627966ee3a1ef5b577493707ccaa0f6c4b62c1b58bd123e",
     "docs/SETUP.md": "0c5ba2e5780db52d942178616d9acee83a2b317625859c1f020a72a6854857b0",
@@ -100,7 +100,7 @@
     "learning/test_paper_outcomes.py": "ca0982ac11221fea45921cd6d8bd73b74666f1e6860c35d822606876c2e9bb99",
     "learning/test_diagnose_journal_counts.py": "652ede2064e547eefcebd365893877cb89f46f2b6f072c3892bd930073ee1d44",
     "learning/paper_outcomes.py": "d113c22b879936912d9709e04dde39b37376a9d15665f3bd4c4af0dbb0b50768",
-    "learning/JOURNAL_DIAGNOSIS_20261008.md": "7bb6e2b7e1446721ac71f53d31749e113681d3215ca3640b51a3051bc5fddd1d",
+    "learning/JOURNAL_DIAGNOSIS_20261008.md": "9609675d604ea71e2d2865da7c11ae3a8ca573e3e023491da5579fa2616e8f84",
     "learning/README.md": "c6f3f66931b6ba6fc73d6b09b66279794423992beaccc613861ffb8d040f27a0",
     "learning/install_daily_learning.py": "7c2b982e82f723e48e255cbd6908b883489c4b2199902882e26589c63ac12767",
     "learning/daily_learning.py": "370ca35a27033b7278f45470f8519e2ea2da0e8a5a00707d40e496b9bc00f468",
@@ -192,16 +192,17 @@
     "agent/runtime/crypto_agent.py": "9ff8c0bf056d7998a3c546a271e16fe2af1d4d3968ecc15f9f4b35eb14ced313",
     "agent/interpretation/test_interpretation.py": "90f2e9522ce8d7e2b6882d5ce351001e2515273e30f58385a932491dfb09c930",
     "agent/interpretation/install_interpretation.py": "1acc31aa2938efe3f2b38b9e2ed30efe56ace22a7fa1b0a883f648c6914a752b",
-    "agent/interpretation/README.md": "11511f76030298aa9a3f636a5c067f05e88450c0a9785d8dcc1e6783bce0c4fd",
+    "agent/interpretation/README.md": "6c2d044ddfbd0e01d497a322e01b637e4f70347349f4f2e6a960ee6dd8387d7e",
     "agent/interpretation/acceptance_facts.py": "16ab28558f30a6f838f83b9717b6f9491517fc7b14eab04e886e876bee0b97ad",
     "agent/interpretation/factual_guard.py": "352e9369fd986df447d172b40e3de08f6b4c4fd9bcf9d3d05adbf83cc8d7db74",
-    "agent/interpretation/install_factual_guard.py": "28ec14f29991a27c8f314d77cedd6a626de04759a7fde4633a9268c60e2d2aad",
+    "agent/interpretation/install_factual_guard.py": "4ed707a2e8d1456d29367cd0eac31bb62cc4e5a27c00aff960ffdcfad62e27bf",
     "agent/interpretation/INTERPRETATION_ACTIVATION_20261005.md": "10b0234aa7c9f24d9ad5ff8c13d54860ec818c7d463a2c806079254a64ed6505",
-    "agent/interpretation/INTERPRETATION_ACTIVATION_20261008.md": "125c58cfd895e46223d0f60d92c5c2d4c36c65b2b2aec042520781110c1c5ad9",
+    "agent/interpretation/INTERPRETATION_ACTIVATION_20261008.md": "44dd11f1a105b7947e1046d000b7f1d3070a030ec94a6f9263583f88d5ce136a",
     "agent/interpretation/FACTUAL_ACCEPTANCE.json": "34c333fd082a5816f8cb5c38a40ff0be0a009b0cf4a8d276057bd03f00ce97e1",
     "agent/interpretation/model_proxy.py": "6893358dc8ce3a57dfd6d2c63fa977871f24b3f677e2f3093e9bfbe25fd2f615",
     "agent/interpretation/crypto_agent.py": "ddd57fea740ce087122482a89ad1ea65d18516f2a077264d0bc6f593b8dd2423",
-    "agent/interpretation/test_factual_guard.py": "fef228bb346ef35f2032084a225d973bf81b695d53b489bc59c598c4c6a5717d"
+    "agent/interpretation/test_factual_guard.py": "fef228bb346ef35f2032084a225d973bf81b695d53b489bc59c598c4c6a5717d",
+    "agent/interpretation/test_install_factual_guard.py": "1218b3e2bb69cc1494067d327e6a2653f94229400faed786e2bcdcae6de6854c"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -370,7 +371,7 @@
     "live_execution": false
   },
   "crypto_agent": {
-    "status": "activated; generation completes; factual acceptance failed on 2026-10-06; reviewed constrained guard awaits owner activation",
+    "status": "constrained guard installed 2026-10-08; evidence-table live postflight verified; new 10-question live acceptance pending",
     "bundle_sha256": "53701ea8ce3a1e9795fb05bc98bb5c958b98e0993b7791ff2848ef0dd8b12bbc",
     "tests_passed": 19,
     "independent_status_verified": true,
@@ -390,7 +391,19 @@
     "generation_completes": true,
     "factual_acceptance_failed_20261006": true,
     "free_text_interpretation_verified": false,
-    "candidate_receipt": "agent/interpretation/INTERPRETATION_ACTIVATION_20261008.md"
+    "candidate_receipt": "agent/interpretation/INTERPRETATION_ACTIVATION_20261008.md",
+    "factual_guard_activation": {
+      "activated_at_utc": "2026-10-08T12:26:48.232896Z",
+      "bundle_sha256": "1eaa0d9373e669eeb69859162236f51a3c9a210ad857ca61f0e875af2fb0b255",
+      "application_sha256": "ddd57fea740ce087122482a89ad1ea65d18516f2a077264d0bc6f593b8dd2423",
+      "guard_sha256": "352e9369fd986df447d172b40e3de08f6b4c4fd9bcf9d3d05adbf83cc8d7db74",
+      "backup": "crypto-factual-guard-ce2ck54a",
+      "tests_passed": 20,
+      "postflight_mode": "evidence_table_only",
+      "evidence_rows": 111,
+      "response_time_seconds": 0.278,
+      "new_live_acceptance_verified": false
+    }
   },
   "crypto_runtime": {
     "status": "activated; live connector and isolation checks verified",
@@ -417,7 +430,7 @@
     "interpretation_receipt": "agent/interpretation/INTERPRETATION_ACTIVATION_20261005.md"
   },
   "crypto_interpretation": {
-    "status": "activated; generation completes; factual acceptance failed on 2026-10-06; reviewed constrained guard awaits owner activation",
+    "status": "constrained guard installed 2026-10-08; evidence-table live postflight verified; new 10-question live acceptance pending",
     "bundle_sha256": "6814bcdae171d25851a4a2be1c3fa6dfba6559cd4dd4e03d28b06165037323a2",
     "activated_at_utc": "2026-10-05T17:41:40.707775Z",
     "model": "qwen3:4b-instruct-2507-q4_K_M",
@@ -436,7 +449,19 @@
     "generation_completes": true,
     "factual_acceptance_failed_20261006": true,
     "free_text_interpretation_verified": false,
-    "candidate_receipt": "agent/interpretation/INTERPRETATION_ACTIVATION_20261008.md"
+    "candidate_receipt": "agent/interpretation/INTERPRETATION_ACTIVATION_20261008.md",
+    "factual_guard_activation": {
+      "activated_at_utc": "2026-10-08T12:26:48.232896Z",
+      "bundle_sha256": "1eaa0d9373e669eeb69859162236f51a3c9a210ad857ca61f0e875af2fb0b255",
+      "application_sha256": "ddd57fea740ce087122482a89ad1ea65d18516f2a077264d0bc6f593b8dd2423",
+      "guard_sha256": "352e9369fd986df447d172b40e3de08f6b4c4fd9bcf9d3d05adbf83cc8d7db74",
+      "backup": "crypto-factual-guard-ce2ck54a",
+      "tests_passed": 20,
+      "postflight_mode": "evidence_table_only",
+      "evidence_rows": 111,
+      "response_time_seconds": 0.278,
+      "new_live_acceptance_verified": false
+    }
   },
   "crypto_selection_audit": {
     "status": "historical audit completed; comparable-control gate failed",
@@ -673,5 +698,20 @@
       "next_gate": "one_main_commit_and_remote_changed_file_hash_verification",
       "astra_protocol": "docs/FULL_SETUP.md"
     }
+  },
+  "crypto_directive2_20261008": {
+    "task_a": "partial; live ten-question gateway acceptance pending",
+    "journal_alert_cases": 47,
+    "journal_alert_holdout_excluded": 47,
+    "journal_after_holdout": 0,
+    "journal_recorded_decisions": 0,
+    "movement_measuring": 37,
+    "movement_crypto_unavailable": 16,
+    "real_sent_delivery_records": 2,
+    "real_alarm_latency_verified": false,
+    "pilot_modified": false,
+    "policy_changed": false,
+    "tasks_b_to_e": "not started",
+    "task_f_scheduled_utc": "2026-10-09T10:25:00Z"
   }
 }

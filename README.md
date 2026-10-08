@@ -15,11 +15,11 @@ A continuously running Solana small-cap observation and research system on Hetzn
 | Prediction ledger | Freeze shadow predictions and later eligible labels for a prospective baseline comparison | Activated; no completed validation claim |
 | Numerical model | Seven-feature logistic baseline, published coefficients and evaluation | Experimental; underperformed baseline; does not drive alerts |
 | Daily case learning | Matched first-call reviews, fresh agent memory and prospective paper journal | Live daily review and paper journal; daily supervision scheduled; decision-time endpoint extension activated |
-| Dedicated Crypto Lab agent | Separate conversations, crypto-only read tools and local evidence interpretation | Isolated runtime active; generation completes, factual acceptance failed on 6 October; reviewed constrained 10/10 guard awaits owner activation; separate queue, storage and permissions |
+| Dedicated Crypto Lab agent | Separate conversations, crypto-only read tools and local evidence interpretation | Isolated runtime active; generation completes, factual acceptance failed on 6 October; constrained guard installed 8 October; evidence-table postflight verified; new live 10-question acceptance pending; separate queue, storage and permissions |
 | Agent context | Select dated crypto knowledge and limitations for an agent session | Public extraction; private conversational runtime excluded |
 | Trading-agent layer | Paper proposal records, owner feedback and versioned playbook | Scaffold; no continuous agent or live execution |
 | Transaction-decoder experiments | Offline DFlow/Pump endpoint reconciliation | Not promoted into production |
-| TradingView and market movements | Account/watchlist sync plus independent BTC/SOL measurements | Watchlists verified; TradingView quotes/candles blocked; exchange adapter installed; partial fresh-price coverage; BTC/SOL windows and fresh sync verified; other spot/perpetual windows, real alarms and 24-hour refresh pending ([handover](docs/TRADINGVIEW_HANDOVER_20261008.md)) |
+| TradingView and market movements | Account/watchlist sync plus independent BTC/SOL measurements | Watchlists verified; TradingView quotes/candles blocked; exchange adapter installed; partial fresh-price coverage; BTC/SOL windows and fresh sync verified; other spot/perpetual windows verified in owner aggregate; two real sent records; SOL absent from that export; latency and 24-hour refresh pending ([handover](docs/TRADINGVIEW_HANDOVER_20261008.md)) |
 | Broad survivor discovery / live trading | Universe-wide survivor discovery and broker/wallet execution | Not implemented |
 
 ## How it fits together
