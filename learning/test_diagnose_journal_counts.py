@@ -48,4 +48,3 @@ class CountTests(unittest.TestCase):
    c.close()
    with self.assertRaises(sqlite3.OperationalError):d.readonly(Path(directory)/'absent.sqlite')
 if __name__=='__main__':unittest.main()
-
