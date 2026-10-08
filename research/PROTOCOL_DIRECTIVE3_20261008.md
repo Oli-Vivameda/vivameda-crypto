@@ -272,3 +272,149 @@ Final publication requires verification of every changed file's remote bytes.
    first normal-cycle append without sends; retain rollback and private data.
 7. Append short receipts and all subsequent handover updates to this file only.
    Publish aggregates only and verify remote hashes after every publication.
+
+## Owner development receipt — 2026-10-08
+
+This append supersedes the pending development-export status above. Source:
+owner-supplied aggregate JSON from the reviewed development exporter; cutoff
+2026-10-08T18:10:00Z. No private rows were supplied or inspected by engineering.
+Input digest: 28e1a8169a7128dad3b4bd160de9663a7a42c9260b4b7c38326e843a1a331fa4.
+79 excluded mints; identities exported false, ledger values read false, pilot
+outcomes read false, provider requests 0, production changed false, holdout
+opened false. Pure live function bytes match the reviewed source. Live full
+source digest 765aba08982c3f0c562b52755ab9122cdaabfc396b78e7fed878089db87fa54e
+DIFFERS from the engineering source digest. This is not evidence of a production
+change by this directive. The post-stop scanner patch installer must refuse
+that full-source mismatch and require a fresh source review/rebase.
+
+### C counts, scope and development result
+
+7,388 nonexcluded observed minutes: 4,783 base/invalid exclusions, 43 age/pair,
+242 coverage gaps, 1,248 missing endpoint, 528 scorer-history exclusions, 60
+split/immature and 484 covered windows. These sum to 7,388. Of the 484 covered,
+208 have partial prehistory and are separated; 276 meet the full-history study
+eligibility. UTC-date counts: 6 October 103; 7 October 173.
+Full-history labels: 76 run, 67 non-run, 133 intermediate (sum 276). Base run
+rate 76/276 = 27.54%. This is a retained snapshot-observed candidate-minute
+baseline, not all launches, original top-60 scanner cycles, independent tokens
+or the historical 7% alert endpoint-doubling baseline. Run-onset label means a
+within-60-minute peak; endpoint doubling is a different quantity.
+Partial-history labels: run 50, non-run 76, intermediate 82 (sum 208), excluded
+from the primary development analysis. The 76 run minutes represent six tokens
+and six nonoverlapping episodes; overlapping minutes are not independent.
+Only 20 same-hour/day non-run comparisons were sampled; two run hours had no
+comparison. Feature contrasts below use all 76 run minutes vs those 20 selected
+comparisons, so imbalance and clustering limit any generalization.
+
+| Development selection | Minutes | Tokens | Days | Run / non-run minutes | Run rate | Median 60m MC multiple | 60m endpoint >=2x |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| A0 current score | 56 | 9 | 2 | 5 / 29 | 8.93% | 1.0752 | 0/56 |
+| A1 h1 hard gate | 6 | 2 | 2 | 1 / 2 | 16.67% | 1.6573 | 0/6 |
+| Each A2 grid gate (1.10, 1.25, 1.50, 2.00) | 4 | 1 | 1 | 1 / 0 | 25.00% | 1.6758 | 0/4 |
+
+These are repeated eligible minutes, not forward shadow decisions or executions.
+A1 retains 6/56 A0 minutes (10.71%) and drops 50/56 (89.29%). A0 selects 5/76
+run-labelled minutes (6.58%); A1 selects 1/76 (1.32%). These are minute overlaps,
+not unique-episode recall. A1's higher median and peak rate are descriptive:
+only two tokens, six minutes, two dates, zero endpoint doubles. All four A2
+thresholds select the same four minutes; no threshold discrimination is present.
+Each fails the frozen gate of >=20 run minutes, >=20 non-run minutes and >=2
+UTC dates. Therefore proposed_g=null and rule_freeze_ready=false. A2 final arm
+has zero decisions because no threshold was frozen. No rule file is created.
+No clustered inferential claim is made with only two development dates.
+
+### Development feature distributions
+
+Median [p25, p75]; run n=76 vs hour/day-matched non-run n=20 throughout unless
+missing is stated. Fractions use decimal units; pc fields are percentage points.
+
+| Feature | Run | Matched non-run |
+| --- | --- | --- |
+| Age seconds | 5219 [4208.75,10527] | 5442 [5157,6554] |
+| MC / first retained MC | 2.6471 [2.2035,3.3868] | 5.3654 [4.9537,6.0476] |
+| MC gain since first retained observation | 1.6471 [1.2035,2.3868] | 4.3654 [3.9537,5.0476] |
+| First retained age seconds | 2099 [2027.5,4092] | 1812 [1812,2099] |
+| First retained pc_h1 | 1.55 [-22.87,6.85] | 1.55 [1.55,1.55] |
+| 30m band | 1.8646 [1.5504,2.5374] | 2.2701 [2.0827,2.4632] |
+| 30m net MC change | 1.0897 [0.4112,1.5217] | 2.1140 [1.2726,2.3827] |
+| Hour buy ratio | 0.5542 [0.5199,0.5647] | 0.5466 [0.5389,0.5706] |
+| 5m buy ratio | 0.5694 [0.5151,0.6017] | 0.5016 [0.4412,0.5733] |
+| Liquidity USD | 30900.92 [27944.42,35529.22] | 45392.57 [43545.91,48325.73] |
+| 30m liquidity change | 0.4996 [0.2123,0.6639] | 0.8308 [0.5610,0.9132] |
+| MC USD | 126550 [100916.5,139964.75] | 261183.5 [241140.75,294390.25] |
+| pc_h1 | 180 [116.25,260.75] | 499.5 [449,562] |
+| pc_m5 | 13.47 [-1.56,36.79] | 18.225 [8.0025,41.2975] |
+| Score | 6 [6,6] | 6 [6,7] |
+| Hour transactions | 3721 [516.5,4568.5] | 758 [693.75,3717.5] |
+| 5m transactions | 192.5 [81.75,278.75] | 119 [87.5,349.75] |
+| Volume acceleration | 0.7106 [0.5353,1.1024] | 1.5540 [1.1454,2.1030] |
+| Hour volume / MC | 2.2129 [0.2624,2.6275] | 0.2386 [0.2135,1.3662] |
+| 30m history seconds | 1800 [1800,1800] | 1800 [1800,1800] |
+| 35m history seconds | 2100 [2040,2100] | 2100 [2100,2100] |
+| Historical MC / pump ATH | unavailable; 76 missing | unavailable; 20 missing |
+
+Descriptive pattern: runs were less extended than matched non-runs, but already
+had median +180% hourly change and 2.65x first-retained MC. These data do not
+establish pre-run accumulation detection or a profitable entry rule. No new
+feature, weight, threshold or signal is selected from these contrasts.
+
+| Existing signal | Run passes /76 | Matched non-run passes /20 |
+| --- | ---: | ---: |
+| band_compact | 2 | 0 |
+| buy52 | 56 | 20 |
+| h1_not_extended | 3 | 0 |
+| higher_low | 65 | 20 |
+| liq25k | 76 | 20 |
+| liq_stable | 74 | 20 |
+| m5_not_extended | 17 | 6 |
+| net_constructive | 11 | 0 |
+| txns100 | 76 | 20 |
+| vol_mc25 | 63 | 9 |
+| volume_accel | 17 | 14 |
+
+First observed episode age: median 3095.5 seconds [1884.5,5191.5], n=6.
+Two episodes were first observed extended. This is NOT the number of runs
+never visible before candidacy: that count remains unidentifiable/null.
+Historical pump ATH and historical candidate trade/top-60 state are absent;
+48-hour retention makes the first retained observation an incomplete anchor.
+
+Wallet coverage (single aggregate line): 0 complete/fresh owner-token requirements
+of 111 KNOWN required; 1/7 current nonexcluded candidate reports verified; full
+required-owner denominator unverified; freshness limit 300 seconds. No build.
+
+C next gate: stop at the preregistered insufficient-development result. Holdout
+stays closed. Do not rerun against a moving retained-history population, relax
+qualifications, change dates, add thresholds or collect a new research sample
+under this protocol. A separately reviewed owner amendment would be required.
+
+### A/B receipts after development
+
+A: 0 activated services and 0 forward shadow decisions. No development-qualified
+A2 threshold, no frozen rule and no permission for holdout/activation. Exact
+scanner-cycle parity remains unverified. The candidate stays inactive; the
+existing 49 synthetic tests do not establish efficacy. Next gate: separately
+reviewed owner decision on the insufficient sample, preserving the holdout.
+
+B: unchanged zero-request append-only candidate; 0 installs and no production
+bytes changed. Full live-source mismatch above is now verified by owner output.
+Keep the installer refusal. After pilot stop plus passive-follow-up allowance,
+re-read live source and build/review a patch against its actual bytes before
+owner installation; do not substitute a hash to bypass review. Creation-path
+coverage and disk fit remain unverified. Retain current backup/rollback gates.
+
+## Astra handover — development result supersedes pending-export steps
+
+1. Treat this owner receipt as the development result for input digest above;
+   previous pending-export instructions are historical. Publish aggregates only.
+2. Preserve g=null, rule_freeze_ready=false and holdout_opened=false. Do not
+   freeze a rule or invoke holdout. Do not repeat development or alter its gates.
+3. Explain that the 27.54% base rate is overlapping candidate-minutes and peaks;
+   A0's 8.93% and A1's 16.67% are not endpoint doubling or independent trials.
+4. Keep A inactive. Any proposal for a larger development sample requires a new
+   reviewed owner amendment with an untouched holdout and outcome-independent
+   collection plan; no automatic extension or backfill is authorized.
+5. Keep B build-only until the post-stop review. Audit the changed live source
+   before rebasing; never alter the frozen production scorer or running pilot.
+6. Wallet evidence remains insufficient (0/111 known, denominator incomplete).
+   Build no wallet-quality feature. Downstream layers and scheduled checks stay
+   under their existing directives. Append future receipts to this file only.
