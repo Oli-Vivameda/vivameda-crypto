@@ -35,3 +35,11 @@ python3 /var/lib/vivameda-engineering/repo/client_learning/crypto_directive2_202
 ```
 
 The helper caches the aggregate receipt and reuses fixed request IDs. Owner run/score pending; no permission widening is proposed.
+
+## Owner live-gateway acceptance — 8 October 2026
+
+Owner supplied the hash-bound helper output: **10/10 facts correct**, zero failed questions, zero unassessable questions, zero invented explanations or unsupported rows; **passed=true**, **3.24 seconds**. Scope: ten live gateway submissions against live retained daily evidence, not synthetic fixtures. All ten answer modes were `evidence_table_only`.
+
+Application SHA-256 `ddd57fea740ce087122482a89ad1ea65d18516f2a077264d0bc6f593b8dd2423`; guard SHA-256 `352e9369fd986df447d172b40e3de08f6b4c4fd9bcf9d3d05adbf83cc8d7db74`. These match the installed activation receipt. Owner reports permissions_changed=false, pilot_modified=false, provider_requests=0. No repeated live batch is required.
+
+Task A2 live factual acceptance is complete. **Free-text interpretation and selection quality remain unverified** (`false` in the owner receipt). Passing the table fallback proves factual rendering on the acceptance set, not model interpretation or question-specific selection quality. Crypto explain's contract remains constrained evidence selection with evidence-table fallback. Earlier pending statements above describe the pre-receipt state.

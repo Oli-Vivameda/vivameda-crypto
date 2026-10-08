@@ -4,7 +4,7 @@
   "missing": [],
   "sha256": {
     ".gitignore": "be399efba81fec45218410e877c3d3935a920538dd15e3ea558a8d5a2bdf68ec",
-    "README.md": "66227d679d5643e93292a6a0b51a60c6f9439b14d596945693e72aa10f6423f6",
+    "README.md": "1876244bc67ea0c4a9e820c279b7a2c001cccdea9738400f7d20b317e6bbed37",
     "credentials.example.json": "c58950f6be306e8860e318b8d3bfdadd2c8f4142c92149a83ac52530be0f0ab5",
     "SIGNALS.md": "e6912005df13615138935c45b77756b23dee636891cb85faed9d273723117cc8",
     "CRYPTO_LEARNING_REVIEW_20261006.md": "a9703c5ff9c13e74234f195b85d73bb04731774753d27d7a00dbaaa918b0e625",
@@ -141,12 +141,12 @@
     "research/capture_recovery/install_recovery.py": "90a5ef69aa35bfefc581fb205a1371bb4e15aa9d4ad2118984c7228e748a7af9",
     "research/capture_recovery/BUILD_STATUS.md": "5470ad8a129d3fcb198e768ef3ac127733df64556d5b2a5c89ea896c6e176876",
     "research/capture_recovery/HANDOVER_INDEX.md": "6dac9fbb04c172518a6b25296f6e8fa855d9b2d672f71a9018c5072178125186",
-    "research/forward_capture/CONTROL_AVAILABILITY_20261008.md": "c69df349f93d7952703e5e408077a494ad3c351cfabee9d1644da1cd36358127",
+    "research/forward_capture/CONTROL_AVAILABILITY_20261008.md": "90820bd219675591b735bce1a0ee1e16b6cf2357553c021353704322090c2bb0",
     "research/forward_capture/HANDOVER_20261005.md": "58535079baa3fc87bbd96db055016381845fefde7c22036bfde375d64441d70c",
     "research/forward_capture/HANDOVER_20261006.md": "8f123179bd5a10b767ce8ee6ed6b344959f75a36362893bb3cb31e6b19debed0",
     "research/forward_capture/README.md": "215d76743d7337955158ddacd697d31fdd9b682220234ce5df94d7e4a2c96ac3",
-    "research/forward_capture/STATUS_20261008.md": "c5db0be664d36085342e352d7d34b624043d474fbe7c63826804fa6a5a8b9755",
-    "research/forward_capture/PROTOCOL_V2_DRAFT.md": "e28d28d700bd01b661d1a6a686e0a5aa684373ded143bf04442ac10ee6e2654d",
+    "research/forward_capture/STATUS_20261008.md": "c7cf6b434b784b246b7f5a710eb780f0ba501bacb420fd935e1fb13cd6e82a3a",
+    "research/forward_capture/PROTOCOL_V2_DRAFT.md": "7030c44c96c0294967c67228624e3bbf83c5e6a553df1e78f61111303726f1a8",
     "research/forward_capture/test_capture.py": "35053218a58207d371726a29946b404b29a3e4a8db14684ed29c95c6ffd74211",
     "research/forward_capture/BUILD_STATUS.md": "79c4efcd388222bcb7f8cf08d1ad042a4a3c64f687559e24cbae482b4607b4d8",
     "research/forward_capture/capture.py": "78a49a298e5e30aac3726634de5d91be8ba17d6febf98087342767afe36dcfec",
@@ -208,7 +208,7 @@
     "agent/interpretation/factual_guard.py": "352e9369fd986df447d172b40e3de08f6b4c4fd9bcf9d3d05adbf83cc8d7db74",
     "agent/interpretation/install_factual_guard.py": "20228dbd72ec0f581075afdc63b6b488153d18d44a446c7b1db3e5d389be6bac",
     "agent/interpretation/INTERPRETATION_ACTIVATION_20261005.md": "10b0234aa7c9f24d9ad5ff8c13d54860ec818c7d463a2c806079254a64ed6505",
-    "agent/interpretation/INTERPRETATION_ACTIVATION_20261008.md": "cfe8c5d16a03420086804e39b02af5a85ebceaed25636b318b78e3a09616c66f",
+    "agent/interpretation/INTERPRETATION_ACTIVATION_20261008.md": "2e6b93f99f5f9cfcb89a122496a0428c1da400b6a78e06c00921f9eff400e107",
     "agent/interpretation/live_gateway_acceptance.py": "ae347fc146330a80e6309bc0a744c402f5a3ef67957b8d7a9790ba6dbcdf640f",
     "agent/interpretation/FACTUAL_ACCEPTANCE.json": "34c333fd082a5816f8cb5c38a40ff0be0a009b0cf4a8d276057bd03f00ce97e1",
     "agent/interpretation/model_proxy.py": "6893358dc8ce3a57dfd6d2c63fa977871f24b3f677e2f3093e9bfbe25fd2f615",
@@ -441,7 +441,7 @@
     "interpretation_receipt": "agent/interpretation/INTERPRETATION_ACTIVATION_20261005.md"
   },
   "crypto_interpretation": {
-    "status": "constrained guard installed 2026-10-08; evidence-table live postflight verified; new 10-question live acceptance pending",
+    "status": "constrained guard installed; owner live factual acceptance passed 10/10; evidence_table_only; free-text interpretation and selection quality unverified",
     "bundle_sha256": "6814bcdae171d25851a4a2be1c3fa6dfba6559cd4dd4e03d28b06165037323a2",
     "activated_at_utc": "2026-10-05T17:41:40.707775Z",
     "model": "qwen3:4b-instruct-2507-q4_K_M",
@@ -471,7 +471,20 @@
       "postflight_mode": "evidence_table_only",
       "evidence_rows": 111,
       "response_time_seconds": 0.278,
-      "new_live_acceptance_verified": false
+      "new_live_acceptance_verified": true,
+      "live_acceptance": {
+        "question_count": 10,
+        "facts_correct": 10,
+        "failed_questions": 0,
+        "unassessable_questions": 0,
+        "invented_explanations_or_unsupported_rows": 0,
+        "answer_modes": {
+          "evidence_table_only": 10
+        },
+        "response_time_seconds": 3.24,
+        "selection_quality_verified": false,
+        "free_text_interpretation_verified": false
+      }
     }
   },
   "crypto_selection_audit": {
@@ -711,7 +724,7 @@
     }
   },
   "crypto_directive2_20261008": {
-    "task_a": "partial; live ten-question gateway acceptance pending",
+    "task_a": "live factual acceptance passed; frozen journal dormant; SOL absence/stale diagnostics pending",
     "journal_alert_cases": 47,
     "journal_alert_holdout_excluded": 47,
     "journal_after_holdout": 0,
@@ -722,19 +735,19 @@
     "real_alarm_latency_verified": false,
     "pilot_modified": false,
     "policy_changed": false,
-    "tasks_b_to_e": "not started",
+    "tasks_b_to_e": "B verified; C owner aggregates recorded with counterfactual limitation; E reviewed awaiting owner install; D draft only",
     "task_f_scheduled_utc": "2026-10-09T10:25:00Z",
     "journal_owner_decision": "Option 1: keep frozen population; do not amend",
     "journal_status": "dormant by design until the prediction ledger closes (200 eligible or 2026-11-03T06:45:43Z)",
     "release_supported_python": "3.12; other versions explicitly refused before release checks",
-    "control_availability": "owner aggregate export pending; rejected rows not retained, exact counterfactual not identifiable",
-    "release_gate": "Python 3.12 supported; 442 tests passed; other versions explicitly refused",
+    "control_availability": "owner 14:09:27 UTC verified hour/day/funnel/reuse aggregates; 23 qualified/3 matched/5 control entries; exact discarded-cycle yield not identifiable",
+    "release_gate": "Python 3.12 supported; 450 tests/14 suites passed; other versions explicitly refused",
     "evidence_logs": {
       "bundle_sha256": "b29c87e37c6f112a6703e3d5a5c0e38dd4689c566af0a014c4aa7515eef4c97d",
       "owner_installed": false
     },
     "protocol_v2": "draft only; owner approval after 20 October stop; no pilot outcomes used",
-    "live_gateway_acceptance": "owner-run ten-question route prepared; live score pending",
+    "live_gateway_acceptance": "owner live: 10/10 facts; zero failed/unassessable/unsupported; 3.24s; evidence_table_only for all 10; interpretation and selection quality unverified",
     "sol_alarm_handoff": "intended in source; absence from inventory not verified",
     "stale_trade_diagnosis": "historical payloads not retained; owner current-feed aggregate probe pending"
   }
