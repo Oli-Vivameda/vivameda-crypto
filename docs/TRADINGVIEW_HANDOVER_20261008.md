@@ -86,3 +86,62 @@ The installation snapshot covered three watchlists: 61 account symbols, 53 crypt
 Earlier counts of 63 symbols / 55 crypto included the two additional core Coinbase BTC/SOL symbols. The exchange collector reports the account inventory; core BTC/SOL retain their separate existing monitor. This count change does not by itself demonstrate removed watchlist entries.
 
 Remaining: verify at least 15 minutes of forward samples and gap-free measuring status, observe a completed fresh TradingView inventory sync, review actual unavailable symbols and add exact supported adapters where appropriate. Synthetic test delivery is verified by the sender result; real threshold-triggered watchlist alerts and full-watchlist coverage remain unverified. Live trading stays disabled.
+
+## Directive Task 4 validation receipt — 8 October, 11:05 UTC
+
+Read-only public health and existing core movement status were checked. TradingView reported `watchlists_synchronized`, observed **2026-10-08T11:00:28Z**, after the owner restart. Three watchlists contain 61 symbols: 53 crypto, eight non-crypto. The exchange report at **11:04:26Z** had 37 fresh prices and 16 unavailable, with a 6.666-second collection cycle and 232-second inventory age. Fresh inventory synchronization is verified; inventory does not prove market coverage or authorization refresh.
+
+| Symbol class | Complete forward 15-minute window |
+|---|---|
+| BTC, independent Coinbase spot | Verified by `below_threshold` at 11:04:34Z, 35 retained samples; evaluator requires a 900–990 second observed baseline and no sampling gap exceeding 120 seconds. |
+| SOL, independent Coinbase spot | Verified by `below_threshold`, last observed 11:04:35Z, 35 retained samples, same cadence guard. |
+| Other spot | Not verified: protected per-symbol exchange report cannot be read by engineering. |
+| Perpetual | Not verified: same permission boundary. |
+
+Here “gap-free” means the installed evaluator's maximum 120-second sampling gap, not uninterrupted tick-level market data. No historical endpoint or observation was backfilled.
+
+The engineering aggregate-export attempt was denied for `/var/lib/vivameda-tradingview/exchange_status.json`; permissions were preserved. The actual unavailable-symbol list must be reviewed privately in the owner's existing coverage view or terminal. It must not be committed to this public repository. No per-symbol identities were retrieved or published in this check.
+
+Run this read-only aggregate export in the existing owner terminal, then share only its aggregate result:
+
+```bash
+python3 - <<'PY'
+import json, pathlib, collections, datetime
+p=pathlib.Path('/var/lib/vivameda-tradingview'); d=json.loads((p/'exchange_status.json').read_text()); s=json.loads((p/'exchange_state.json').read_text())
+classes=collections.Counter()
+for row in d.get('symbols',{}).values():
+    m=row.get('mapping',{}); kind=m.get('instrument','unavailable'); base=m.get('base')
+    cls=base if kind=='spot' and base in ('BTC','SOL') else ('other_spot' if kind=='spot' else kind)
+    classes[(cls,row.get('status','unknown'))]+=1
+print(json.dumps({'checked_at_utc':datetime.datetime.fromtimestamp(d['checked_at'],datetime.timezone.utc).isoformat(),'class_status_counts':[{'class':k[0],'status':k[1],'count':v} for k,v in sorted(classes.items())],'unavailable_reasons':dict(collections.Counter(r.get('reason','unknown') for r in d.get('symbols',{}).values() if r.get('status')=='unavailable')),'real_sent_delivery_records':sum(v.get('status')=='sent' for v in s.get('delivery',{}).values()),'synthetic_test_sent':s.get('telegram_test')=='sent','delivery_delay_measured':False,'private_rows_displayed':False},sort_keys=True))
+PY
+```
+
+The installed exchange evaluator's `measuring` status establishes a complete current forward window with its cadence guard. Real sent-delivery records are retained per instrument and can be overwritten by later attempts; their count is not a complete historical alarm count.
+
+For the requested exact unavailable list, run the following privately; do not paste the output into public records. Every listed symbol receives a reason and recommendation. This generates the actual current list, rather than guessing it from installation counts.
+
+```bash
+python3 - <<'PY'
+import json,pathlib,collections
+d=json.loads(pathlib.Path('/var/lib/vivameda-tradingview/exchange_status.json').read_text()); groups=collections.defaultdict(list)
+for symbol,row in d.get('symbols',{}).items():
+    if row.get('status')!='unavailable': continue
+    reason=row.get('reason','unknown')
+    recommendation='leave unavailable'
+    if reason=='unsupported_venue': recommendation='leave unavailable; exact adapter requires owner approval and conflicts with the current no-new-provider constraint'
+    elif reason=='unsupported_instrument': recommendation='leave unavailable; establish exact tradable instrument before considering an approved adapter'
+    elif reason in ('pair_not_listed','pair_inactive','ambiguous_pair'): recommendation='leave unavailable; do not substitute another venue, quote or instrument'
+    else: recommendation='leave unavailable for this cycle; diagnose the existing adapter without adding providers'
+    groups[reason].append({'symbol':symbol,'recommendation':recommendation})
+print(json.dumps(groups,indent=2))
+PY
+```
+
+At installation the unavailable reasons were 11 unsupported venues, one unsupported instrument and one unlisted pair. The current total is 16; its reason distribution and actual identities are pending owner inspection. No adapters were added or approved.
+
+Telegram: the labelled synthetic test was sent. A real threshold-triggered alarm is **not verified**. Source review shows `last_sent` records the pre-send cycle time, without a Telegram acknowledgement timestamp; subtracting it cannot measure delivery delay. A real alarm receipt must identify observation time and independently measured acknowledgement/arrival time before claiming a delay. Existing monitor state cannot reconstruct that latency. No synthetic event was substituted for a real signal.
+
+Authorization refresh surviving 24 hours is **not verified**. Today's post-restart sync proves current authorization only. Earliest conservative 24-hour post-install check: **2026-10-09T10:20:00Z**; require a newly completed sync, not cached inventory, plus evidence of actual refresh before calling refresh itself verified.
+
+Next gate: owner aggregate class/reason export and private unavailable-list review; then the first genuine alarm receipt with measured latency, and the 24-hour refresh check. These remain explicit pending checks; the collector, scanner, pilot, permissions, adapters and thresholds were unchanged.
