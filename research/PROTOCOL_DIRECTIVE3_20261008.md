@@ -418,3 +418,164 @@ coverage and disk fit remain unverified. Retain current backup/rollback gates.
 6. Wallet evidence remains insufficient (0/111 known, denominator incomplete).
    Build no wallet-quality feature. Downstream layers and scheduled checks stay
    under their existing directives. Append future receipts to this file only.
+
+## 2026-10-08 — Directive 3 Amendment 1: owner-authorised snapshot custody
+
+This amendment supersedes the previous prohibition on collecting a new research
+sample. The owner explicitly permits the separate read-only archiver despite the
+pilot's indirect dependency: early_scout.history() reads snapshots, then scoring
+passes history into fc_emit_cycle(). No scanner, scorer, capture or pilot bytes,
+inputs or records are changed. This permission does not authorise pilot analysis.
+
+### Custody installation and operational gate
+
+The new hourly oneshot opens only scanner.snapshots with URI mode=ro,
+query_only=ON and busy_timeout=500ms; immutable is forbidden so committed WAL rows
+are visible. An SQL authorizer denies every other source table. No capture.sqlite
+access, ledger-table access, provider requests, network or Telegram calls occur.
+The existing non-root health service user is reused only after owner approval of
+that identity. New service filesystem isolation makes scanner and health paths
+read-only and capture's directory inaccessible. Engineering permissions, existing
+units and production sources are not changed. Nice=19; I/O scheduling is idle.
+
+Each source read transaction selects at most 5,000 rows ordered by (ts,mint),
+then rolls back immediately before archive writes or checks. A one-second query
+progress limit, 20-second overall copying bound and 20-batch bound limit load.
+Busy/locked/interrupted batches are skipped without a retry loop; next hourly run
+resumes from the archived composite checkpoint. Rows newer than two minutes are
+left for a later run because scanner minute rows can still be updated. Archive
+keys are (mint,ts); repeated keys retain their first copied values. UPDATE/DELETE
+triggers protect both snapshots and checkpoints. No automatic deletion occurs.
+
+The same B limits apply: 512 MiB cap, 3 GiB minimum free, with a conservative
+reserve for rollback journaling and logs. At a storage guard the new timer is
+disabled and an aggregate incident remains in its own state. Row logs contain
+only count, copied timestamp range and runtime, never mint, pair or source values.
+Copies can include excluded tokens in private custody, but no archived token rows
+are queried for study, exported or summarised until the existing pilot/ledger-mint
+exclusion is applied. Initial retained rows before activation are custody only;
+they are not new development decision-minutes or a pilot backfill.
+
+Because existing read_status.py has current counters rather than a retained
+hourly history, installation begins with a two-hour baseline and zero copied
+rows. Counts come only from the existing sanitized read_status route, whose bytes
+are pinned; no pilot DB is opened. At the first copy attempt after that baseline,
+a durable, non-resetting activation record fixes the collection dates before any
+snapshot read. Any failure does not reset the dates. The before and after reports
+include their actual status timestamps, accepted/rejected count deltas, last
+successful-cycle age, scanner WAL size and batch runtimes. The first after report
+spanning at least two hours is retained separately in private operational state;
+actual elapsed duration is shown if hourly status timing exceeds exactly two hours.
+
+Material rejected-rate rise is predeclared as >=5 percentage points over baseline
+once each comparison has >=20 observed cycles. A smaller baseline fails closed.
+An existing health incident logged during any run, any WAL growth relative to the
+previous copy-run measurement, missing/stale health evidence or guard failure also
+requests an immediate stop. A root ExecStopPost checks the sanitized existing
+incident audit and disables ONLY vivameda-snapshot-archive.timer. It accepts no
+other unit names or command text. No scanner/pilot diagnosis or restart occurs.
+An ordinary WAL growth can therefore conservatively stop collection; owner review
+is required before any resumption. Source/user/access drift also refuses install.
+
+Reviewed rollback: disable/stop only the new timer; leave its archive and logs in
+place, with no deletion and no production restore required. The installer backs
+up the unchanged scanner and learning source, records their hashes and verifies
+unchanged existing unit/source hashes after install. It refuses an existing new
+component rather than resetting activation or overwriting its archive. B still
+requires a freshly reviewed post-stop patch against the actual live scanner hash.
+
+### New dated development and sealed holdout
+
+Let T be the activation timestamp written immediately before the first copy
+attempt after the two-hour baseline. Development decision-times are [T,T+21d);
+holdout decision-times are [T+21d,T+28d). Only the existing 60-minute labels,
+<=180-second lateness/gap coverage, features, exclusions and temporal safeguards
+apply. Endpoint maturation and archive coverage at boundaries must be enforced;
+no decisions outside these fixed windows are added or backfilled. Collection
+stops independently of outcomes at T+28d. Holdout stays closed until qualifying
+rules are frozen. A failed/insufficient window does not automatically extend.
+
+Qualifications remain >=20 run minutes, >=20 non-run minutes and >=2 UTC dates;
+also report episodes, unique tokens, date counts and decision-day clustered
+uncertainty so repeated minutes are not treated as independent trials. Incomplete
+prehistory, historical candidate/trade state and missing ATH remain limitations.
+The post-stop launch-path change can create differing observation coverage within
+this window: report coverage by date and anchor type; do not equate a first stored
+candidate MC with launch MC or retrospectively invent pre-candidacy paths.
+
+A1 is comparison-only: h1_not_extended removed 73/76 development run minutes;
+combined score+A1 selected just 1/76. g remains null; no A2 choice was qualified.
+No new shadow service, agent, wallet feature, signal or trading feature is activated.
+
+### Second-leg continuation family: grid frozen before new outcomes
+
+The existing development contrast motivates a continuation hypothesis: median
+five-minute buy ratio was 0.569 for runs versus 0.502 for matched non-runs, and
+hourly volume/MC was 2.213 versus 0.239. These are six episodes over two dates,
+not evidence of a predictive edge. Define S independently of A1's hour-extension
+hard gate and without requiring the current score threshold. Existing candidacy,
+coverage and exclusions remain mandatory. Fixed gates: first stored same-pair
+anchor multiple >=2; current MC/prior-30-minute peak >=0.5; five-minute buy ratio
+>=0.55; five-minute transactions >=100. The peak uses only snapshots strictly
+before t0, and the anchor is the first available archived same-pair MC, not launch.
+
+Exactly two tunable parameters and their full grid are frozen now:
+
+| Parameter | Frozen values |
+|---|---|
+| Maximum current MC / strictly prior 30-minute peak | 0.75, 0.90, 1.00 |
+| Minimum hourly volume / current MC | 0.25, 1.00, 2.00 |
+
+The nine choices cannot be enlarged after collection. Select the qualifying choice
+with highest development run precision; ties prefer smaller maximum peak ratio,
+then larger minimum volume/MC. Qualification applies to selected run/non-run
+minutes, not all development labels. At most two candidate rules can be frozen:
+one qualified A2 and one qualified S. A1 remains a comparison. A family with no
+qualifying choice produces no rule; no qualifying rule means no holdout opening.
+Open holdout once, report decision-day clustered results, and do not iterate.
+The machine-readable grid is archiver/second_leg_grid.json. Production thresholds
+and weights remain frozen; these are research definitions only.
+
+### Amendment receipts and remaining gates
+
+Custody build: 20 Python 3.12 synthetic tests passed locally and on the engineering
+server (Python 3.12.3); all 49 existing Directive 3 tests also passed (69 total).
+Both new systemd units passed syntax verification. Tests include WAL
+visibility, forbidden source-table access, read transaction closure, bounded
+batches, dedupe/resume, append-only triggers, busy skip, storage guards, rate/WAL/
+health kills, fixed-unit stop authority, preserved two-hour postflight and metadata
+receipt without archive access and symlink-safe privileged marker writes. No real snapshot rows were read by engineering.
+Actual install, first copied row count/time range, effective service access and the
+live two-hour after comparison remain unverified until the owner installs and
+returns the aggregate receipt. Provider requests=0; new Telegram sends=0.
+
+B receipt: unchanged build-only; 0 installs. Re-audit actual live source after
+2026-10-20T06:50:39Z and existing follow-up constraints before reviewed owner install.
+A/C receipt: historical development insufficient (6 episodes, 2 dates); new window
+not activated by engineering, holdout closed, g=null, 0 new shadow decisions.
+Wallet scope stays frozen: 0 complete/fresh of 111 known owner-token requirements;
+full denominator unverified. No new wallet work.
+
+Owner recovery-notification receipt: recovery messages inactive, incidents active;
+health source 611bb7f873f985af55b76bc29efe11a1ac88a56bf3048336be17ab736a089ddf;
+backup /opt/vivameda-operations/crypto-health-recovery-inactive-f2nbx87u; five tests
+passed, no restart, pilot or unit changes. Normal-cycle recovery_suppressed evidence
+remains pending. The archiver observes incident states regardless of send result.
+
+### Astra handover — Amendment 1 is controlling
+
+1. Preserve this amendment's permission boundary: custody only; no pilot outcomes,
+   ledger contents, production changes or downstream builds. The prior small-sample
+   no-new-collection gate is superseded solely by the fixed archive window above.
+2. Verify published source hashes and the owner bundle digest before owner install;
+   use the approved existing health user, without expanding engineering access.
+3. Record installation backup, zero-row baseline receipt, activation timestamp,
+   first-copy row count/time range and per-batch runtimes in THIS protocol only.
+   Obtain aggregate metadata with archiver/read_receipt.py; do not inspect its DB.
+4. Check the preserved two-hour postflight and timer state. Any kill condition must
+   leave only the new timer disabled. Do not investigate by touching pilot/scanner.
+5. Keep g null and holdout closed; apply existing exclusions BEFORE study queries.
+   Do not read new development outcomes until the fixed development window closes.
+   Do not enlarge the nine-choice S grid, iterate holdout or extend collection.
+6. Keep A inactive; keep B pending post-stop live-source re-audit. Publish aggregates
+   only, bind changed files by SHA-256 and verify those hashes on the public remote.

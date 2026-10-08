@@ -1,7 +1,16 @@
 {
   "activated": false,
+  "archiver_installed": false,
   "files": {
-    "PROTOCOL_DIRECTIVE3_20261008.md": "deead2c89cadfc6248c7be230a1806d1ef739212ee490d482889698ab5b691db",
+    "PROTOCOL_DIRECTIVE3_20261008.md": "8a91f01434b315cb3d7207853eace5b730c07de40df8bc7d7b46e4748cf3837d",
+    "archiver/archiver.py": "d8167b3b33db6d25438425f374aa71cec23588a5a6fd08637cdd70235019ad44",
+    "archiver/install_archiver.py": "47e5aa934ccc7573ac428eee7bac7700e8f52045bff8f5349c4b2b35078a6fb7",
+    "archiver/kill_switch.py": "60807c7a027161313c334c21ce0db0700f845b35be7c1517787a8aa8bff9b895",
+    "archiver/read_receipt.py": "f11fef37b01dc69765816bc4d03370b3aa3924c126c8c9c1901895801b514d87",
+    "archiver/second_leg_grid.json": "4413b7417321fb114b4ad7c79432da2a80d38e7e44b3511049c8e887789f61b9",
+    "archiver/test_archiver.py": "7dc8033969a788e97eec7a812fceb90bd6288a943a8fefac73c4110fdfeae28e",
+    "archiver/vivameda-snapshot-archive.service": "ad573eb1dda2f596166336b9113f2e9ca0614fc8e719cd7867e9b17b9f8e9539",
+    "archiver/vivameda-snapshot-archive.timer": "b1d7268152eb8b41f1da3040f944ff437358434e3596ac6fc45f3eab97e71fb7",
     "build_launch_patch.py": "ae51a57b87d83f9df8fcbfe7136b6faae5d1d8f47bc2c198494ccddf182c00ca",
     "candidate_early_scout.txt": "0f178cac4b45bf972aa8dd5c6f1b399b4dbc1b5211123ca384bb5109fd6adba6",
     "earlier_entry.py": "8a8a7e54d3807e583fb07a1eefbfe0ec3378daf803ee8100c3c4c1dfc49ce60c",
@@ -15,6 +24,8 @@
     "vivameda-earlier-entry-shadow.service": "3794398f027cdbd191cde1b863555e450590bbf93baea6406a38928f1ce6700b",
     "vivameda-earlier-entry-shadow.timer": "db8000a0874c3755f760bd1a7272e6fa3a5bb89b1f26c2195eb936eabd61c261"
   },
+  "g": null,
+  "holdout_opened": false,
   "python": "3.12",
   "schema": "directive3-review-bundle-v1"
 }
