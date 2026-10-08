@@ -1,0 +1,16 @@
+[Unit]
+Description=Vivameda earlier-entry shadow research (post-stop reviewed activation only)
+
+[Service]
+Type=oneshot
+User=vivameda-monitor
+Group=vivameda-monitor
+ExecStart=/usr/bin/python3 /opt/vivameda-earlier-entry/shadow_scorer.py --once
+NoNewPrivileges=true
+PrivateNetwork=true
+ProtectSystem=strict
+ProtectHome=true
+ReadOnlyPaths=/opt/vivameda-crypto-early-scout /opt/vivameda-earlier-entry
+ReadWritePaths=/var/lib/vivameda-crypto-earlier-entry/shadow
+UMask=0077
+

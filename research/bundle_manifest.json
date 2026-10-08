@@ -1,0 +1,20 @@
+{
+  "activated": false,
+  "files": {
+    "PROTOCOL_DIRECTIVE3_20261008.md": "ef5ce88f961ca4a2795faf5052987b852a3b02d028b5d2546c33a5aefc75a91e",
+    "build_launch_patch.py": "ae51a57b87d83f9df8fcbfe7136b6faae5d1d8f47bc2c198494ccddf182c00ca",
+    "candidate_early_scout.txt": "0f178cac4b45bf972aa8dd5c6f1b399b4dbc1b5211123ca384bb5109fd6adba6",
+    "earlier_entry.py": "8a8a7e54d3807e583fb07a1eefbfe0ec3378daf803ee8100c3c4c1dfc49ce60c",
+    "frozen_scorer_source.txt": "3e73978a41e2e21e090a7eea92bbdc1a52dc190ce229ac262a3c6a2b0af6a043",
+    "install_launch_path.py": "05790afc51779652d32defaf1af7196f3b89863df9d849a959e5017831ffebbd",
+    "install_shadow.py": "ee64cd2d0bcc9c6d358aa00cc5c3eee9dcbe83f690f5f06a30047fa57368b463",
+    "launch_path.py": "0bfdfadc1b67fc0f3708339f7ce4f6e2da67e6f2e225cff01198bb483aa53262",
+    "shadow_policy.DRAFT.json": "50db7deaf5057f085555bf73c32ae08b76f3161f203b77fc76dcb0bf62aeb4ef",
+    "shadow_scorer.py": "c39b4a82530d98b69b3669036ad47843bd007ae5f0c04c16c4349249026262f4",
+    "test_directive3.py": "b02add017ecb98f1d01e6cdbcda63ce8af957f9eaf8f9fc1372811c747970c6d",
+    "vivameda-earlier-entry-shadow.service": "3794398f027cdbd191cde1b863555e450590bbf93baea6406a38928f1ce6700b",
+    "vivameda-earlier-entry-shadow.timer": "db8000a0874c3755f760bd1a7272e6fa3a5bb89b1f26c2195eb936eabd61c261"
+  },
+  "python": "3.12",
+  "schema": "directive3-review-bundle-v1"
+}

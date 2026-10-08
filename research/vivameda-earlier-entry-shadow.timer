@@ -1,0 +1,11 @@
+[Unit]
+Description=Earlier-entry shadow sampling (independent poll, no production synchronization claim)
+
+[Timer]
+OnBootSec=60
+OnUnitInactiveSec=60
+AccuracySec=1
+Unit=vivameda-earlier-entry-shadow.service
+
+[Install]
+WantedBy=timers.target

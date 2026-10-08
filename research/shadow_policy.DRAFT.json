@@ -1,0 +1,12 @@
+{
+  "deadline": 1794898239,
+  "estimand": "independent_poll_current_scanner_universe",
+  "g": null,
+  "owner_approved": false,
+  "protocol_sha256": null,
+  "rule_sha256": null,
+  "seed": 20261008,
+  "source_sha256": "3e73978a41e2e21e090a7eea92bbdc1a52dc190ce229ac262a3c6a2b0af6a043",
+  "target_per_arm": 100,
+  "version": "directive3-shadow-DRAFT"
+}

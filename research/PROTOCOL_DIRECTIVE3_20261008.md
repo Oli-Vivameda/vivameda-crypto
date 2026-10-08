@@ -196,3 +196,79 @@ B status: post-stop candidate build; installation forbidden before stop/review.
 10. Append each receipt here. No separate handover documents, model/agent/trading
     features, new providers, extra requests or Telegram tests.
 
+## Build receipts — 2026-10-08 (no real study outcomes opened)
+
+C: the protocol was committed before study access, published on GitHub main in
+commit 69499d5, and its exact remote bytes verified against preregistration
+SHA-256 b664efae1447f0cbffff9d53de51141577daf3f8e5f28efd9011d1a2ed099822.
+The exclusion-aware exporter is built. Engineering access was refused without
+changing permissions. Actual development candidate-minutes, run/non-run counts,
+feature distributions and qualifying thresholds remain UNAVAILABLE. No holdout
+has been opened and no rule has been frozen. Never-visible pre-candidacy runs
+cannot be counted from retained snapshots/latest launch metadata.
+Next gate: owner runs the following read-only development command and returns
+only its aggregate JSON. This opens development labels, never pilot endpoints
+or prediction bodies; exclusion identities stay private.
+
+```bash
+python3 /var/lib/vivameda-engineering/repo/client_learning/crypto_directive3_20261008/research/earlier_entry.py --phase development --expected-sha256 8a8a7e54d3807e583fb07a1eefbfe0ec3378daf803ee8100c3c4c1dfc49ce60c
+```
+
+Wallet coverage: complete-and-fresh required-owner histories / required owners =
+UNAVAILABLE pending the same owner export; no wallet-quality feature was built.
+
+A: separate read-only shadow candidate, own append-only SQLite, deterministic R
+control draws, passive covered endpoints and refusal gates built; activation
+count 0. A2 threshold remains null and owner_approved remains false. Stored
+alert_level is delivery state, so exact current-score parity is not verified.
+Independent polling does not guarantee the scanner's exact cycle or timestamp;
+owner must approve that estimand or require a separately reviewed parity route.
+No extra provider requests are included. Candidate request budget is 0.
+The exclusion view reads pilot cohort membership, so before-stop activation does
+not meet the requirement to read nothing the pilot writes and is not selected.
+Next gate: development-qualified rule freeze, committed hashes, service-user
+read-only access verification and owner approval of estimand, sample and stop.
+Installer leaves the new timer disabled; no activation command is authorized now.
+
+B: append-only launch-path module and a separate scanner text candidate built;
+no deployed scanner bytes changed. Candidate scanner SHA-256:
+0f178cac4b45bf972aa8dd5c6f1b399b4dbc1b5211123ca384bb5109fd6adba6.
+Hook uses only existing upsert_pump observations; extra requests 0. All-launch
+creation coverage and disk fit remain unverified. 512 MiB cap, 3 GiB free-space
+gate and 30-day archive-review stop are implemented without automatic deletion.
+Both installers conservatively refuse until 2026-10-20T07:53:39Z (pilot stop plus
+63-minute passive-follow-up allowance); this is a deployment guard, not a change
+to the pilot stop or research outcomes. Source backup and source-hash postflight
+are implemented; service restart/activation is left to the reviewed owner action.
+Rollback: restore backed-up scanner bytes, retain private captured path data,
+remove or leave the new module inactive, and owner-restart only after stop.
+Next gate: post-stop live-source re-audit, reviewed bundle SHA-256, owner install,
+normal-cycle path-write postflight and aggregate cap/coverage receipt.
+
+Validation across C/A/B: 49 focused synthetic tests passed on server Python 3.12
+(0.580 seconds) and local Python 3.12. No actual development or holdout results,
+production installs, pilot changes, restarts, new provider requests or Telegram
+sends occurred. This is candidate-build validation, not live parity or efficacy.
+The accompanying bundle_manifest.json binds every candidate file by SHA-256.
+Final publication requires verification of every changed file's remote bytes.
+
+## Astra handover — current next gates
+
+1. Preserve the fixed pilot stop, frozen production files and downstream layers.
+   Use Python 3.12. Read this protocol and verify the review manifest first.
+2. Obtain only the owner development aggregate from the command above. Do not
+   widen private permissions or read prediction bodies/pilot endpoints. If the
+   exporter refuses, diagnose its reviewed guard instead of bypassing it.
+3. Append actual development counts and distributions here. Label invisible
+   pre-candidacy counts unidentifiable and report retention/ATH limitations.
+4. If the preregistered development qualifications pass, freeze at most A1/A2,
+   commit the rule bytes and hashes, then permit the one-shot holdout route.
+   Do not iterate after opening; inadequate date clusters stay descriptive.
+5. Keep shadow activation blocked until parity/estimand, read-only access,
+   development threshold, sample, stop and owner approval gates are satisfied.
+   Respect the conservative post-stop installer time gate; no new requests.
+6. After stop and review, install B only against matching live source with a
+   backup, exact bundle SHA-256 and owner install. Verify source hashes and the
+   first normal-cycle append without sends; retain rollback and private data.
+7. Append short receipts and all subsequent handover updates to this file only.
+   Publish aggregates only and verify remote hashes after every publication.
