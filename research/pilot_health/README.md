@@ -13,3 +13,13 @@ Limitations: notification delivery has the usual send/state-write crash window a
 Installed by the owner on 6 October 2026 at 07:37 UTC; backup `/opt/vivameda-operations/crypto-health-backup-20261006T073739Z`. Timer and a healthy collecting report were subsequently verified. See `../forward_capture/STATUS_20261008.md` for today's counts and explicit missing incident-history evidence. The following describes the original installer, not a request to reinstall. `install_health.py --install --expected-sha256 HASH` verifies the complete monitor bundle and both currently deployed pilot source hashes, requires an existing readable pilot, compiles source and validates unit syntax before installation. It installs only its own files/timer and never restarts scanner/tracker or opens their private database for writing. A differing existing monitor requires a separately reviewed update. Postflight returns sanitized health and timer state. A paused pilot is reported, never automatically cleared.
 
 Run `python3 -m unittest discover -s client_learning/crypto_pilot_health_20261006 -p 'test_*.py'` on Hetzner. Tests use temporary synthetic data and mocked sends, never production endpoints or credentials.
+
+## E1 incident/send audit — reviewed, not installed
+
+Candidate logging bundle `b29c87e37c6f112a6703e3d5a5c0e38dd4689c566af0a014c4aa7515eef4c97d` appends sanitised state, reason code, UTC epoch time and send result to `incident_send_log.jsonl` in the existing health state directory. Pending-check and final results preserve crash/failed-send ambiguity; they are not proof of recipient delivery. It changes no health/dedup/retry rules, pilot files, units, permissions or timer cadence. Logging failures are visible as `audit_log=unavailable`. Previous incident history cannot be backfilled. Eight logging/installer regressions plus 41 existing movement/exchange regressions passed: **49 tests total**.
+
+```bash
+python3 /var/lib/vivameda-engineering/repo/client_learning/crypto_directive2_20261008/evidence_logs/install_evidence_logs.py --component health --install --expected-sha256 b29c87e37c6f112a6703e3d5a5c0e38dd4689c566af0a014c4aa7515eef4c97d
+```
+
+Owner installer requires the original health hash, a quiet oneshot, creates source backup and atomically replaces only health.py. It does not invoke a health run or emit a message; the existing timer loads it next. Postflight checks installed hashes, active timer and frozen pilot/config/unit bytes; next fresh audit status is still required. No pilot restart or permission change. Next gate: owner install receipt, then verify next normal timer run writes the sanitised log.
