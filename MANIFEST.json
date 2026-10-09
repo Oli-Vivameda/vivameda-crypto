@@ -14,7 +14,7 @@
     "docs/COMPLETENESS.md": "0568f3e2e3f6604e1a447261ae39ed7c4d5d25a9e493231d69798e17c5229e8e",
     "docs/FULL_SETUP.md": "b5cc9809c9a70bbd8afdc45a30f8fc62ef7456531ddfeeee9633e6f3a0991efa",
     "docs/TRADINGVIEW_HANDOVER_20261008.md": "35d705a80fc3080114540a30c5b794a68452d92ccd70f2a9f769cb1bc546e75f",
-    "docs/VALIDATION.md": "3c3f948d1459d6c6213eb7378af43f9519d72d66687cfbcdaa9c44c5ed2e782a",
+    "docs/VALIDATION.md": "0eeadea278bc4fb7bc6e94e12336b72cc5a29ddadde4caa0f8aa10241f1da326",
     "docs/COVERAGE_20261004.md": "b5b089412561c9f0b627966ee3a1ef5b577493707ccaa0f6c4b62c1b58bd123e",
     "docs/SETUP.md": "0c5ba2e5780db52d942178616d9acee83a2b317625859c1f020a72a6854857b0",
     "docs/REPOSITORY_POLICY.md": "937df3adcdce8dde1722f0931c10580a48a3a93592755a925f643eb1245ff4f3",
@@ -146,7 +146,7 @@
     "research/forward_capture/HANDOVER_20261006.md": "8f123179bd5a10b767ce8ee6ed6b344959f75a36362893bb3cb31e6b19debed0",
     "research/forward_capture/README.md": "215d76743d7337955158ddacd697d31fdd9b682220234ce5df94d7e4a2c96ac3",
     "research/forward_capture/STATUS_20261008.md": "c486141f303fcc469c93a5b55c594af6280bd066056abb30b05e7de08a62b0e9",
-    "research/forward_capture/PROTOCOL_V2_DRAFT.md": "7030c44c96c0294967c67228624e3bbf83c5e6a553df1e78f61111303726f1a8",
+    "research/forward_capture/PROTOCOL_V2_DRAFT.md": "bf348a9d3e9476cd66c0bac2f8f12189cd21af386aa04d72e872e6a4da13caa7",
     "research/forward_capture/test_capture.py": "35053218a58207d371726a29946b404b29a3e4a8db14684ed29c95c6ffd74211",
     "research/forward_capture/BUILD_STATUS.md": "79c4efcd388222bcb7f8cf08d1ad042a4a3c64f687559e24cbae482b4607b4d8",
     "research/forward_capture/capture.py": "78a49a298e5e30aac3726634de5d91be8ba17d6febf98087342767afe36dcfec",
@@ -214,7 +214,7 @@
     "agent/interpretation/model_proxy.py": "6893358dc8ce3a57dfd6d2c63fa977871f24b3f677e2f3093e9bfbe25fd2f615",
     "agent/interpretation/crypto_agent.py": "ddd57fea740ce087122482a89ad1ea65d18516f2a077264d0bc6f593b8dd2423",
     "agent/interpretation/test_factual_guard.py": "fef228bb346ef35f2032084a225d973bf81b695d53b489bc59c598c4c6a5717d",
-    "research/PROTOCOL_DIRECTIVE3_20261008.md": "37ad16c6b3219a5b277095045e61a408f9ba7ca8e1223afa07ea386c6228ac04",
+    "research/PROTOCOL_DIRECTIVE3_20261008.md": "588b81288c7bff73ea32db6456f666d90c83eeaf830f307f77fde016c9bbae23",
     "research/build_launch_patch.py": "ae51a57b87d83f9df8fcbfe7136b6faae5d1d8f47bc2c198494ccddf182c00ca",
     "research/candidate_early_scout.txt": "0f178cac4b45bf972aa8dd5c6f1b399b4dbc1b5211123ca384bb5109fd6adba6",
     "research/earlier_entry.py": "8a8a7e54d3807e583fb07a1eefbfe0ec3378daf803ee8100c3c4c1dfc49ce60c",
@@ -227,7 +227,7 @@
     "research/test_directive3.py": "b02add017ecb98f1d01e6cdbcda63ce8af957f9eaf8f9fc1372811c747970c6d",
     "research/vivameda-earlier-entry-shadow.service": "3794398f027cdbd191cde1b863555e450590bbf93baea6406a38928f1ce6700b",
     "research/vivameda-earlier-entry-shadow.timer": "db8000a0874c3755f760bd1a7272e6fa3a5bb89b1f26c2195eb936eabd61c261",
-    "research/bundle_manifest.json": "973d257007db55715cd166deecc2b1187c4b45f65e606d888eb0dcdcdbd9fecf",
+    "research/bundle_manifest.json": "5fd074be9418d4154458f32d5f09e1ddbe5204c1a68ccb0992c59fa869b89cb8",
     "research/archiver/read_receipt.py": "f11fef37b01dc69765816bc4d03370b3aa3924c126c8c9c1901895801b514d87",
     "research/archiver/vivameda-snapshot-archive.service": "ad573eb1dda2f596166336b9113f2e9ca0614fc8e719cd7867e9b17b9f8e9539",
     "research/archiver/second_leg_grid.json": "4413b7417321fb114b4ad7c79432da2a80d38e7e44b3511049c8e887789f61b9",
@@ -240,7 +240,10 @@
     "research/archiver/test_install_preflight.py": "ac4e5261c44ab937c54d860eb4960c37ccab0842a7b7c747ec546baaaeaecc36",
     "research/health_incident_inactive/health.py": "3a5005d2a5e68421d1aea4680d1059f7c07874c03659b4d3313435de59569c18",
     "research/health_incident_inactive/test_inactive.py": "249081ea8534c0765445e0cc70f82a23fe8d94d0f117fcd9e7e7774d74db1985",
-    "research/health_incident_inactive/install_inactive.py": "9198644c435cdf9923c9e01cafe66d66dd42612bb3947e8397bad85a027b908a"
+    "research/health_incident_inactive/install_inactive.py": "9198644c435cdf9923c9e01cafe66d66dd42612bb3947e8397bad85a027b908a",
+    "research/pilot_health/recovery_inactive/health.py": "611bb7f873f985af55b76bc29efe11a1ac88a56bf3048336be17ab736a089ddf",
+    "research/pilot_health/recovery_inactive/install_inactive.py": "6089239d803fb811bf102dba11e531f38068839c725ccf8ec5be6a5dff2e669a",
+    "research/pilot_health/recovery_inactive/test_inactive.py": "5b4d72bb19cc3e82448139255c493bb893e2516cabcbb25147bae9ce5834ae2e"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -793,7 +796,7 @@
     "status": "archiver_owner_installed_two_hour_baseline_collection_activation_pending",
     "protocol": "research/PROTOCOL_DIRECTIVE3_20261008.md",
     "review_bundle": "research/bundle_manifest.json",
-    "review_bundle_sha256": "973d257007db55715cd166deecc2b1187c4b45f65e606d888eb0dcdcdbd9fecf",
+    "review_bundle_sha256": "5fd074be9418d4154458f32d5f09e1ddbe5204c1a68ccb0992c59fa869b89cb8",
     "python": "3.12",
     "synthetic_tests_passed": 49,
     "holdout_opened": false,
@@ -855,5 +858,24 @@
     "source_sha256": "3a5005d2a5e68421d1aea4680d1059f7c07874c03659b4d3313435de59569c18",
     "normal_cycle_suppression_verified": false,
     "service_restarted": false
+  },
+  "directive2_3_followup_20261009": {
+    "release_integrity_files": 241,
+    "release_full_suite_passed": false,
+    "release_blocker": "execution_environment_unix_socket_creation_refused",
+    "python": "3.12.14",
+    "new_manifest_bindings": 3,
+    "task_f_scheduled_utc": "2026-10-09T10:25:00Z",
+    "pilot_count_only_dates": [
+      "2026-10-12",
+      "2026-10-16",
+      "2026-10-20"
+    ],
+    "age_window_draft_only": true,
+    "directive3_rerun": false,
+    "development_complete_days_required": 21,
+    "holdout_opened": false,
+    "g": null,
+    "pilot_modified": false
   }
 }
