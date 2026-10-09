@@ -27,3 +27,14 @@ The release check now explicitly supports Python 3.12 and refuses every other ma
 Message: `Release blocked: supported interpreter is Python 3.12; Python 3.13 is unsupported because frozen scorer AST hashes are version-bound. Use Python 3.12; deployed source and pilot binding must not be regenerated.`
 
 Next gate: use Python 3.12 for release. No deployed scanner, tracker, scoring policy, frozen fixture or capture activation bytes changed.
+
+
+## 9 October 2026 — recovery files bound; clean-checkout release attempt
+
+Clean public checkout base: `1f97fc1cbf8e02e7120e1dbd6e504f3637c07c06`. Inventory found exactly three missing manifest bindings: `research/pilot_health/recovery_inactive/health.py`, `install_inactive.py`, `test_inactive.py`. Their existing bytes were added; no source or test bytes changed. After draft/receipt documentation and research-manifest updates, all 241 included file bindings match. Deployed source and pilot binding remain unchanged.
+
+`python3 scripts/verify_release.py` was actually run in the clean public checkout with the reviewed metadata/documentation patch on Python 3.12.14. Integrity passed; full-suite release FAILED CLOSED in `agent/runtime`: 18 tests ran, 17 passed, one error in `test_peer_credentials_and_worker_remain_separate`, because this execution environment refuses Unix-domain socket creation with `PermissionError: [Errno 1] Operation not permitted`. This is an environment blocker, not a passing receipt or a reason to skip/change the test. No supported-interpreter refusal occurred. No later suites are claimed as run. Existing Python 3.12 server counts remain historical.
+
+A separate clean public clone on engineering server succeeded, but subsequent server connector read/write/job calls returned internal errors; no server verification result or successful draft write is claimed. Five recovery-inactive focused tests pass locally on Python 3.12.14 (synthetic fixtures); they do not establish a full release pass. No runtime permissions were widened, no tests skipped and no source/scorer regenerated. No provider requests, production changes, pilot work or outcomes accessed.
+
+Next release gate: run the unchanged `scripts/verify_release.py` on a fresh checkout of the published follow-up commit in an ordinary Python 3.12 environment with Unix sockets enabled, then append the exact full-suite receipt here and bind its hash. Owner can use a new temporary directory: `git clone --depth 1 https://github.com/Oli-Vivameda/vivameda-crypto.git <new-directory>`, then `python3.12 <new-directory>/scripts/verify_release.py` with existing project dependencies. Do not claim release-ready before that receipt. All follow-up changes will enter main as one squashed commit; verify each changed remote file SHA-256 after publication.
