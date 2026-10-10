@@ -1,0 +1,9 @@
+[Unit]
+Description=Vivameda fire watchlist check every minute
+[Timer]
+OnBootSec=60
+OnUnitInactiveSec=60
+AccuracySec=5
+Unit=vivameda-100x-watchlist.service
+[Install]
+WantedBy=timers.target

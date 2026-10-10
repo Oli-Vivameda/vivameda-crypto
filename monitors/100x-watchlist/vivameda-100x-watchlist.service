@@ -1,0 +1,20 @@
+[Unit]
+Description=Vivameda separate fire watchlist Telegram relay
+After=network-online.target
+[Service]
+Type=oneshot
+User=@USER@
+Group=@GROUP@
+Nice=19
+IOSchedulingClass=idle
+ExecStart=/usr/bin/python3 /opt/vivameda-100x-watchlist/notifier.py
+TimeoutStartSec=30
+UMask=0077
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ReadOnlyPaths=/opt/vivameda-crypto-early-scout
+InaccessiblePaths=/opt/vivameda-crypto-early-scout/data/forward_capture -/opt/vivameda-crypto-early-scout/data/prediction_ledger
+ReadWritePaths=/var/lib/vivameda-100x-watchlist
+MemoryMax=128M
