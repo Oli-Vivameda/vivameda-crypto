@@ -243,7 +243,13 @@
     "research/health_incident_inactive/install_inactive.py": "9198644c435cdf9923c9e01cafe66d66dd42612bb3947e8397bad85a027b908a",
     "research/pilot_health/recovery_inactive/health.py": "611bb7f873f985af55b76bc29efe11a1ac88a56bf3048336be17ab736a089ddf",
     "research/pilot_health/recovery_inactive/install_inactive.py": "6089239d803fb811bf102dba11e531f38068839c725ccf8ec5be6a5dff2e669a",
-    "research/pilot_health/recovery_inactive/test_inactive.py": "5b4d72bb19cc3e82448139255c493bb893e2516cabcbb25147bae9ce5834ae2e"
+    "research/pilot_health/recovery_inactive/test_inactive.py": "5b4d72bb19cc3e82448139255c493bb893e2516cabcbb25147bae9ce5834ae2e",
+    "monitors/100x-watchlist/README.md": "485948aafbc22e5375c24f07ddd4a6cc13ab063536b2b30ddce490af6941be15",
+    "monitors/100x-watchlist/install.py": "73e081edb2402958a3a27fdc013eebe1f63762da048c6db16dbc0af6ffaab841",
+    "monitors/100x-watchlist/notifier.py": "1a5b133179cb29d7bb1b00dfdaedaad555a0fb40f963ba60168e36725bc090bd",
+    "monitors/100x-watchlist/test_notifier.py": "286c5ed4e7257a29a21609154d0e90aa7127f3c1544e54d778c3defe91a4d82f",
+    "monitors/100x-watchlist/vivameda-100x-watchlist.service": "ca2abd0e9c5f67cffd353778d0da17e3942db45b6937372b4c7add95dc8cd348",
+    "monitors/100x-watchlist/vivameda-100x-watchlist.timer": "401e97ed25e4647ffdca4693b3802a154611888552387dd704f417fa542e79a1"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
