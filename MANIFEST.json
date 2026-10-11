@@ -244,12 +244,17 @@
     "research/pilot_health/recovery_inactive/health.py": "611bb7f873f985af55b76bc29efe11a1ac88a56bf3048336be17ab736a089ddf",
     "research/pilot_health/recovery_inactive/install_inactive.py": "6089239d803fb811bf102dba11e531f38068839c725ccf8ec5be6a5dff2e669a",
     "research/pilot_health/recovery_inactive/test_inactive.py": "5b4d72bb19cc3e82448139255c493bb893e2516cabcbb25147bae9ce5834ae2e",
-    "monitors/100x-watchlist/README.md": "485948aafbc22e5375c24f07ddd4a6cc13ab063536b2b30ddce490af6941be15",
-    "monitors/100x-watchlist/install.py": "73e081edb2402958a3a27fdc013eebe1f63762da048c6db16dbc0af6ffaab841",
-    "monitors/100x-watchlist/notifier.py": "1a5b133179cb29d7bb1b00dfdaedaad555a0fb40f963ba60168e36725bc090bd",
-    "monitors/100x-watchlist/test_notifier.py": "286c5ed4e7257a29a21609154d0e90aa7127f3c1544e54d778c3defe91a4d82f",
+    "monitors/100x-watchlist/README.md": "0ce3f1e7055f1d50e2b59ae7470177c210e8129c80ce41e00c23fcff9d3467bb",
+    "monitors/100x-watchlist/install.py": "4eb391d1d6d1e3bf58f43cb3f594a4d002f15dc98cae4396d3207f31152b305e",
+    "monitors/100x-watchlist/notifier.py": "e0f7e8905b6e1a97bcd0a43d63247b814786666bfb2cc296bed2dc371d5d1556",
+    "monitors/100x-watchlist/test_notifier.py": "5e9dd4341627a1ba3fe36be653a1db058eb9c48fca37da6c0b2d9e4bba66fcef",
     "monitors/100x-watchlist/vivameda-100x-watchlist.service": "ca2abd0e9c5f67cffd353778d0da17e3942db45b6937372b4c7add95dc8cd348",
-    "monitors/100x-watchlist/vivameda-100x-watchlist.timer": "401e97ed25e4647ffdca4693b3802a154611888552387dd704f417fa542e79a1"
+    "monitors/100x-watchlist/vivameda-100x-watchlist.timer": "401e97ed25e4647ffdca4693b3802a154611888552387dd704f417fa542e79a1",
+    "monitors/100x-watchlist/test_research.py": "8107916de28b4eab8faea500447a477ee32ebc35753d9807106ba7d288e9807e",
+    "monitors/100x-watchlist/remove_expiry.py": "a0951f1f2b4dd0bdcd9e584663add9be547b3546dfbda5c7763440ee170cfb56",
+    "monitors/100x-watchlist/update_research.py": "fd12f4a19f42e4d2a8340cd4902acbceb67bf7d9562af96ac7c39ccc93e8cb66",
+    "monitors/100x-watchlist/update_classification.py": "8678eb2c49ac6f40d325268fad9cfef4e6483bdc690089e44671fbbbc30a3b31",
+    "monitors/100x-watchlist/research.py": "7f1dbd8731d6d06e7aceb7a6f0eae6bb2dfe1c06812884943474e5225954dbcf"
   },
   "model_publication_approved": "2026-10-03",
   "diagnostics_extension": {
@@ -883,5 +888,19 @@
     "holdout_opened": false,
     "g": null,
     "pilot_modified": false
+  },
+  "fire_watchlist": {
+    "existing_relay": "owner-installed, indefinite, latest screening classification enabled",
+    "public_research_update": "tested and staged; owner activation pending",
+    "tests_passed": 50,
+    "python": "3.12",
+    "provider_requests_per_research_attempt_max": 2,
+    "research_budget_seconds": 8,
+    "independent_developer_research": false,
+    "organic_buyer_attribution": false,
+    "adoption_revenue_verified": false,
+    "live_trading": false,
+    "deadline_ts": null,
+    "updater_sha256": "fd12f4a19f42e4d2a8340cd4902acbceb67bf7d9562af96ac7c39ccc93e8cb66"
   }
 }
