@@ -1,56 +1,44 @@
-# Separate fire watchlist relay — 10 October 2026
+# Separate 🔥 research watchlist — 11 October 2026
 
-Owner request: send a separate candidate message through the existing Telegram bot,
-starting with 🔥. Build reviewed; owner installation and real delivery remain pending.
+The existing bot and chat remain in use, with a separate 🔥 message per candidate. The owner installed indefinite operation and the latest-screen classification update. **This public-research update is tested and staged; owner activation is pending.**
 
-This is a notification relay for existing successfully sent scanner alerts, filtered
-to an exploratory $100,000–$500,000 alert-snapshot valuation range. It is not a new
-100× prediction model, independent discovery feed, scam certificate or trade signal.
+An alert used to explain only scanner admission. The new step gathers evidence tied to the exact mint and pool, assesses recent activity, reads a provider-linked project website and explains why attention is weak or supported.
 
-## Boundaries and delivery
-- Reads only launches, snapshots and prealert_reviews from the scanner DB using
-  SQLite URI mode=ro, query_only=ON, WAL visibility, a 200ms busy timeout and a
-  two-second query deadline. No capture, ledger or outcome reads.
-- Rechecks fresh persisted admission and the three required evidence checks.
-  Any reported REJECT blocks delivery. Background UNKNOWN stays visible.
-- Does not modify/restart the scanner, learning, pilot, archiver or their units.
-- Reuses existing bot credentials and chat locally; never exports credentials.
-- Own delivery state; one attempt per mint; maximum one message per five minutes.
-  A network-ambiguous delivery is not retried automatically. Some candidates may
-  expire during the cooldown; this is deliberately a bounded stream.
-- Checks every minute and sends no candidate messages after activation + 21 days.
-  The timer may still run an inexpensive expiry check after that date.
-- Only Telegram delivery requests; no new market-provider calls or purchases.
-- No automated trading. Snapshot values are not executable buy/sell quotes.
-- State file cap 1 MiB; maximum 2,000 ledger keys. No automatic history deletion.
+## Research and classification
 
-## Review receipt
-20 synthetic tests passed on server Python 3.12; both systemd units passed syntax
-verification. Tests include WAL-visible reads, stale/future/identity rejection,
-unknown/rejected screening, valuation limits, no history backlog, deduplication,
-ambiguous-delivery handling, rate limiting, expiry and the stop marker.
-No synthetic Telegram message was sent. Live installation and real Telegram
-delivery have not been verified. Full-stack release validation is not claimed.
+- One free DexScreener pair request, plus at most one linked HTTPS website request per research attempt. Sources, fetch times, response hashes, measured observations, developer screening and reasons are saved in private relay research records.
+- The pair must match Solana, the pinned pool and base-token mint. An identity mismatch blocks delivery.
+- Read up to three nonoverlapping five-minute windows from the last 30 minutes of the same mint/pool scanner snapshots. At least two buy-heavy windows and liquidity holding within 10% classify **ACTIVITY-SUPPORTED WATCH**. This is an activity proxy; transaction counts do not establish unique buyers, organic growth, business adoption or a 100× probability.
+- A website title/description or relevant visible passage is explicitly a **project claim**, never verified revenue or adoption. A displayed mint establishes association only. Readable pages are not independent due diligence.
+- Claims about creator fees funding repeated token purchases get **THIN THESIS — FEE-FUNDED BUYBACK CLAIM**. Recirculated trading fees require outside demand and sustainable fee revenue; they do not establish either.
+- Claims about volume-generating tools get **THIN THESIS — ACTIVITY TOOLING CLAIM**. This does not assert fraud or wash trading without evidence.
+- Current public liquidity falling more than 20% below the alert snapshot weakens the classification. A public price above 2× the snapshot discloses chasing risk.
+- Weak, new or incomplete candidates remain permitted as **THIN THESIS**, with gaps visible. Public-source failure cannot create a stronger classification. Any latest scanner rejection still blocks delivery.
+- Developer behaviour uses the existing fresh developer-history screen and its reason. **Independent developer investigation, organic buyer attribution, catalysts, audited adoption/revenue and executable exit quotes are not implemented and remain UNVERIFIED.** This is a bounded evidence-and-rules research step, with no LLM or validated investment-selection model.
 
-Reviewed deployment bundle:
-9c19b132ebc65cbcd3c92825d6346d8be7104ea6b61a1ffa0996e889c417bf21
+The latest persisted screening is read again after public research and before Telegram. A newer HOLD/REJECT, stale required check, changed pool or stop marker suppresses delivery. This does not promise detection of events after the final check.
 
-Owner terminal:
-python3 /var/lib/vivameda-engineering/repo/client_learning/crypto_100x_watchlist_20261010/install.py --install --expected-sha256 9c19b132ebc65cbcd3c92825d6346d8be7104ea6b61a1ffa0996e889c417bf21
+## Boundaries
 
-Inspect the new component:
-cat /var/lib/vivameda-100x-watchlist/status.json
-systemctl status vivameda-100x-watchlist.timer --no-pager
+No scanner scoring/threshold, scanner source/unit, learning source, pilot, holdout, prediction ledger, capture or outcome changes. SQLite opens read-only with query-only mode, WAL visibility and bounded queries on launches, snapshots and prealert_reviews. No paid calls, purchases or trading.
 
-Stop only the new relay:
-systemctl disable --now vivameda-100x-watchlist.timer
-systemctl stop vivameda-100x-watchlist.service
+Public fetches have an eight-second total research budget, HTTPS certificate verification, public-address DNS validation pinned to the connection, no redirects, two requests maximum and a 256 KiB response cap. Website content is parsed as data, never executed. Unknown facts stay unknown.
 
-## Handover
-Do not describe this relay as a validated 100× finder or fully audited candidate
-recommendation. Independent catalyst, ownership continuity, organic growth and
-executable exit assessment still require separate review. Installation is
-hash-bound, refuses existing component state (no activation reset), uses the
-existing dedicated health user and verifies frozen source/unit hashes.
-No Directive 2/3 rerun, holdout access, new g, pilot outcome read or pilot change
-is authorized by this notification request.
+Operation has **no end date**. Resource caps can pause the relay and require maintenance: 1 MiB per state record, 2,000 delivery keys and 2,000 research files. No automatic history deletion. One research attempt per five minutes, one Telegram delivery attempt per mint; ambiguous sends are not automatically retried. Same bot/chat, existing dedicated service user and unchanged unit sandbox.
+
+## Validation and activation
+
+50 tests pass on server Python 3.12. Tests cover research identity, project claims, fee-funded buybacks, activity versus organic demand, nonoverlapping windows, same-pool/future exclusion, liquidity/price warnings, public-source failure, URL/DNS/response limits, research deadline, fresh developer evidence, latest rejection during research, stop, saved audit, message size, existing deduplication and read-only boundaries. No test sends Telegram.
+
+A live free public-metadata check matched VOLUMIZER's exact screenshot mint and pool, and read its linked site. It used no production history or Telegram and is not a reconstructed entry decision.
+
+For the owner-installed classified relay, use the server engineering checkout:
+```bash
+python3 /var/lib/vivameda-engineering/repo/client_learning/crypto_100x_watchlist_20261010/update_research.py --expected-sha256 fd12f4a19f42e4d2a8340cd4902acbceb67bf7d9562af96ac7c39ccc93e8cb66
+```
+
+The updater binds exact source/test hashes, requires root/server Python 3.12 and the installed classified source, reruns tests as the engineering user, backs up the relay, stops only its own timer/service, preserves configuration/activation/delivery history, installs two source files and verifies first-run health. It restores the previous relay on a failed update. It refuses unknown or partially changed installations.
+
+Fresh installations must use the current install.py --bundle output; historic hashes are not valid for this source. Historical remove_expiry.py and update_classification.py are retained only for audit, not applied after this update.
+
+Inspect: /var/lib/vivameda-100x-watchlist/status.json and its private research/<mint>.json. Stop only this relay with systemctl disable --now vivameda-100x-watchlist.timer, then systemctl stop vivameda-100x-watchlist.service.

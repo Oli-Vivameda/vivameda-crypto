@@ -9,12 +9,44 @@ def good():
     review={'mint':MINT,'pair':PAIR,'chain':'solana','policy':'crypto-prealert-v1','checked_at':NOW,'checks':checks}
     return {'mint':MINT,'symbol':'TEST','created_ts':(NOW-3600)*1000,'pinned_pair':PAIR,'last_alert_ts':NOW,'alert_level':1,'ts':NOW,'mc':200000,'liq':30000,'price':.0002,'checked_at':NOW,'verdict':'PASS','review':json.dumps(review)}
 class Tests(unittest.TestCase):
+    def setUp(self):
+        p=patch.object(n.research,'assess',side_effect=lambda row,db,now:n.research.empty(row,now))
+        p.start();self.addCleanup(p.stop)
     def test_valid(self):self.assertTrue(n.eligible(good(),config(),NOW))
     def test_prefix_and_unknowns(self):
         text=n.message(good(),NOW);self.assertTrue(text.startswith('🔥'))
         self.assertIn('developer history: UNKNOWN',text)
         self.assertIn('$20,000,000',text)
         self.assertIn('No validated 100×',text)
+    def test_classification_incomplete_admitted(self):
+        self.assertTrue(n.eligible(good(),config(),NOW))
+        self.assertEqual(n.classification(good(),NOW),'EARLY WATCH — INCOMPLETE SCREENING')
+        self.assertIn('THIN THESIS',n.message(good(),NOW))
+    def test_screening_complete_is_not_thesis(self):
+        r=good();review=json.loads(r['review'])
+        for k in n.BACKGROUND:review['checks'][k]={'status':'PASS','observed_at':NOW,'evidence_refs':['synthetic:test']}
+        r['review']=json.dumps(review)
+        self.assertEqual(n.classification(r,NOW),'SCREENING COMPLETE')
+        self.assertIn('not a forecast',n.message(r,NOW))
+        review['checks']['developer_history']['observed_at']=NOW-301;r['review']=json.dumps(review)
+        self.assertEqual(n.classification(r,NOW),'EARLY WATCH — INCOMPLETE SCREENING')
+    def test_latest_rejection_overrides_alert_pass(self):
+        with tempfile.TemporaryDirectory() as d:
+            p=pathlib.Path(d)/'db';c=sqlite3.connect(p)
+            c.executescript('CREATE TABLE launches(mint TEXT,symbol TEXT,created_ts INTEGER,pinned_pair TEXT,last_alert_ts INTEGER,alert_level INTEGER);CREATE TABLE snapshots(mint TEXT,ts INTEGER,mc REAL,liq REAL,price REAL);CREATE TABLE prealert_reviews(mint TEXT,level INTEGER,bucket INTEGER,checked_at INTEGER,verdict TEXT,review TEXT);')
+            r=good()
+            c.execute('INSERT INTO launches VALUES(?,?,?,?,?,?)',(MINT,'TEST',r['created_ts'],PAIR,NOW,1))
+            c.execute('INSERT INTO snapshots VALUES(?,?,?,?,?)',(MINT,NOW,200000,30000,.0002))
+            c.execute('INSERT INTO prealert_reviews VALUES(?,?,?,?,?,?)',(MINT,1,1,NOW,'PASS',r['review']))
+            for verdict in ('REJECT','HOLD'):
+                c.execute('DELETE FROM prealert_reviews WHERE level=2')
+                review=json.loads(r['review']);review['checked_at']=NOW+1
+                review['checks']['developer_history']={'status':'REJECT'}
+                c.execute('INSERT INTO prealert_reviews VALUES(?,?,?,?,?,?)',(MINT,2,1,NOW+1,verdict,json.dumps(review)));c.commit()
+                result=n.rows(p,NOW-1,NOW+1)
+                self.assertEqual(result[0]['verdict'],verdict)
+                self.assertFalse(n.eligible(result[0],config(),NOW+1))
+            c.close()
     def test_stale(self):
         r=good();r['ts']=NOW-301;self.assertFalse(n.eligible(r,config(),NOW))
     def test_old_alert(self):
@@ -56,6 +88,17 @@ class Tests(unittest.TestCase):
     def test_expiry_no_read_or_send(self):
         with tempfile.TemporaryDirectory() as d,patch.object(n,'rows',side_effect=AssertionError()):
             p=self.state(d);self.assertEqual(n.run(p,now=NOW+1000)['state'],'expired')
+    def test_no_deadline_after_original_window(self):
+        with tempfile.TemporaryDirectory() as d,patch.object(n,'rows',return_value=[]) as read:
+            p=self.state(d);c=config();c['deadline_ts']=None;n.atomic(p/'config.json',c)
+            self.assertEqual(n.run(p,now=NOW+365*86400)['state'],'waiting')
+            read.assert_called_once()
+    def test_invalid_deadline_fails_closed(self):
+        for deadline in ('forever',True,-1,float('inf')):
+            with tempfile.TemporaryDirectory() as d,patch.object(n,'rows',side_effect=AssertionError()):
+                p=self.state(d);c=config();c['deadline_ts']=deadline
+                (p/'config.json').write_text(json.dumps(c))
+                with self.assertRaises(ValueError):n.run(p,now=NOW)
     def test_stop_no_read(self):
         with tempfile.TemporaryDirectory() as d,patch.object(n,'rows',side_effect=AssertionError()):
             p=self.state(d);(p/'STOP').touch();self.assertEqual(n.run(p,now=NOW)['state'],'stopped')
@@ -88,3 +131,4 @@ class Tests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as d,patch.object(n,'rows',return_value=[good(),good()]):
             p=self.state(d);sent=[];n.run(p,sender=sent.append,now=NOW);self.assertEqual(len(sent),1)
 if __name__=='__main__':unittest.main()
+

@@ -3,7 +3,7 @@ import argparse, grp, hashlib, json, os, pathlib, pwd, shutil, subprocess, sys, 
 HERE=pathlib.Path(__file__).resolve().parent
 DEST=pathlib.Path('/opt/vivameda-100x-watchlist')
 STATE=pathlib.Path('/var/lib/vivameda-100x-watchlist')
-FILES=('notifier.py','test_notifier.py','install.py','vivameda-100x-watchlist.service','vivameda-100x-watchlist.timer')
+FILES=('notifier.py','test_notifier.py','install.py','vivameda-100x-watchlist.service','vivameda-100x-watchlist.timer','research.py','test_research.py')
 SCANNER_SHA='765aba08982c3f0c562b52755ab9122cdaabfc396b78e7fed878089db87fa54e'
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def bundle():return hashlib.sha256(json.dumps({n:sha(HERE/n) for n in FILES},sort_keys=True,separators=(',',':')).encode()).hexdigest()
@@ -24,12 +24,12 @@ def install(expected,apply=False):
         p=pathlib.Path('/etc/systemd/system')/name
         if p.exists():frozen.append(p)
     before={str(p):sha(p) for p in frozen}
-    units=FILES[3:]
+    units=FILES[3:5]
     if DEST.exists() or STATE.exists() or any((pathlib.Path('/etc/systemd/system')/n).exists() for n in units):raise ValueError('existing relay; activation reset forbidden')
     if shutil.disk_usage('/var/lib').free<1024**3:raise ValueError('minimum 1 GiB free space')
     for n in FILES:
         if n.endswith('.py'):compile((HERE/n).read_text(),n,'exec')
-    command(['/usr/sbin/runuser','-u','vivameda-engineer','--','/usr/bin/python3','-m','unittest','discover','-s',str(HERE),'-p','test_notifier.py'])
+    command(['/usr/sbin/runuser','-u','vivameda-engineer','--','/usr/bin/python3','-m','unittest','discover','-s',str(HERE),'-p','test_*.py'])
     with tempfile.TemporaryDirectory() as d:
         temp=pathlib.Path(d)
         for n in units:(temp/n).write_text((HERE/n).read_text().replace('@USER@',user).replace('@GROUP@',group))
@@ -40,9 +40,10 @@ def install(expected,apply=False):
         (backup/'install.json').write_text(json.dumps({'new_component_absent':True,'frozen_hashes':before},sort_keys=True))
         DEST.mkdir(mode=0o755);STATE.mkdir(mode=0o700);os.chown(STATE,account.pw_uid,account.pw_gid)
         shutil.copyfile(HERE/'notifier.py',DEST/'notifier.py');(DEST/'notifier.py').chmod(0o644)
+        shutil.copyfile(HERE/'research.py',DEST/'research.py');(DEST/'research.py').chmod(0o644)
         import notifier
         activation=int(time.time())
-        config={'activation_ts':activation,'deadline_ts':activation+21*86400,'min_mc':100000,'max_mc':500000,'policy':'existing-alert-watchlist-v1'}
+        config={'activation_ts':activation,'deadline_ts':None,'min_mc':100000,'max_mc':500000,'policy':'existing-alert-watchlist-v1'}
         for name,value in (('config.json',config),('delivery.json',{})):
             notifier.atomic(STATE/name,value);os.chown(STATE/name,account.pw_uid,account.pw_gid)
         for n in units:shutil.copyfile(temp/n,pathlib.Path('/etc/systemd/system')/n)
@@ -50,7 +51,7 @@ def install(expected,apply=False):
             command(['/usr/bin/systemctl','daemon-reload'])
             command(['/usr/bin/systemctl','start','vivameda-100x-watchlist.service'])
             report=json.loads((STATE/'status.json').read_text())
-            if report['state'] not in ('waiting','sent','cooldown'):raise ValueError('relay first-run failed')
+            if report['state'] not in ('waiting','sent','cooldown','read_skipped','screening_changed','research_identity_mismatch','delivery_unknown'):raise ValueError('relay first-run failed')
             if {str(p):sha(p) for p in frozen}!=before:raise ValueError('frozen bytes changed')
             if sha(DEST/'notifier.py')!=sha(HERE/'notifier.py'):raise ValueError('relay bytes mismatch')
             command(['/usr/bin/systemctl','enable','--now','vivameda-100x-watchlist.timer'])
@@ -67,3 +68,4 @@ if __name__=='__main__':
     else:
         try:print(json.dumps(install(a.expected_sha256,a.install),sort_keys=True))
         except Exception:raise SystemExit('Relay refused; inspect reviewed source, access, existing-install or first-run gate. No credentials printed.')
+

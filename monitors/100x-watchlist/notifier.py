@@ -1,6 +1,7 @@
-"""Standalone watchlist relay. No scoring, provider calls or pilot/outcome reads."""
+"""Separate research watchlist. No scanner scoring edits or pilot/outcome reads."""
 import datetime, fcntl, json, math, os, pathlib, re, sqlite3, tempfile, time
 import urllib.parse, urllib.request
+import research
 BASE=pathlib.Path('/opt/vivameda-crypto-early-scout')
 STATE=pathlib.Path('/var/lib/vivameda-100x-watchlist')
 REQUIRED=('token_controls','liquidity_control','trading_mechanics')
@@ -34,9 +35,9 @@ def rows(database,activation,now):
         FROM launches l
         JOIN snapshots s ON s.mint=l.mint AND s.ts=(
           SELECT max(ts) FROM snapshots WHERE mint=l.mint AND ts<=l.last_alert_ts)
-        JOIN prealert_reviews r ON r.mint=l.mint AND r.level=l.alert_level AND r.bucket=(
-          SELECT max(bucket) FROM prealert_reviews WHERE mint=l.mint AND level=l.alert_level
-            AND checked_at<=l.last_alert_ts)
+        JOIN prealert_reviews r ON r.rowid=(
+          SELECT rowid FROM prealert_reviews WHERE mint=l.mint
+          ORDER BY checked_at DESC,rowid DESC LIMIT 1)
         WHERE l.last_alert_ts>=? AND l.last_alert_ts BETWEEN ? AND ?
           AND l.alert_level>0 AND length(r.review)<=131072
         ORDER BY l.last_alert_ts,l.mint LIMIT 100
@@ -66,7 +67,11 @@ def eligible(row,config,now):
     if any(isinstance(i,dict) and i.get('status')=='REJECT' for i in checks.values()):return False
     return all(valid_evidence(checks.get(k),now) and checks[k].get('status')=='PASS' for k in REQUIRED)
 def clean(s):return ''.join(c for c in str(s) if c.isprintable())[:30]
-def message(row,now):
+def classification(row,now):
+    checks=json.loads(row['review'])['checks']
+    complete=all(valid_evidence(checks.get(k),now) and checks[k].get('status')=='PASS' for k in BACKGROUND)
+    return 'SCREENING COMPLETE' if complete else 'EARLY WATCH — INCOMPLETE SCREENING'
+def message(row,now,assessment=None):
     checks=json.loads(row['review'])['checks'];bg=[]
     for name in BACKGROUND:
         item=checks.get(name,{})
@@ -78,11 +83,14 @@ def message(row,now):
     if number(row.get('created_ts')) and 0<row['created_ts']/1000<=row['ts']:
         age=f"{(row['ts']-row['created_ts']/1000)/3600:.1f}h"
     return (
-        '🔥 100× WATCHLIST — SOLANA\n\n'
+        '🔥 '+classification(row,now)+' — SOLANA\n\n'
         +clean(row.get('symbol','?'))+' | age at snapshot '+age+'\n'
         +f"Alert snapshot MC ${row['mc']:,.0f} | liquidity ${row['liq']:,.0f}\n"
         +f"Snapshot price ${row['price']:.10g}\n"
         +'Snapshot UTC: '+stamp+'\n'
+        +'Why surfaced: existing scanner alert; snapshot MC within $100k–$500k; required checks PASS.\n'
+        +research.describe(assessment or research.empty(row,now))+'\n'
+        +'100×: search objective and valuation scenario, not a forecast.\n'
         +f"100× price scenario implies MC ${row['mc']*100:,.0f}, assuming unchanged supply.\n\n"
         +'Required scanner checks PASS: token controls, liquidity control, recent sell receipts.\n'
         +'\n'.join(bg)+'\n\n'
@@ -96,11 +104,14 @@ def send(text,credentials=BASE/'credentials.json'):
     request=urllib.request.Request('https://api.telegram.org/bot'+c['bot_token']+'/sendMessage',data=body,method='POST')
     with urllib.request.urlopen(request,timeout=12) as response:result=json.load(response)
     if result.get('ok') is not True:raise ValueError('delivery failed')
-def run(state=STATE,database=BASE/'data'/'early_scout.sqlite',sender=send,now=None):
+def run(state=STATE,database=BASE/'data'/'early_scout.sqlite',sender=send,now=None,assessor=None):
+    live_clock=now is None
     now=int(time.time()) if now is None else now
     config=json.loads((state/'config.json').read_text())
     report={'checked_at':now,'candidate_messages_sent':0,'market_provider_requests':0,'pilot_read':False,'scanner_changed':False}
-    if now>=config['deadline_ts']:
+    deadline=config['deadline_ts']
+    if deadline is not None and (not number(deadline) or deadline<config['activation_ts']):raise ValueError('invalid deadline')
+    if deadline is not None and now>=deadline:
         report['state']='expired';atomic(state/'status.json',report);return report
     if now<config['activation_ts']:raise ValueError('clock before activation')
     if (state/'STOP').exists():
@@ -111,7 +122,7 @@ def run(state=STATE,database=BASE/'data'/'early_scout.sqlite',sender=send,now=No
     if not isinstance(ledger,dict):raise ValueError('invalid delivery state')
     if len(ledger)>=2000:
         report['state']='state_cap';atomic(state/'status.json',report);return report
-    if now-ledger.get('_last_attempt',0)<300:
+    if now-max(ledger.get('_last_attempt',0),ledger.get('_last_research',0))<300:
         report['state']='cooldown';atomic(state/'status.json',report);return report
     try:candidates=rows(database,config['activation_ts'],now)
     except sqlite3.OperationalError:
@@ -119,7 +130,25 @@ def run(state=STATE,database=BASE/'data'/'early_scout.sqlite',sender=send,now=No
     report['state']='waiting'
     for row in candidates:
         if row['mint'] in ledger or not eligible(row,config,now):continue
-        text=message(row,now)
+        audit=state/'research';audit.mkdir(mode=0o700,exist_ok=True)
+        if len(list(audit.iterdir()))>=2000 and not (audit/(row['mint']+'.json')).exists():
+            report['state']='state_cap';break
+        ledger['_last_research']=now;atomic(ledger_path,ledger)
+        assessment=(assessor or research.assess)(row,database,now)
+        if assessment.get('mint')!=row['mint'] or assessment.get('pair')!=row['pinned_pair'] or assessment.get('policy')!=research.POLICY:raise ValueError('research identity')
+        report['market_provider_requests']+=assessment['provider_requests']
+        atomic(audit/(row['mint']+'.json'),assessment)
+        if assessment['identity']=='MISMATCH':
+            report['state']='research_identity_mismatch';break
+        # Network research can take seconds; any newer HOLD/REJECT or stale screen blocks delivery.
+        current=int(time.time()) if live_clock else now
+        latest=next((r for r in rows(database,config['activation_ts'],current) if r['mint']==row['mint']),None)
+        if latest is None or latest['pinned_pair']!=row['pinned_pair'] or not eligible(latest,config,current):
+            report['state']='screening_changed';break
+        if (state/'STOP').exists():
+            report['state']='stopped';break
+        row=latest;now=current
+        text=message(row,now,assessment)
         ledger[row['mint']]={'attempted_at':now,'result':'delivery_unknown'}
         ledger['_last_attempt']=now
         atomic(ledger_path,ledger)
@@ -140,3 +169,4 @@ def main():
             except Exception:pass
         print(json.dumps(report,sort_keys=True))
 if __name__=='__main__':main()
+
